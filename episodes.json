@@ -1,0 +1,22 @@
+{
+  "seasons": [
+    {
+      "season": 1,
+      "title": "Season 1 — Critical Infrastructure Under Siege",
+      "episodes": [
+        {
+          "id": "S1E1",
+          "title": "Episode 1 — First Contact",
+          "description": "The fundamentals of OT cybersecurity — why it matters, what's at stake, and how to defend it.",
+          "available": true,
+          "fa_challenges": "challenges/S1E1_FA.json",
+          "cp_challenges": {
+            "internal": "challenges/S1E1_CP_internal.json",
+            "event": "challenges/S1E1_CP_event.json",
+            "community": "challenges/S1E1_CP_community.json"
+          }
+        }
+      ]
+    }
+  ]
+}

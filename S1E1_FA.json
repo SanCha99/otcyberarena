@@ -1,0 +1,402 @@
+[
+  {
+    "id": "fa1",
+    "title": "Why Would Anyone Attack a Factory?",
+    "category": "Fundamentals",
+    "difficulty": "Rookie",
+    "credits": 40,
+    "concept": "<strong>OT systems</strong> (Operational Technology) control physical processes — pumps, valves, conveyor belts, production lines. Unlike office computers, if an OT system stops working, production stops — or something dangerous can happen. According to CISA, attacks on industrial control systems have increased every year since 2020. Attackers target OT for ransom, sabotage, or to steal sensitive production data.",
+    "scenario": "A senior colleague says: <em>'We make physical products here — we don't store credit card numbers or personal data. Why would a hacker bother attacking our factory systems?'</em>",
+    "question": "What is the most accurate reason why operational technology environments are targeted by cyber attackers?",
+    "hint": "Think about what the attacker gains — not from data, but from disrupting or controlling a physical process.",
+    "keywords": ["ransom","disrupt","production","uptime","physical","safety","infrastructure","halt","stop","shutdown","extort"],
+    "opts": [
+      "Attackers only target factories if they store customer personal data",
+      "Attackers target OT systems to disrupt production, demand ransom, or cause physical damage — even without stealing personal data",
+      "Factories are too complex for hackers to understand — attacks are very rare",
+      "Only government-owned infrastructure is targeted by cyber attackers"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> The Colonial Pipeline attack (2021) shut down a major US fuel pipeline for days — the goal was ransom, not data theft. OT environments are high-value targets because disrupting them creates immediate, visible, costly consequences.<br><br><strong>🌐 Source:</strong> CISA ICS-CERT Annual Report · Colonial Pipeline Incident Analysis"
+  },
+  {
+    "id": "fa2",
+    "title": "IT vs OT — What's the Difference?",
+    "category": "Fundamentals",
+    "difficulty": "Rookie",
+    "credits": 40,
+    "concept": "In IT security, if a server crashes, you restart it. In <strong>OT security</strong>, if a control system crashes mid-process, you might have a chemical spill, a production line failure, or a safety incident. OT security requires a completely different approach — one that <strong>never disrupts operations</strong>, even while protecting them.",
+    "scenario": "Your company's IT security team proposes using the same vulnerability scanner they use for office computers on the factory floor control systems. The OT team pushes back. Your manager asks you to explain the difference.",
+    "question": "Why can't you safely use a standard IT security scanner on OT network devices like PLCs and SCADA systems?",
+    "hint": "Think about what happens when a device receives unexpected network traffic it was never designed to handle.",
+    "keywords": ["crash","reboot","disrupt","uptime","production","legacy","plc","designed","safety","halt","stop","passive"],
+    "opts": [
+      "You can use any IT scanner on OT — the devices are just computers after all",
+      "OT devices like PLCs were not designed to handle active network scanning — it can cause them to crash, reboot, or behave unexpectedly, disrupting production",
+      "IT scanners work fine on OT — the only issue is a different software licence",
+      "OT devices are more secure than IT devices so scanning is unnecessary"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> PLCs were designed decades ago to do one thing reliably. They were never designed to handle the network traffic an IT scanner sends. This is why SecureOT Platform uses <strong>passive, OEM-safe</strong> methods — it watches without touching.<br><br><strong>🌐 Source:</strong> NIST SP 800-82 Guide to ICS Security"
+  },
+  {
+    "id": "fa3",
+    "title": "The Invisible Risk",
+    "category": "Asset Awareness",
+    "difficulty": "Rookie",
+    "credits": 40,
+    "concept": "You can't protect what you don't know exists. In most industrial facilities, <strong>asset inventory</strong> — a complete, up-to-date list of every device on the network — is either outdated, inaccurate, or non-existent. NIST's Cybersecurity Framework lists \"Identify\" as the very first function. Before you can protect, detect, or respond, you must first know what you have.",
+    "scenario": "A plant manager says: <em>'We have a list of our main equipment — the big machines. We don't really track the smaller control devices and sensors on the network. Does that matter?'</em>",
+    "question": "Why is having a complete inventory of ALL devices on an OT network critical for cybersecurity?",
+    "hint": "Think about what an attacker could do if they found a device on your network that you didn't know was there.",
+    "keywords": ["unknown","unmanaged","invisible","attack","entry","vector","vulnerable","identify","visibility","blind spot","discover"],
+    "opts": [
+      "Only the main production machines matter — sensors and small devices are too simple to be hacked",
+      "Any unmanaged device on the network is a potential entry point for attackers — you cannot protect what you cannot see",
+      "A partial inventory is good enough as long as critical machines are documented",
+      "Device inventory only matters after a cyber incident has already occurred"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> In 2021, an attacker accessed a Florida water treatment facility through a remote access tool the plant didn't know was installed. NIST CSF lists asset identification as Function 1. SecureOT Platform's comprehensive asset inventory finds every device, including forgotten ones.<br><br><strong>🌐 Source:</strong> NIST CSF Identify Function · CISA Water Sector Alert 2021"
+  },
+  {
+    "id": "fa4",
+    "title": "What Is a Vulnerability?",
+    "category": "Vulnerability Basics",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "A <strong>vulnerability</strong> is a weakness in software or a device that an attacker could exploit. When vulnerabilities are discovered, the device maker releases a <strong>patch</strong> — an update that fixes the weakness. In IT, patching is routine. In OT, patching is dangerous — updating firmware on a running control system can cause unpredictable behaviour, and many OT systems are certified by regulators and cannot be updated without re-certification.",
+    "scenario": "Your security team reports a critical vulnerability affecting a controller model used across your production lines. A colleague says: <em>'Just patch it tonight — it's like updating your phone software.'</em>",
+    "question": "Why is patching OT devices significantly more complex and risky than patching an office computer?",
+    "hint": "Think about what happens to a physical production process if a controller behaves unpredictably after a software update.",
+    "keywords": ["certification","uptime","production","safety","test","validate","downtime","process","disruption","reboot","recertify","risk"],
+    "opts": [
+      "OT patching is exactly like patching a smartphone — just takes longer",
+      "Patching OT devices can require production downtime, system recertification, and carries the risk of unexpected behaviour in live processes — it must be carefully planned",
+      "OT devices don't need patching because they are isolated from the internet",
+      "Patches for OT devices are always safe to apply immediately"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> An OT device running a continuous process cannot simply be rebooted at 11pm. The patch might change system behaviour. Certified processes may need re-validation. This is why SecureOT Platform provides risk scoring with compensating controls.<br><br><strong>🌐 Source:</strong> NIST SP 800-82 Rev 3 · IEC 62443 Patch Management"
+  },
+  {
+    "id": "fa5",
+    "title": "The Layers of Industrial Automation",
+    "category": "OT Architecture",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "Industrial automation is built in layers. At the bottom are <strong>field devices</strong> — sensors, actuators, and PLCs controlling physical equipment. Above that are <strong>control systems</strong> like SCADA and DCS. Higher still are <strong>business systems</strong> like MES and ERP. Each layer needs protection. The challenge: these layers were historically kept separate, but today they're increasingly connected — creating new security risks.",
+    "scenario": "A visitor asks: <em>'If we protect our business network well with firewalls and antivirus, isn't that enough to protect the whole factory? The factory floor computers are just running the machines...'</em>",
+    "question": "Why is protecting only the business (IT) network not sufficient to secure an industrial facility?",
+    "hint": "Think about the connection between the business network and the factory floor systems.",
+    "keywords": ["ot","layer","plc","scada","dcs","mes","connected","convergence","separate","segmentation","network","floor"],
+    "opts": [
+      "Protecting the business network is enough — factory floor systems are completely separate",
+      "Business and OT networks are increasingly connected. An attacker who compromises the business layer can move laterally into OT systems if there's no segmentation between them.",
+      "OT systems have their own built-in security that doesn't require network protection",
+      "Antivirus software is sufficient for all layers of industrial automation"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> The Triton/TRISIS attack (2017) targeted safety systems deep in the OT layer of a petrochemical plant. The attackers worked their way down through the network over time. NIST SP 800-82 specifically addresses this: each layer needs its own security controls.<br><br><strong>🌐 Source:</strong> NIST SP 800-82 Rev 3 · Triton/TRISIS Incident Analysis (Dragos 2018)"
+  },
+  {
+    "id": "fa6",
+    "title": "Why 'No Incident Before' Isn't Reassurance",
+    "category": "Threat Awareness",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "In cybersecurity, <strong>dwell time</strong> is how long an attacker stays inside a network before being detected. Dragos research shows the average dwell time in OT environments can be measured in months. An attacker can be inside your network, quietly learning your systems, long before you know they're there. The absence of a detected attack does not mean the absence of an attacker.",
+    "scenario": "A plant director says: <em>'We've been running this facility for 22 years and we've never had a cyber attack. Our systems are clearly secure enough.'</em>",
+    "question": "What is the most important flaw in the reasoning 'we've never detected a cyber attack, therefore we are secure'?",
+    "hint": "Think about the difference between an attack not happening and an attack not being detected.",
+    "keywords": ["dwell","undetected","invisible","monitoring","visibility","detect","blind","inside","unknown","present"],
+    "opts": [
+      "The reasoning is sound — 22 years without an incident is strong evidence of security",
+      "Attackers often stay inside OT networks for months without detection. No detected attack could mean no visibility, not no attacker.",
+      "If there were an attacker, industrial equipment would malfunction and alert the team",
+      "22 years of operation means the systems are too old and complex for modern attackers"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> Dragos research shows OT threat landscape is growing and dwell times are long. Many organisations discover they were compromised months or years after the fact. \"No detected incident\" is very different from \"no incident.\"<br><br><strong>🌐 Source:</strong> Dragos OT/ICS Cybersecurity Year in Review 2023"
+  },
+  {
+    "id": "fa7",
+    "title": "What Is a Compliance Framework?",
+    "category": "Compliance Basics",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "Governments and industry bodies have created <strong>cybersecurity frameworks</strong> to help organisations know what 'good' security looks like. For OT environments, the key frameworks are: <strong>IEC 62443</strong> (international standard for industrial cybersecurity), <strong>NIST CSF</strong> (US government framework, widely adopted globally), and <strong>NIS2</strong> (EU directive that now explicitly covers OT and critical infrastructure).",
+    "scenario": "A compliance officer asks: <em>'Our customers in Europe are asking us to demonstrate NIS2 compliance for our OT environment. We know what NIS2 is — but we have no idea how to actually prove compliance. Where do we even start?'</em>",
+    "question": "Which of the following best describes what NIS2 requires of organisations operating OT/industrial control systems in Europe?",
+    "hint": "NIS2 is the EU's updated Network and Information Security directive — it expanded scope in 2023 to cover industrial operators.",
+    "keywords": ["nis2","eu","europe","directive","risk management","incident reporting","supply chain","critical","operator","essential","reporting"],
+    "opts": [
+      "NIS2 only applies to IT systems — OT and industrial control systems are specifically exempt",
+      "NIS2 requires organisations to implement risk management measures, report significant incidents, and ensure supply chain security — including for OT environments in essential sectors",
+      "NIS2 only applies to government organisations, not private companies",
+      "NIS2 compliance is optional — it carries no legal penalties for non-compliance"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> NIS2 (effective October 2024) explicitly covers OT in sectors including energy, manufacturing, water, and food. Requirements include risk management measures and incident reporting within 24 hours. SecureOT Platform's built-in compliance reporting auto-aligns to IEC 62443, NIST CSF, and NIS2.<br><br><strong>🌐 Source:</strong> EU NIS2 Directive 2022/2555 · ENISA NIS2 Implementation Guidance"
+  },
+  {
+    "id": "fa8",
+    "title": "What Does 'Passive Monitoring' Mean?",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "<strong>Passive monitoring</strong> means observing network traffic and device behaviour without sending any packets or probes to the devices being monitored. It's the opposite of <strong>active scanning</strong>, where a tool sends requests to each device. In OT environments, passive monitoring is critical — sending unexpected traffic to a PLC can crash it. SecureOT Platform uses passive monitoring by default.",
+    "scenario": "A colleague from IT security asks: <em>'Why does Rockwell Automation make such a big deal about passive monitoring? Our IT security tools do active scanning all the time and it works fine.'</em>",
+    "question": "What is the key reason passive monitoring is the correct approach for OT environments?",
+    "hint": "Think about the fundamental difference between an office server and a PLC controlling a live production line.",
+    "keywords": ["crash","disrupt","production","plc","designed","legacy","uptime","safety","traffic","packet","probe","passive","oem"],
+    "opts": [
+      "Passive monitoring is simply slower than active scanning — it's a performance compromise",
+      "OT devices were not designed to handle active scanning traffic — it can crash them or disrupt production. Passive monitoring discovers everything without sending a single packet to the devices.",
+      "Passive monitoring and active scanning are identical in OT environments",
+      "Active scanning is actually preferred in OT — passive monitoring misses most devices"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> A 15-year-old PLC controlling a chemical process may crash when it receives unexpected network traffic. SecureOT Platform places software sensors that listen to existing traffic — they observe without speaking. Every device announces itself through normal communications.<br><br><strong>🌐 Source:</strong> NIST SP 800-82 Rev 3 · SecureOT Platform Technical Overview"
+  },
+  {
+    "id": "fa9",
+    "title": "The Human Factor",
+    "category": "Threat Awareness",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "Not all cyber threats come from external attackers. In OT environments, <strong>insider risk</strong> includes actions by employees, contractors, and vendors — whether malicious or accidental. A maintenance engineer who plugs an infected USB drive into a control system, a vendor who uses weak credentials, or an employee who makes an unauthorised configuration change can all create serious security incidents.",
+    "scenario": "A site manager says: <em>'We're not worried about cyber attacks — we trust our people. Our team has been here for years. We also work with very reputable vendors.'</em>",
+    "question": "Which statement best describes the insider risk challenge in OT environments?",
+    "hint": "Think about the difference between intent and impact — an employee doesn't have to be malicious to cause a security incident.",
+    "keywords": ["unintentional","accidental","vendor","contractor","usb","human","error","credential","access","insider","trusted","mistake"],
+    "opts": [
+      "Insider risk only applies to malicious employees — trusted, long-serving staff pose no risk",
+      "Insider risk includes well-intentioned employees and trusted vendors who make mistakes, use weak credentials, or introduce infected devices — intent doesn't determine impact",
+      "Reputable vendors are pre-screened by regulators and cannot introduce cyber risk",
+      "Insider risk is only relevant for industries that handle personal data"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> The 2021 Oldsmar Water Treatment incident was triggered through TeamViewer — a remote access tool staff used legitimately but with weak password protections. No malicious insider was involved, but the trusted access pathway created the vulnerability.<br><br><strong>🌐 Source:</strong> CISA ICS Advisory · Oldsmar Florida Water Treatment Incident 2021"
+  },
+  {
+    "id": "fa10",
+    "title": "What Is SecureOT?",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "<strong>SecureOT Suite</strong> by Rockwell Automation is a comprehensive cybersecurity solution for OT environments. It addresses four core problems: organisations don't know everything on their network, they don't know which devices are vulnerable, they can't tell when something has changed, and they struggle to prove to auditors that they're secure. SecureOT solves all four — without disrupting production.",
+    "scenario": "After learning OT cybersecurity basics, a colleague asks: <em>'Okay — I understand why OT security matters. But what does SecureOT actually do? What problem does it solve that we can't solve with what we already have?'</em>",
+    "question": "Which of the following best summarises what SecureOT Suite delivers that traditional IT security tools cannot?",
+    "hint": "Think about the four things most OT organisations struggle with — and which answer addresses all four.",
+    "keywords": ["visibility","asset","vulnerable","change","compliance","passive","ot","specific","native","platform","designed","purpose"],
+    "opts": [
+      "SecureOT Suite is an antivirus product that removes malware from OT devices",
+      "SecureOT Suite provides complete OT asset visibility, vulnerability mapping, configuration change detection, and compliance reporting — all without disrupting operations",
+      "SecureOT Suite replaces the need for a firewall in OT environments",
+      "SecureOT Suite is an IT security tool adapted for some OT use cases"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> SecureOT Suite addresses four core OT security gaps in one solution:<br>1. <strong>See everything</strong> — vendor-neutral passive asset discovery, 1,000+ data points per device<br>2. <strong>Know your risk</strong> — CVEs mapped to assets, multi-dimensional risk scoring<br>3. <strong>Detect changes early</strong> — continuous configuration baseline monitoring<br>4. <strong>Prove it to auditors</strong> — IEC 62443, NIST CSF, NIS2 compliance reporting, automated<br><br><strong>🌐 Source:</strong> Rockwell Automation SecureOT Suite · NIST CSF Functions · IEC 62443"
+  },
+  {
+    "id": "fa11",
+    "title": "What Happened at Colonial Pipeline?",
+    "category": "Real Incidents",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "In May 2021, <strong>Colonial Pipeline</strong> — which supplies about 45% of the fuel consumed on the US East Coast — was hit by a ransomware attack. The attackers compromised the company's IT network. Colonial Pipeline then proactively shut down its OT pipeline operations to prevent the malware from spreading. The result: fuel shortages across the US East Coast for nearly a week.",
+    "scenario": "A colleague in finance asks: <em>'I heard about the Colonial Pipeline attack. If they were a pipeline company, why did a cyber attack cause a fuel shortage? Didn't they just have their computers hacked?'</em>",
+    "question": "What was the key lesson from the Colonial Pipeline incident for OT cybersecurity?",
+    "hint": "Think about the decision Colonial Pipeline made — and why the IT/OT connection made that decision necessary.",
+    "keywords": ["it ot","convergence","connected","spread","precaution","shutdown","proactive","link","boundary","ransomware","impact","decision"],
+    "opts": [
+      "The lesson is that ransomware can directly control pipeline operations remotely",
+      "The IT/OT connection meant that an IT ransomware attack forced a precautionary OT shutdown — demonstrating that cyber attacks on IT can have immediate physical operational consequences",
+      "The lesson is that pipelines should have no computers at all",
+      "The incident showed that fuel companies are uniquely vulnerable — other industries are safer"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> Colonial Pipeline's OT systems were not directly attacked. But because their IT and OT networks were connected, the company made the precautionary decision to shut down pipeline operations. That decision caused the fuel shortage. The lesson: the IT/OT boundary is where risk lives.<br><br><strong>🌐 Source:</strong> CISA Colonial Pipeline Incident Analysis · US-CERT Advisory AA21-131A"
+  },
+  {
+    "id": "fa12",
+    "title": "What Is a CVE?",
+    "category": "Vulnerability Basics",
+    "difficulty": "Easy",
+    "credits": 60,
+    "concept": "A <strong>CVE (Common Vulnerabilities and Exposures)</strong> is a publicly disclosed security vulnerability in software or hardware. CVEs are assigned a number and a <strong>CVSS score</strong> (0–10, where 10 is critical). When a CVE is published, organisations need to know: which of their devices are affected, how severe the risk is, and whether a patch is available. In OT environments, thousands of CVEs may affect devices on a typical network at any one time.",
+    "scenario": "Your security team says a new critical CVE has been published affecting a firmware version running on several of your production controllers. Your manager asks: <em>'How do we know which of our 200 controllers are affected?'</em>",
+    "question": "What is the most practical challenge organisations face when managing CVEs in a large OT environment?",
+    "hint": "Think about what you need to know about each device before you can tell if a CVE affects it — and how manual processes scale to 200 devices.",
+    "keywords": ["inventory","know","which","affected","firmware","version","asset","visibility","scale","map","patch","status"],
+    "opts": [
+      "CVEs are only relevant to software — hardware like PLCs cannot be affected",
+      "Without a complete and current asset inventory showing exact firmware versions, organisations cannot quickly identify which of their hundreds of devices are affected by a specific CVE",
+      "All CVEs require immediate patching — there is no prioritisation needed",
+      "CVEs are publicly disclosed so attackers don't have any advantage — everyone finds out at the same time"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> A CVE affecting firmware version 4.2 of a specific controller is meaningless if you don't know which of your 200 devices are running that firmware. Manual checks can take days. SecureOT Platform's 1,000+ data points per endpoint includes exact firmware versions for all enrolled devices.<br><br><strong>🌐 Source:</strong> CISA National Vulnerability Database · SecureOT Platform CVE Mapping"
+  },
+  {
+    "id": "fa13",
+    "title": "Firewall vs Monitoring",
+    "category": "OT Architecture",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "A <strong>firewall</strong> controls what network traffic is allowed in and out — it's a gatekeeper at the boundary. <strong>Monitoring</strong> watches what's happening inside the network — even after something has already gotten through. In OT security, many organisations rely only on firewalls and assume that if nothing got in, nothing is wrong. But firewalls don't detect changes inside the network.",
+    "scenario": "An OT engineer says: <em>'We have a firewall between our IT and OT networks. That should be enough to keep threats out, right? Why would we need monitoring software inside the OT network as well?'</em>",
+    "question": "Why is a firewall alone not sufficient protection for an OT network?",
+    "hint": "Think about what a firewall does and doesn't see — and what happens after a threat actor is already inside the network.",
+    "keywords": ["inside","lateral","movement","already in","boundary","perimeter","detect","change","monitor","baseline","after","within"],
+    "opts": [
+      "A firewall is sufficient — if nothing is allowed through, nothing dangerous can happen",
+      "A firewall stops external traffic at the boundary but cannot detect threats already inside the network or entering through authorised channels. Continuous monitoring catches what the firewall misses.",
+      "Monitoring is only needed if you don't have a firewall",
+      "Firewalls are more important than monitoring — always prioritise boundary protection"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> A firewall is like a security guard at the front door. It doesn't help once someone is already inside. Threats can enter through authorised connections — vendor access, USB drives, supply chain software. SecureOT Platform's continuous baseline monitoring detects exactly these inside-the-network changes.<br><br><strong>🌐 Source:</strong> NIST SP 800-82 Rev 3 · CISA ICS Monitoring Guidance"
+  },
+  {
+    "id": "fa14",
+    "title": "What Is Supply Chain Risk in OT?",
+    "category": "Threat Awareness",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "<strong>Supply chain risk</strong> in OT means that cyber threats can enter your environment through the products, software, and services you purchase from third-party vendors. A compromised software update from a trusted OEM, a laptop brought in by a maintenance contractor, or a component with pre-installed malware can all introduce threats that bypass your perimeter security entirely.",
+    "scenario": "A procurement manager says: <em>'We only buy equipment from reputable, well-known OEM vendors. We've vetted all our contractors. Surely our supply chain is secure?'</em>",
+    "question": "Why does buying from reputable vendors and vetting contractors not fully eliminate supply chain risk in OT environments?",
+    "hint": "Think about what happens when a trusted vendor's own systems are compromised.",
+    "keywords": ["vendor","trusted","compromised","update","software","third party","pre-installed","supply chain","contractor","legitimate","channel"],
+    "opts": [
+      "Buying from reputable vendors fully eliminates supply chain risk",
+      "Even reputable vendors can be compromised. Malware delivered through a legitimate software update or maintenance visit bypasses vetting and perimeter security entirely.",
+      "Supply chain risk only applies to organisations that use open-source software",
+      "Contractor vetting means their equipment is always safe to connect to your OT network"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> The SolarWinds attack (2020) compromised software updates from a widely trusted IT management vendor — affecting 18,000+ organisations. In OT, the equivalent is a compromised firmware update from an OEM, or a contractor's laptop pre-infected with malware.<br><br><strong>🌐 Source:</strong> CISA SolarWinds Advisory · NIST SP 800-161 Supply Chain Risk Management"
+  },
+  {
+    "id": "fa15",
+    "title": "Why OT Security Is Everyone's Job",
+    "category": "Fundamentals",
+    "difficulty": "Rookie",
+    "credits": 40,
+    "concept": "OT cybersecurity is not just a job for IT or security specialists. Sales teams talk to customers about security posture. Operations teams make decisions that affect the network. Procurement teams choose vendors. Finance teams approve security budgets. Every function in an industrial organisation has a role to play.",
+    "scenario": "A new sales colleague says: <em>'I'm in sales — why do I need to know anything about OT cybersecurity? That's for the technical people to worry about.'</em>",
+    "question": "Why does someone in a non-technical role benefit from understanding OT cybersecurity basics?",
+    "hint": "Think about the conversations a sales person has with customers — and what happens when a customer asks a security question.",
+    "keywords": ["customer","conversation","trust","credibility","informed","awareness","risk","everyone","decision","question","answer","relevant"],
+    "opts": [
+      "They don't need to — OT security is purely a technical matter",
+      "Non-technical roles are often the first line of customer conversations, budget decisions, and vendor selections — understanding OT security basics builds credibility, improves decisions, and reduces risk",
+      "Only people with cybersecurity certifications need to understand OT security",
+      "Non-technical staff should leave all security questions to specialists — it's safer to say nothing"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> A sales person who can speak fluently about OT security wins more customer trust. A procurement manager who understands supply chain risk makes better vendor decisions. This is exactly why the Field Agent track exists.<br><br><strong>🌐 Source:</strong> CISA \"Cybersecurity is Everyone's Job\" Initiative · NIST CSF Awareness and Training"
+  },
+  {
+    "id": "fa16",
+    "title": "What Is an OT Security Assessment?",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "An <strong>OT security assessment</strong> is a structured evaluation of an organisation's industrial cybersecurity posture. It identifies: what assets are on the network, what vulnerabilities exist, what gaps exist between current security and best practice, and what the priority risks are. Assessments reference frameworks like NIST CSF or IEC 62443 to benchmark current maturity.",
+    "scenario": "A CEO says: <em>'I've been told we need to improve our OT cybersecurity. But I don't know where we stand today, what we're missing, or what to fix first. How do I even begin to answer those questions?'</em>",
+    "question": "What is the purpose of an OT security assessment — and what should it give the CEO at the end?",
+    "hint": "Think about what the CEO is actually asking for: a starting point, a gap analysis, and a priority list.",
+    "keywords": ["assessment","gap","baseline","risk","priority","roadmap","maturity","identify","where we stand","starting point","evidence","benchmark"],
+    "opts": [
+      "An assessment is just a technical audit — it won't help the CEO understand business risk",
+      "An OT security assessment identifies current assets, vulnerabilities, and gaps against a framework — giving the CEO a clear picture of current risk, what needs fixing, and in what priority order",
+      "Assessments are only useful after an incident has already occurred",
+      "A CEO doesn't need to understand the assessment — that's for the technical team"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> Rockwell Automation's Strategic Advisory service starts with a risk assessment that quantifies OT risk, benchmarks against IEC 62443 or NIST CSF, identifies priority gaps, and builds a business-backed roadmap.<br><br><strong>🌐 Source:</strong> Rockwell Automation Strategic Advisory · NIST CSF Implementation Tiers · IEC 62443 Security Level Assessment"
+  },
+  {
+    "id": "fa17",
+    "title": "What Is Incident Response in OT?",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "<strong>Incident response</strong> is the organised approach to handling a cyber security event — from detection through containment, recovery, and lessons learned. In OT environments, incident response is more complex than IT because the goal isn't just to remove a threat — it's to do so without causing a production shutdown, a safety incident, or environmental harm.",
+    "scenario": "A plant operations manager asks: <em>'If we ever had a cyber attack on our production systems, what would we actually do? Our IT team handles cyber incidents — can't they just do the same thing they'd do for an office PC?'</em>",
+    "question": "Why is OT incident response different from IT incident response?",
+    "hint": "Think about the consequences of taking an OT system offline versus taking an office PC offline.",
+    "keywords": ["safety","production","shutdown","uptime","process","consequence","ot specific","industrial","knowledge","containment","isolate","physical"],
+    "opts": [
+      "OT incident response is identical to IT — the same team and process applies",
+      "OT incident response requires specialists who understand industrial processes — containment decisions affect physical operations, safety, and potentially the environment, not just data",
+      "The best response to any OT cyber incident is to immediately shut down all production",
+      "OT incidents don't need a formal response — production should always keep running"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> Shutting down an office PC during an incident is trivial. Shutting down a chemical process mid-batch can cause a safety incident, environmental harm, or millions in losses. OT incident response requires responders who know which systems can be isolated safely.<br><br><strong>🌐 Source:</strong> CISA ICS Incident Response Guide · Rockwell Automation Incident Response & Recovery"
+  },
+  {
+    "id": "fa18",
+    "title": "Why the ASD Essential Eight Doesn't Fully Cover OT",
+    "category": "Compliance Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "The <strong>ASD Essential Eight</strong> is the Australian Cyber Security Centre's framework of eight baseline mitigation strategies for IT environments. However, several Essential Eight strategies — like application patching within 48 hours or multi-factor authentication on all systems — are difficult or impossible to apply directly to OT environments without causing operational risk.",
+    "scenario": "At <strong>Ironvale Mining Group</strong>, Perth. <strong>Mr. James Macallister</strong>: <em>'Our head office IT security team says we need to comply with the ASD Essential Eight across all our systems — including the mine site OT networks. My OT engineers are pushing back saying it doesn't apply. Who's right?'</em>",
+    "question": "Why can the ASD Essential Eight not be applied directly to OT environments without modification?",
+    "hint": "Think about two Essential Eight strategies — application patching and multi-factor authentication — and why applying them directly to PLCs or SCADA systems is problematic.",
+    "keywords": ["essential eight","asd","ot","not applicable","patch","mfa","authentication","scada","plc","adapt","framework","aescsf","critical infrastructure","australia"],
+    "opts": [
+      "The ASD Essential Eight applies equally to IT and OT — implement it fully across all systems",
+      "The Essential Eight was designed for IT environments — applying strategies like real-time patching or MFA directly to OT systems can cause operational disruption. OT environments need adapted controls guided by OT-specific frameworks.",
+      "OT environments are exempt from all Australian cybersecurity frameworks",
+      "The Essential Eight should be applied to OT by the OT team without any IT involvement"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> The ASD Essential Eight is an IT framework. \"Patch applications within 48 hours\" applied to a certified OT process requiring 18-month re-certification is an impossible demand. \"MFA on all systems\" applied to a PLC with no authentication interface isn't feasible. Australian critical infrastructure operators should reference the ACSC OT guidance and AESCSF.<br><br><strong>🌐 Source:</strong> Australian Cyber Security Centre (ACSC) OT Security Guidance · AESCSF · ASD Essential Eight"
+  },
+  {
+    "id": "fa19",
+    "title": "What Does an OT SOC Actually Do?",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "A <strong>SOC (Security Operations Centre)</strong> is a team of analysts who monitor an organisation's security 24/7, triage alerts, and respond to incidents. For OT environments, a standard IT SOC is often not enough — because OT alerts look different from IT alerts and require industrial process knowledge to interpret correctly.",
+    "scenario": "A CISO says: <em>'We already have a 24/7 SOC for our IT environment. They said they can extend coverage to our OT network — it's just monitoring, right? Why would we need a separate OT-specific SOC service?'</em>",
+    "question": "Why is an IT SOC not sufficient for monitoring OT environments?",
+    "hint": "Think about what an IT SOC analyst sees when an OT alert fires — and whether they would know if it was a genuine threat or a normal industrial process event.",
+    "keywords": ["context","industrial","process","false positive","knowledge","ot specific","analyst","protocol","interpret","normal","variation","expert"],
+    "opts": [
+      "An IT SOC is fully sufficient for OT monitoring — monitoring is monitoring",
+      "OT alerts require industrial process context to interpret correctly. An IT SOC analyst may not know whether an anomaly is a genuine threat or a normal operational variation — leading to missed threats or costly false alarms.",
+      "The only difference is that OT SOC analysts need to work different shifts",
+      "OT environments generate so few alerts that a dedicated SOC is unnecessary"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> An IT SOC analyst looking at an alert from a petrochemical plant's SCADA system may not know that a particular sensor reading deviation is a normal process fluctuation versus a sign of a compromised controller. SecureOT's Security Monitoring & Response provides OT-specific SOC analysts who bring industrial process knowledge to every alert.<br><br><strong>🌐 Source:</strong> Dragos OT/ICS SOC Analysis · CISA ICS Monitoring & Detection"
+  },
+  {
+    "id": "fa20",
+    "title": "Connecting It All — The SecureOT Journey",
+    "category": "SecureOT Basics",
+    "difficulty": "Medium",
+    "credits": 80,
+    "concept": "A strong OT cybersecurity programme follows a structured journey: <strong>Assess</strong> (understand your current risk), <strong>Design</strong> (architect a secure environment), <strong>Implement</strong> (deploy security controls and monitoring), <strong>Manage</strong> (continuously monitor, respond, and improve). Rockwell Automation's SecureOT Suite covers every stage.",
+    "scenario": "After completing all your Field Agent challenges, your manager asks: <em>'You've been learning about OT cybersecurity. If a customer asked us to explain our complete OT security offering in one sentence, what would you say?'</em>",
+    "question": "Which statement best summarises Rockwell Automation's SecureOT Suite as a complete OT cybersecurity offering?",
+    "hint": "Think about the Assess → Design → Implement → Manage journey — and which answer captures all four stages.",
+    "keywords": ["complete","end to end","assess","design","implement","manage","platform","services","journey","one partner","suite","comprehensive"],
+    "opts": [
+      "SecureOT Suite is a software platform that scans OT networks for vulnerabilities",
+      "SecureOT Suite is Rockwell Automation's comprehensive OT cybersecurity offering — combining an OT-specific platform with professional and managed services to take organisations from risk assessment through to continuous monitoring and response",
+      "SecureOT Suite is a managed security service for organisations that can't afford an internal OT security team",
+      "SecureOT Suite is only relevant for organisations that use Rockwell Automation control systems"
+    ],
+    "correctIdx": 1,
+    "debrief": "<strong>Why B:</strong> SecureOT Suite is the complete answer: SecureOT Platform (asset inventory, risk and vulnerability management, config change detection) + Professional Services (strategic advisory, risk assessments, network design) + Managed Services (24/7 security monitoring, incident response, MDR). One partner. End-to-end OT security. Vendor-neutral.<br><br><strong>🌐 Source:</strong> Rockwell Automation SecureOT Suite Overview · rockwellautomation.com/industrial-cybersecurity"
+  }
+]

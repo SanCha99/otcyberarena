@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OT CyberArena — Season 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c0a;--bg2:#0e1610;--bg3:#131f16;--border:rgba(74,222,128,0.12);--border2:rgba(74,222,128,0.25);--green:#4ade80;--gdim:rgba(74,222,128,0.07);--amber:#fbbf24;--adim:rgba(251,191,36,0.1);--red:#f87171;--rdim:rgba(248,113,113,0.1);--blue:#60a5fa;--bdim:rgba(96,165,250,0.1);--purple:#a78bfa;--pdim:rgba(167,139,250,0.1);--gold:#f59e0b;--golddim:rgba(245,158,11,0.1);--teal:#2dd4bf;--tealdim:rgba(45,212,191,0.1);--text:#e2f0e4;--text2:#a8c5ab;--text3:#4a6b4d;--fd:'Rajdhani',sans-serif;--fb:'DM Sans',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(74,222,128,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,128,0.025) 1px,transparent 1px);background-size:48px 48px;}
+.app{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 16px 80px;}
+.screen{display:none;}.screen.active{display:block;animation:fadeIn 0.4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ob-wrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:40px 0;}
+.ob-logo{text-align:center;margin-bottom:36px;}
+.ob-logo-main{font-family:var(--fd);font-size:48px;font-weight:700;color:var(--green);letter-spacing:2px;line-height:1;text-shadow:0 0 40px rgba(74,222,128,0.3);}
+.ob-logo-sub{font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-top:6px;}
+.ob-logo-ver{font-size:11px;color:var(--text3);margin-top:5px;}
+.ob-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px 32px;max-width:640px;margin:0 auto;}
+.ob-title{font-family:var(--fd);font-size:22px;font-weight:600;color:var(--green);margin-bottom:6px;}
+.ob-sub{font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.65;}
+.ob-input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fb);font-size:15px;padding:12px 16px;border-radius:10px;outline:none;transition:border-color .2s;}
+.ob-input:focus{border-color:var(--green);}
+.ob-input::placeholder{color:var(--text3);}
+select.ob-input{cursor:pointer;}
+.pin-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+.id-label{font-size:11px;color:var(--text3);margin-bottom:5px;letter-spacing:.5px;}
+.cs-suggest{background:var(--gdim);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.cs-suggest-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.cs-suggest-text strong{font-family:var(--fd);font-size:15px;color:var(--green);}
+.cs-suggest-note{font-size:11px;color:var(--text3);display:block;margin-top:2px;}
+.btn-cs{padding:7px 16px;font-size:12px;font-weight:600;background:var(--green);color:#071209;border:none;border-radius:8px;cursor:pointer;font-family:var(--fb);white-space:nowrap;flex-shrink:0;}
+.btn-cs:hover{background:#86efac;}
+.sp-status{font-size:11px;padding:6px 12px;border-radius:8px;text-align:center;margin-bottom:12px;display:none;}
+.st-ok{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);display:block!important;}
+.st-err{background:var(--rdim);color:var(--red);border:1px solid rgba(248,113,113,.2);display:block!important;}
+.st-wait{background:var(--adim);color:var(--amber);border:1px solid rgba(251,191,36,.2);display:block!important;}
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.t-btn{border:1px solid var(--border);border-radius:14px;padding:20px 16px;cursor:pointer;background:var(--bg3);transition:all .2s;text-align:left;}
+.t-btn:hover,.t-btn.sel{border-color:var(--border2);background:var(--gdim);}
+.t-btn.sel{border-color:var(--green);}
+.t-icon{font-size:26px;margin-bottom:8px;}
+.t-name{font-family:var(--fd);font-size:17px;font-weight:600;margin-bottom:4px;}
+.t-btn.fa .t-name{color:var(--green);}.t-btn.cp .t-name{color:var(--blue);}
+.t-level{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px;}
+.t-btn.fa .t-level{background:var(--tealdim);color:var(--teal);border:1px solid rgba(45,212,191,.2);}
+.t-btn.cp .t-level{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.t-desc{font-size:11px;color:var(--text2);line-height:1.5;}
+.disclaimer{font-size:10px;color:var(--text3);line-height:1.6;padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;margin-bottom:18px;}
+.btn-p{width:100%;padding:13px;font-family:var(--fd);font-size:17px;font-weight:600;letter-spacing:1px;background:var(--green);color:#071209;border:none;border-radius:10px;cursor:pointer;transition:all .2s;}
+.btn-p:hover{background:#86efac;transform:translateY(-1px);}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-sec{width:100%;padding:11px;font-family:var(--fd);font-size:15px;font-weight:600;background:none;color:var(--green);border:1px solid var(--border2);border-radius:10px;cursor:pointer;transition:all .2s;margin-top:8px;}
+.btn-sec:hover{background:var(--gdim);}
+.calib-opt{padding:10px 13px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;background:var(--bg3);font-size:12px;color:var(--text2);transition:all .15s;}
+.calib-opt:hover{border-color:var(--border2);}
+.calib-opt.sel{border-color:var(--green);background:var(--gdim);}
+.calib-progress{font-size:11px;color:var(--text3);margin-bottom:12px;}
+.calib-pass-wrap{text-align:center;padding:20px 0 16px;}
+.calib-pass-num{font-family:var(--fd);font-size:88px;font-weight:700;color:var(--green);line-height:1;text-shadow:0 0 50px rgba(74,222,128,.6);animation:popIn .5s ease;margin-bottom:6px;}
+@keyframes popIn{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.calib-pass-title{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--green);letter-spacing:2px;margin-bottom:12px;}
+.calib-pass-sub{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px;}
+.calib-fail-num{font-family:var(--fd);font-size:52px;font-weight:700;color:var(--amber);line-height:1;margin-bottom:8px;}
+.cs-detail{font-size:12px;color:var(--text3);padding:10px 14px;background:var(--bg3);border-radius:8px;line-height:1.65;margin-bottom:16px;text-align:left;}
+.geo-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.geo-title{font-size:11px;font-weight:600;color:var(--teal);letter-spacing:1.5px;margin-bottom:8px;}
+.top-bar{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:14px 20px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.tb-identity{display:flex;align-items:center;gap:12px;}
+.tb-av{width:40px;height:40px;border-radius:50%;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--gdim);flex-shrink:0;}
+.tb-name{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--green);line-height:1;}
+.tb-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;}
+.tb-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;}
+.tb-cp{background:var(--bdim);color:var(--blue);border:1px solid rgba(96,165,250,.25);}
+.tb-fa{background:var(--tealdim);color:var(--teal);border:1px solid rgba(45,212,191,.25);}
+.tb-rank{font-size:11px;color:var(--text2);padding:2px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;}
+.tb-sync{font-size:12px;cursor:default;}
+.tb-credits{text-align:center;}
+.tb-cr-val{font-family:var(--fd);font-size:40px;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 24px rgba(245,158,11,.35);}
+.tb-cr-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:1px;}
+.tb-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ep-sel{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fb);font-size:12px;padding:6px 10px;border-radius:8px;outline:none;cursor:pointer;}
+.ep-sel:focus{border-color:var(--green);}
+.btn-track{padding:6px 14px;font-size:11px;font-weight:600;border:1px solid var(--border2);border-radius:20px;background:none;color:var(--green);cursor:pointer;font-family:var(--fb);transition:all .15s;}
+.btn-track:hover{background:var(--gdim);}
+.tabs{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:0;}
+.tab{flex:1;padding:7px 6px;font-size:11px;font-weight:500;background:none;border:none;color:var(--text3);cursor:pointer;border-radius:8px;transition:all .15s;font-family:var(--fb);white-space:nowrap;text-align:center;}
+.tab.active{background:var(--gdim);color:var(--green);border:1px solid var(--border2);}
+.tab:hover:not(.active){color:var(--text2);}
+.aria-box{border:1px solid var(--border);border-left:3px solid var(--green);border-radius:14px;padding:14px 18px;background:var(--bg2);margin:14px 0 12px;}
+.aria-tag{font-size:10px;font-weight:600;color:var(--green);letter-spacing:2px;display:block;margin-bottom:5px;}
+.aria-txt{font-size:13px;color:var(--text2);line-height:1.7;}
+.aria-txt strong{color:var(--text);}
+.ch-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
+.ch-card.open{border-color:var(--green);}
+.ch-card.solved{border-color:rgba(74,222,128,.3);opacity:.88;}
+.ch-card.reviewed{border-color:rgba(251,191,36,.25);opacity:.82;}
+.ch-hdr{padding:14px 18px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.ch-hdr:hover{background:rgba(74,222,128,.02);}
+.ch-title{font-family:var(--fd);font-size:16px;font-weight:600;color:var(--text);}
+.ch-mark{font-size:12px;margin-left:8px;}
+.ch-mark.s{color:var(--green);}.ch-mark.r{color:var(--amber);}
+.ch-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;}
+.b-cp{background:var(--bdim);color:var(--blue);border:1px solid rgba(96,165,250,.2);}
+.b-fa{background:var(--tealdim);color:var(--teal);border:1px solid rgba(45,212,191,.2);}
+.b-rookie{background:rgba(74,222,128,.08);color:var(--green);border:1px solid rgba(74,222,128,.15);}
+.b-easy{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);}
+.b-medium{background:var(--adim);color:var(--amber);border:1px solid rgba(251,191,36,.2);}
+.b-hard{background:var(--rdim);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+.b-expert{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.b-cat{background:var(--bg3);color:var(--text3);border:1px solid var(--border);}
+.b-ind{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.b-cr{background:var(--golddim);color:var(--gold);border:1px solid rgba(245,158,11,.25);font-size:12px;padding:4px 12px;border-radius:20px;white-space:nowrap;}
+.ch-chev{color:var(--text3);font-size:11px;margin-top:3px;transition:transform .2s;flex-shrink:0;}
+.ch-card.open .ch-chev{transform:rotate(180deg);}
+.ch-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border);}
+.ch-body.show{display:block;}
+.ind-tag{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 8px;}
+.ic{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+.ic-co{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.ic-hq{background:var(--bdim);color:var(--blue);border:1px solid rgba(96,165,250,.2);}
+.ic-ct{background:var(--golddim);color:var(--gold);border:1px solid rgba(245,158,11,.2);}
+.concept-box{background:linear-gradient(135deg,rgba(45,212,191,.06),rgba(74,222,128,.04));border:1px solid rgba(45,212,191,.2);border-radius:12px;padding:14px 16px;margin:12px 0 10px;}
+.concept-tag{font-size:10px;font-weight:600;color:var(--teal);letter-spacing:1.5px;display:block;margin-bottom:7px;}
+.concept-text{font-size:13px;color:var(--text2);line-height:1.75;}
+.concept-text strong{color:var(--text);}
+.cust-voice{background:var(--bg3);border-left:3px solid var(--amber);border-radius:10px;padding:13px 15px;margin:8px 0 10px;font-size:13px;color:var(--text2);line-height:1.75;}
+.cv-tag{font-size:10px;font-weight:600;color:var(--amber);letter-spacing:1.5px;display:block;margin-bottom:5px;}
+.ch-q{background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.1);border-radius:10px;padding:13px 15px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--text);line-height:1.6;}
+.q-tag{font-size:10px;color:var(--green);font-weight:600;letter-spacing:1.5px;display:block;margin-bottom:5px;}
+.cr-prev{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.crp{font-size:11px;padding:3px 10px;border-radius:20px;}
+.crp-w{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);}
+.crp-l{background:var(--rdim);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+.mcq-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.mcq-opt{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg3);transition:all .15s;}
+.mcq-opt:hover:not(.disabled){border-color:var(--border2);background:var(--gdim);}
+.mcq-opt.sel{border-color:var(--green);background:var(--gdim);}
+.mcq-opt.correct{border-color:var(--green);background:rgba(74,222,128,.1);}
+.mcq-opt.wrong{border-color:var(--red);background:var(--rdim);}
+.mcq-opt.disabled{cursor:default;}
+.mcq-l{width:22px;height:22px;min-width:22px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text3);flex-shrink:0;}
+.mcq-opt.sel .mcq-l,.mcq-opt.correct .mcq-l{background:var(--green);color:#071209;border-color:var(--green);}
+.mcq-opt.wrong .mcq-l{background:var(--red);color:#fff;border-color:var(--red);}
+.mcq-t{font-size:13px;color:#c8deca;line-height:1.5;padding-top:1px;}
+.open-area{width:100%;min-height:80px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--fb);font-size:13px;padding:11px 13px;border-radius:10px;outline:none;resize:vertical;transition:border-color .2s;line-height:1.6;margin-bottom:10px;}
+.open-area:focus{border-color:var(--green);}
+.open-area::placeholder{color:var(--text3);}
+.btn-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.btn-sub{padding:9px 20px;font-family:var(--fd);font-size:14px;font-weight:600;letter-spacing:.5px;background:var(--green);color:#071209;border:none;border-radius:8px;cursor:pointer;transition:all .15s;}
+.btn-sub:hover{background:#86efac;}
+.btn-hint{padding:8px 14px;font-size:12px;border:1px solid rgba(251,191,36,.3);border-radius:8px;background:none;color:var(--amber);cursor:pointer;font-family:var(--fb);transition:all .15s;}
+.btn-hint:hover{background:var(--adim);}
+.btn-sw{padding:8px 13px;font-size:11px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--text3);cursor:pointer;font-family:var(--fb);transition:all .15s;}
+.btn-sw:hover{color:var(--text2);border-color:var(--border2);}
+.res-box{margin-top:10px;padding:13px 15px;border-radius:10px;font-size:13px;line-height:1.7;}
+.r-tag{font-size:10px;font-weight:600;letter-spacing:1.5px;display:block;margin-bottom:5px;}
+.r-ng{background:var(--rdim);border:1px solid rgba(248,113,113,.2);color:#fca5a5;}
+.r-ng .r-tag{color:var(--red);}
+.r-hn{background:var(--adim);border:1px solid rgba(251,191,36,.2);color:#fcd34d;}
+.r-hn .r-tag{color:var(--amber);}
+.recovery{margin-top:10px;background:var(--bg3);border:1px solid rgba(248,113,113,.25);border-radius:12px;padding:14px 16px;}
+.rec-title{font-size:11px;font-weight:600;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.rec-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.rec-btn{padding:9px 16px;font-size:12px;font-weight:600;border-radius:8px;cursor:pointer;font-family:var(--fb);transition:all .15s;border:none;}
+.rb-retry{background:var(--gdim);color:var(--green);border:1px solid rgba(74,222,128,.25);}
+.rb-hint{background:var(--adim);color:var(--amber);border:1px solid rgba(251,191,36,.25);}
+.rb-give{background:var(--rdim);color:var(--red);border:1px solid rgba(248,113,113,.25);}
+.debrief{margin-top:12px;padding:15px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:10px;font-size:13px;color:var(--text2);line-height:1.8;}
+.d-tag{font-size:10px;font-weight:600;color:var(--blue);letter-spacing:1.5px;display:block;margin-bottom:7px;}
+.debrief strong{color:var(--text);}
+.d-link{display:inline-block;margin-top:10px;padding:6px 14px;background:var(--bdim);border:1px solid rgba(96,165,250,.2);border-radius:8px;color:var(--blue);font-size:12px;font-weight:600;text-decoration:none;}
+.lb-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.lb-tab{padding:5px 12px;font-size:11px;font-weight:600;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-family:var(--fb);transition:all .15s;}
+.lb-tab.active{background:var(--golddim);color:var(--gold);border-color:rgba(245,158,11,.3);}
+.lb-tab:hover:not(.active){color:var(--text2);}
+.lb-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.lb-tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding:7px 8px;border-bottom:1px solid var(--border);}
+.lb-tbl td{padding:9px 8px;border-bottom:1px solid rgba(74,222,128,.04);color:var(--text2);vertical-align:middle;}
+.lb-tbl tr:last-child td{border-bottom:none;}
+.lb-cr{color:var(--gold);font-family:var(--fd);font-weight:700;font-size:14px;}
+.lb-you{background:var(--gdim);}.lb-you td{color:var(--green);}.lb-you .lb-cr{color:var(--green);}
+.trk-chip{font-size:9px;font-weight:600;padding:1px 6px;border-radius:20px;margin-left:4px;}
+.tc-cp{background:var(--bdim);color:var(--blue);}.tc-fa{background:var(--tealdim);color:var(--teal);}
+.chg-pos{color:var(--green);font-size:11px;font-weight:600;}.chg-neg{color:var(--red);font-size:11px;font-weight:600;}
+.lb-loading{font-size:12px;color:var(--text3);padding:20px 10px;text-align:center;}
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ab-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px;}
+.ab-icon{font-size:17px;margin-bottom:5px;}
+.ab-title{font-family:var(--fd);font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.ab-body{font-size:12px;color:var(--text2);line-height:1.6;}
+.ib-section{margin-bottom:22px;}
+.ib-heading{font-family:var(--fd);font-size:17px;font-weight:600;color:var(--green);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.ib-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;}
+.ib-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.ib-a{font-size:13px;color:var(--text2);line-height:1.75;}
+.ib-a strong{color:var(--text);}
+.ib-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.ib-tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--border);}
+.ib-tbl td{padding:8px 10px;border-bottom:1px solid rgba(74,222,128,.04);color:var(--text2);vertical-align:top;}
+.ib-tbl tr:last-child td{border-bottom:none;}
+.ib-tbl td:first-child{color:var(--gold);font-weight:600;font-family:var(--fd);font-size:13px;white-space:nowrap;}
+.locked{text-align:center;padding:44px 20px;}
+.lk-icon{font-size:56px;margin-bottom:18px;}
+.lk-title{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--amber);margin-bottom:14px;}
+.lk-aria{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:14px;padding:18px 22px;max-width:480px;margin:0 auto 22px;font-size:13px;color:var(--text2);line-height:1.85;text-align:left;}
+.lk-tag{font-size:10px;font-weight:600;color:var(--amber);letter-spacing:1.5px;display:block;margin-bottom:8px;}
+.lk-feats{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:480px;margin:0 auto 20px;}
+.lk-feat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:left;position:relative;overflow:hidden;}
+.lk-feat::after{content:'🔒';position:absolute;top:8px;right:10px;font-size:13px;opacity:.5;}
+.lk-ft{font-size:12px;font-weight:600;color:var(--text3);margin-bottom:3px;}
+.lk-fd{font-size:11px;color:var(--text3);line-height:1.45;opacity:.7;}
+.lk-credit{font-size:11px;color:var(--text3);opacity:.5;margin-top:16px;text-align:center;letter-spacing:1px;}
+.sf{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7);z-index:999;background:var(--bg2);border-radius:20px;padding:20px 40px;font-family:var(--fd);font-size:38px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;text-align:center;min-width:200px;}
+.sf.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.sf.good{border:2px solid var(--green);color:var(--green);box-shadow:0 0 60px rgba(74,222,128,.25);}
+.sf.bad{border:2px solid var(--red);color:var(--red);}
+.sf.info{border:2px solid var(--amber);color:var(--amber);}
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .3s ease;}
+.modal-box{background:var(--bg2);border:1px solid var(--green);border-radius:20px;padding:28px 30px;max-width:480px;width:100%;text-align:center;}
+.modal-icon{font-size:48px;margin-bottom:12px;}
+.modal-title{font-family:var(--fd);font-size:24px;font-weight:700;color:var(--green);margin-bottom:10px;}
+.modal-body{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:18px;}
+.modal-body strong{color:var(--text);}
+.modal-sig{font-size:11px;color:var(--text3);margin-bottom:18px;font-style:italic;}
+.btn-modal{padding:11px 28px;font-family:var(--fd);font-size:15px;font-weight:600;background:var(--green);color:#071209;border:none;border-radius:10px;cursor:pointer;}
+.btn-modal:hover{background:#86efac;}
+.reset-box{background:var(--rdim);border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:14px 16px;margin-top:12px;}
+.reset-title{font-size:12px;font-weight:600;color:var(--red);margin-bottom:8px;}
+.reset-btns{display:flex;gap:8px;}
+.btn-rc{padding:8px 16px;font-size:12px;font-weight:600;background:var(--red);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--fb);}
+.btn-rx{padding:8px 16px;font-size:12px;font-weight:600;background:none;color:var(--text3);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-family:var(--fb);}
+.load-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.load-logo{font-family:var(--fd);font-size:36px;font-weight:700;color:var(--green);letter-spacing:2px;text-shadow:0 0 30px rgba(74,222,128,.3);}
+.load-msg{font-size:13px;color:var(--text3);}
+.load-bar{width:200px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
+.load-fill{height:100%;background:var(--green);border-radius:2px;animation:loadAnim 1.5s ease-in-out infinite;}
+@keyframes loadAnim{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
+@media(max-width:600px){.track-grid{grid-template-columns:1fr;}.ab-grid,.lk-feats{grid-template-columns:1fr;}.top-bar{flex-direction:column;align-items:flex-start;}.tb-controls{width:100%;}.tabs{overflow-x:auto;}.tab{font-size:10px;padding:6px 4px;}.pin-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="sf" id="sf"></div>
+<div class="app">
+
+<!-- LOADING SCREEN -->
+<div class="screen active" id="sc-load">
+  <div class="load-screen">
+    <div class="load-logo">OT CYBERARENA</div>
+    <div class="load-bar"><div class="load-fill"></div></div>
+    <div class="load-msg" id="load-msg">Loading challenge data...</div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="screen" id="sc-ob">
+<div class="ob-wrap">
+  <div class="ob-logo">
+    <div class="ob-logo-main">OT CYBER<br>ARENA</div>
+    <div class="ob-logo-sub">Meridian Industrial Group · Global Threat Force</div>
+    <div class="ob-logo-ver">Season 1 · SecureOT Suite</div>
+  </div>
+
+  <div class="ob-card" id="ob1">
+    <div class="ob-title">// IDENTITY CHECK</div>
+    <div class="ob-sub">Every operative starts with <strong style="color:var(--gold)">500 credits</strong>. Your email identifies your account — it is never shown publicly or used for marketing.</div>
+    <div style="margin-bottom:14px;">
+      <div class="id-label">EMAIL ADDRESS</div>
+      <input class="ob-input" id="ob-email" placeholder="your@email.com" type="email" maxlength="120" autocomplete="email">
+    </div>
+    <div class="cs-suggest" id="cs-suggest">
+      <div class="cs-suggest-text">
+        Suggested callsign: <strong id="cs-name">GhostNode_SG</strong>
+        <span class="cs-suggest-note">✏️ Use this or type your own below</span>
+      </div>
+      <button class="btn-cs" onclick="useCallsign()">Use this →</button>
+    </div>
+    <div class="pin-row">
+      <div><div class="id-label">CALLSIGN</div><input class="ob-input" id="ob-name" placeholder="Your callsign..." maxlength="30" autocomplete="off"></div>
+      <div><div class="id-label">4-DIGIT PIN</div><input class="ob-input" id="ob-pin" placeholder="e.g. 7392" maxlength="4" type="password" autocomplete="off"></div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="ob-consent1" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
+        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I have read and agree to the <span style="color:var(--green);text-decoration:underline;cursor:pointer;" onclick="showPrivacy()">Privacy Policy</span></span>
+      </label>
+    </div>
+    <div style="margin-bottom:18px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="ob-consent2" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
+        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I confirm I am 16 years of age or older</span>
+      </label>
+    </div>
+    <div class="sp-status" id="ob-sp-status"></div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:18px;">Same email + callsign + PIN on any device = your scores load automatically.</div>
+    <button class="btn-p" onclick="goOb2()" id="btn-ob1">CONFIRM IDENTITY →</button>
+  </div>
+
+  <div class="ob-card" id="ob2" style="display:none">
+    <div class="ob-title">// CHOOSE YOUR TRACK</div>
+    <div class="ob-sub">Two tracks. Same mission: build genuine OT cybersecurity knowledge and sharpen the skills that protect critical operations.</div>
+    <div class="track-grid">
+      <div class="t-btn fa" onclick="selTrack('FA')" id="trk-fa">
+        <div class="t-icon">🌱</div><div class="t-name">FIELD AGENT</div>
+        <div class="t-level">Fundamental Level</div>
+        <div class="t-desc">New to OT cybersecurity? Start here. Every challenge includes a plain-English concept brief. Build your fundamentals from the ground up — no prior knowledge needed.</div>
+      </div>
+      <div class="t-btn cp" onclick="selTrack('CP')" id="trk-cp">
+        <div class="t-icon">⚔️</div><div class="t-name">CYBER PROFESSIONAL</div>
+        <div class="t-level">Advanced Level</div>
+        <div class="t-desc">Already know OT security fundamentals? Real customer scenarios as the OT security lead. Budget battles, board presentations, incident response decisions. Calibration required to enter.</div>
+      </div>
+    </div>
+    <div class="disclaimer">⚠️ All player names, company names, characters, and scenarios are entirely fictitious and created for educational purposes only.</div>
+    <button class="btn-p" onclick="goOb3()" id="btn-ob2" disabled>SELECT TRACK →</button>
+  </div>
+
+  <div class="ob-card" id="ob-geo" style="display:none">
+    <div class="ob-title">// ONE LAST THING</div>
+    <div class="ob-sub">Help us understand where our operatives are based. Your location is used only for the game — never shared externally.</div>
+    <div class="geo-box">
+      <div class="geo-title">// DETECTING YOUR LOCATION</div>
+      <div id="geo-status" style="font-size:12px;color:var(--text3);">⏳ Requesting location access...</div>
+      <div id="geo-manual" style="display:none;margin-top:10px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Select your country:</div>
+        <select class="ob-input" id="geo-country">
+          <option value="">Select country...</option>
+          <option>Australia</option><option>China</option><option>India</option>
+          <option>Indonesia</option><option>Japan</option><option>Korea</option>
+          <option>Malaysia</option><option>New Zealand</option><option>Philippines</option>
+          <option>Singapore</option><option>Taiwan</option><option>Thailand</option>
+          <option>Vietnam</option><option>Others</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-p" onclick="geoNext()" id="btn-geo" disabled>ENTER THE ARENA →</button>
+    <button class="btn-sec" onclick="geoSkip()">Skip for now →</button>
+  </div>
+
+  <div class="ob-card" id="ob3a" style="display:none">
+    <div class="ob-title">// WELCOME, FIELD AGENT</div>
+    <div class="ob-sub">You are on the <strong style="color:var(--green)">Field Agent — Fundamental</strong> track. No prior cybersecurity knowledge needed. Each challenge starts with a concept brief. Read it. Then answer.</div>
+    <div style="background:var(--tealdim);border:1px solid rgba(45,212,191,.2);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.7;">
+      <div style="font-size:10px;font-weight:600;color:var(--teal);letter-spacing:1.5px;margin-bottom:6px;">// WHAT TO EXPECT</div>
+      20 challenges · Multiple choice · Concept brief before every question · Hints available · Wrong answers cost credits but teach you something
+    </div>
+    <button class="btn-p" onclick="launch()">ENTER THE ARENA →</button>
+  </div>
+
+  <div class="ob-card" id="ob3b" style="display:none">
+    <div class="ob-title">// CALIBRATION BRIEF</div>
+    <div class="ob-sub">The <strong style="color:var(--blue)">Cyber Professional — Advanced</strong> track assumes OT cybersecurity fundamentals. Three questions to confirm. All three correct required. Unlimited retries. <strong style="color:var(--green)">Pass once — never asked again, on any device.</strong></div>
+    <div id="calib-q" style="margin-bottom:18px;"></div>
+    <button class="btn-p" onclick="nextCalib()" id="btn-calib" disabled>NEXT →</button>
+  </div>
+
+  <div class="ob-card" id="ob3b-res" style="display:none">
+    <div id="calib-result"></div>
+    <button class="btn-p" id="btn-pass" style="display:none" onclick="launch()">ENTER THE ARENA →</button>
+    <button class="btn-p" id="btn-retry" style="display:none" onclick="retryCalib()">TRY CALIBRATION AGAIN →</button>
+    <button class="btn-sec" id="btn-go-fa" style="display:none" onclick="goFA()">TAKE ME TO FIELD AGENT TRACK →</button>
+  </div>
+</div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="sc-game">
+  <div class="top-bar">
+    <div class="tb-identity">
+      <div class="tb-av">🧑‍💻</div>
+      <div>
+        <div class="tb-name" id="g-name">OPERATIVE</div>
+        <div class="tb-meta">
+          <span id="g-track-badge" class="tb-badge tb-fa">FA</span>
+          <span id="g-rank" class="tb-rank">🔰 Trainee</span>
+          <span id="sp-dot" class="tb-sync" title="Score sync">☁️</span>
+        </div>
+      </div>
+    </div>
+    <div class="tb-credits">
+      <div class="tb-cr-val" id="g-cr">500</div>
+      <div class="tb-cr-lbl">🪙 Arena Credits</div>
+    </div>
+    <div class="tb-controls">
+      <select class="ep-sel" id="ep-sel" onchange="changeEpisode()">
+        <option value="S1E1">S1 · Ep 1</option>
+        <option value="more" disabled>More coming...</option>
+      </select>
+      <button class="btn-track" onclick="changeTrack()">⇄ Track</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('challenges',this)">Challenges</button>
+    <button class="tab" onclick="showTab('leaderboard',this)">Leaderboard</button>
+    <button class="tab" onclick="showTab('about',this)">SecureOT Intel</button>
+    <button class="tab" onclick="showTab('intel',this)">📖 Intel Brief</button>
+    <button class="tab" onclick="showTab('coming',this)">What's Next 🔒</button>
+  </div>
+
+  <div id="tab-challenges">
+    <div class="aria-box" id="aria-brief"></div>
+    <div id="ch-list"></div>
+    <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Want to start fresh with the same callsign and PIN? Reset wipes your solves and returns you to 500 credits.</div>
+      <button class="btn-sw" onclick="showReset()">↺ Reset My Progress</button>
+      <div id="reset-confirm" style="display:none" class="reset-box">
+        <div class="reset-title">⚠️ This cannot be undone. All solves deleted and credits reset to 500.</div>
+        <div class="reset-btns">
+          <button class="btn-rc" onclick="doReset()">Yes, reset everything</button>
+          <button class="btn-rx" onclick="hideReset()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-leaderboard" style="display:none">
+    <div class="aria-box" style="margin-top:14px;">
+      <span class="aria-tag">// ARIA — LIVE CREDIT STANDINGS · SEASON 1</span>
+      <span class="aria-txt">Live scores updated in real time. Every solve changes the board. <strong>Your position changes every time someone plays.</strong></span>
+    </div>
+    <div class="lb-tabs">
+      <button class="lb-tab active" onclick="renderLB('all',this)">All</button>
+      <button class="lb-tab" onclick="renderLB('CP',this)">Cyber Professionals</button>
+      <button class="lb-tab" onclick="renderLB('FA',this)">Field Agents</button>
+    </div>
+    <div id="lb-content"><div class="lb-loading">Loading live scores...</div></div>
+  </div>
+
+  <div id="tab-about" style="display:none">
+    <div class="aria-box" style="margin-top:14px;">
+      <span class="aria-tag">// INTEL DOSSIER — SecureOT™ Suite · Rockwell Automation</span>
+      <span class="aria-txt">Know this cold. <strong>OT-first. Passive. Closed-loop. Vendor-neutral.</strong></span>
+    </div>
+    <div class="ab-grid">
+      <div class="ab-card"><div class="ab-icon">🎯</div><div class="ab-title">The Core Problem</div><div class="ab-body">OT environments need vulnerability management that won't crash a PLC. Traditional IT scanners are too aggressive. SecureOT Platform uses passive, OEM-safe methods — software sensors per subnet, zero production disruption.</div></div>
+      <div class="ab-card"><div class="ab-icon">📡</div><div class="ab-title">Discovery Without Risk</div><div class="ab-body">Passive-first via software sensors. Every OS-based endpoint profiled with 1,000+ data points: patch status, configurations, user accounts, active security controls.</div></div>
+      <div class="ab-card"><div class="ab-icon">⚠️</div><div class="ab-title">Risk & Vulnerability Loop</div><div class="ab-body">Maps CVEs and CVSS scores to discovered assets. Multi-dimensional risk scoring weighs criticality, exposure, and compensating controls. Closed loop: discovery → assessment → remediation.</div></div>
+      <div class="ab-card"><div class="ab-icon">🔔</div><div class="ab-title">Config Change Tracking</div><div class="ab-body">Continuously monitors OT asset configurations and flags deviations from baseline. Detects abnormal activity before the SIEM fires — inside the host, not just at the network boundary.</div></div>
+      <div class="ab-card"><div class="ab-icon">📋</div><div class="ab-title">Compliance Built In</div><div class="ab-body">Auto-aligned governance reporting for IEC 62443, NIST CSF, and NIS2. What took 3 days of manual spreadsheet work becomes a live dashboard.</div></div>
+      <div class="ab-card"><div class="ab-icon">🤝</div><div class="ab-title">Managed Services</div><div class="ab-body">Rockwell Automation OT professionals fill the skills gap: quarterly platform updates, evergreen asset inventory, ongoing cybersecurity roadmap. The 2AM call goes to them, not you.</div></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;">Win phrases</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--text2);">
+        <span><span style="color:var(--green)">✓</span> OT-native, not repurposed IT</span>
+        <span><span style="color:var(--green)">✓</span> Passive-first, preserves uptime</span>
+        <span><span style="color:var(--green)">✓</span> 1,000+ data points per endpoint</span>
+        <span><span style="color:var(--green)">✓</span> Closed-loop: assess → remediate</span>
+        <span><span style="color:var(--green)">✓</span> IEC 62443 + NIST CSF + NIS2 built in</span>
+        <span><span style="color:var(--green)">✓</span> Managed services for the skills gap</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-intel" style="display:none">
+    <div class="aria-box" style="margin-top:14px;">
+      <span class="aria-tag">// ARIA — OPERATIVE FIELD MANUAL · SEASON 1</span>
+      <span class="aria-txt">Everything you need to know to play, score, and climb the leaderboard. Read this once. Then go win.</span>
+    </div>
+    <div class="ib-section">
+      <div class="ib-heading">🎮 Getting Started</div>
+      <div class="ib-card"><div class="ib-q">How do I play?</div><div class="ib-a">Click any challenge card to open it. Read the scenario. Answer the question. Submit. Your credits update instantly and your score appears on the live leaderboard.</div></div>
+      <div class="ib-card"><div class="ib-q">What is my callsign and PIN for?</div><div class="ib-a">Your callsign is your name on the leaderboard. Your 4-digit PIN is your key. <strong>Use the exact same callsign and PIN every time</strong> — on any device, any browser — and your credits and progress load automatically.</div></div>
+      <div class="ib-card"><div class="ib-q">Which track should I choose?</div><div class="ib-a"><strong>Field Agent (Fundamental):</strong> New to OT security. Every challenge starts with a plain-English brief. Start here.<br><br><strong>Cyber Professional (Advanced):</strong> You are the OT security lead. Real customer scenarios — budget battles, board presentations, incident response decisions. Calibration gate required.</div></div>
+    </div>
+    <div class="ib-section">
+      <div class="ib-heading">🪙 Credits & Scoring</div>
+      <div class="ib-card"><div class="ib-a">You start with <strong>500 credits</strong>. Credits are cumulative for life — every challenge you solve adds to the same balance.</div></div>
+      <table class="ib-tbl">
+        <thead><tr><th>Action</th><th>Credit change</th></tr></thead>
+        <tbody>
+          <tr><td>Correct — first attempt</td><td style="color:var(--green)">+ Full challenge credits</td></tr>
+          <tr><td>First wrong answer</td><td style="color:var(--text3)">0 — one free retry granted</td></tr>
+          <tr><td>Wrong after free retry</td><td style="color:var(--red)">− 20% of challenge credits</td></tr>
+          <tr><td>Use a hint</td><td style="color:var(--amber)">− 5% of challenge credits</td></tr>
+          <tr><td>Give up — show answer</td><td style="color:var(--red)">− 20% of challenge credits</td></tr>
+          <tr><td>3-day login streak</td><td style="color:var(--green)">+ 15 bonus credits</td></tr>
+          <tr><td>7-day login streak</td><td style="color:var(--green)">+ 50 bonus credits</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ib-section">
+      <div class="ib-heading">🏆 Ranks</div>
+      <table class="ib-tbl">
+        <thead><tr><th>Rank</th><th>Credits needed</th></tr></thead>
+        <tbody>
+          <tr><td>🔰 Trainee</td><td>0 – 499</td></tr>
+          <tr><td>⚙️ Field Tech</td><td>500 – 749</td></tr>
+          <tr><td>🛡️ SOC Analyst</td><td>750 – 999</td></tr>
+          <tr><td>🔍 Threat Hunter</td><td>1,000 – 1,499</td></tr>
+          <tr><td>💀 Ghost in the Machine</td><td>1,500+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-coming" style="display:none">
+    <div class="locked">
+      <div class="lk-icon">🔒</div>
+      <div class="lk-title">YOU WANT TO KNOW WHAT'S NEXT?</div>
+      <div class="lk-aria">
+        <span class="lk-tag">// ARIA — CLASSIFIED TRANSMISSION</span>
+        The world is in crisis <em>today</em>, operative.<br><br>
+        Critical infrastructure is under attack. Threat actors are active across 14 sectors globally. Your leaderboard position is, frankly, not where it needs to be.<br><br>
+        And you are asking about <em>future versions</em>?<br><br>
+        Take a walk. Sip a coffee. Breathe.<br><br>
+        Come back and finish the challenges in front of you first. What comes next is locked until it is ready — and it will be worth the wait.<br><br>
+        <strong>That is all. — ARIA</strong>
+      </div>
+      <div class="lk-feats">
+        <div class="lk-feat"><div class="lk-ft">⚡ Flash Challenges</div><div class="lk-fd">Breaking OT incidents. 24h window. Double credits.</div></div>
+        <div class="lk-feat"><div class="lk-ft">🤝 Team-Up Mechanics</div><div class="lk-fd">Duels. Relays. Mentor badge.</div></div>
+        <div class="lk-feat"><div class="lk-ft">🌐 More Episodes</div><div class="lk-fd">Asset Inventory, MDR, Incident Response.</div></div>
+        <div class="lk-feat"><div class="lk-ft">🗣️ Language Modes</div><div class="lk-fd">Japanese, Chinese, Korean.</div></div>
+        <div class="lk-feat"><div class="lk-ft">🏆 Track Graduation</div><div class="lk-fd">FA → CP after 500 credits + proctored test.</div></div>
+        <div class="lk-feat"><div class="lk-ft">🎭 Avatar Unlocks</div><div class="lk-fd">Earn by rank. Industry outfits.</div></div>
+      </div>
+      <div class="lk-credit" id="lk-credit" onclick="revealCredit()" style="cursor:pointer;" title="Click to reveal">Imagined by Humans · Powered by AI</div>
+    </div>
+  </div>
+
+</div><!-- /sc-game -->
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG — change this flag per deployment
+// ══════════════════════════════════════════
+const CONFIG = {
+  flavour: 'event',           // 'internal' | 'event' | 'community'
+  requireEmail: false,        // true for external flavours (email verify not yet built — future)
+  brandTitle: 'OT CyberArena',
+  supabaseFlavour: 'event'    // written to flavour column in Supabase
+};
+
+// ══ SUPABASE ══
+const SB_URL='https://gkclknubppjcdqkdvwmo.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrY2xrbnVicHBqY2Rxa2R2d21vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDMwMjEsImV4cCI6MjA5MTIxOTAyMX0.0RSRb0BD0h9_VKCrK6oix6YvhCTzIDQ2Oetdk1jPZ3k';
+const SBH={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+async function sbGet(t,q=''){const r=await fetch(SB_URL+'/rest/v1/'+t+q,{headers:SBH});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbPost(t,d){const r=await fetch(SB_URL+'/rest/v1/'+t,{method:'POST',headers:{...SBH,'Prefer':'return=representation'},body:JSON.stringify(d)});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbPatch(t,q,d){const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+q,{method:'PATCH',headers:{...SBH,'Prefer':'return=representation'},body:JSON.stringify(d)});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbDelete(t,q){const r=await fetch(SB_URL+'/rest/v1/'+t+'?'+q,{method:'DELETE',headers:SBH});if(!r.ok)throw new Error(r.status);}
+
+// ══ CHALLENGE DATA — loaded from JSON ══
+let FA_CHALLENGES = [];
+let CP_CHALLENGES = [];
+
+// ══ SEED PLAYERS — Event flavour ══
+const SEED_PLAYERS = [
+  {name:'IronGrid_AU',  credits:1740, solved:18, track:'CP', type:'seed', country:'Australia'},
+  {name:'NullVector_SG',credits:1380, solved:15, track:'CP', type:'seed', country:'Singapore'},
+  {name:'SOC_Samurai',  credits:920,  solved:10, track:'CP', type:'seed', country:'Japan'},
+  {name:'FieldOps_IN',  credits:610,  solved:11, track:'FA', type:'seed', country:'India'},
+  {name:'CyberWatch_MY',credits:445,  solved:5,  track:'FA', type:'seed', country:'Malaysia'}
+];
+
+// ══ CONSTANTS ══
+const START_CR=500;
+const TITLES=[[0,'🔰 Trainee'],[500,'⚙️ Field Tech'],[750,'🛡️ SOC Analyst'],[1000,'🔍 Threat Hunter'],[1500,'💀 Ghost in the Machine']];
+const ARIA_MSGS=[
+  {icon:'🌍',title:'THE WORLD NEEDS YOU, OPERATIVE.',body:`Critical infrastructure attacks have surged <strong>47% this quarter</strong>. Somewhere right now, a threat actor is mapping an OT network just like this one. You are not just learning — you are building the skills that keep the lights on. <strong>Five attempts in. Keep going.</strong>`},
+  {icon:'⚡',title:'ARIA INTERRUPT — THREAT LEVEL: ELEVATED.',body:`Five more attempts logged. Your knowledge is a weapon. A dull weapon does not protect anyone. <strong>Sharpen it. Keep going.</strong>`},
+  {icon:'🛡️',title:'STATUS REPORT: OPERATIVE STILL STANDING.',body:`Five more attempts logged. The global OT threat landscape does not pause for coffee breaks — and neither do you. <strong>Fun fact:</strong> The average dwell time for OT attackers is measured in months. Your awareness shortens that window. <strong>Resume mission.</strong>`},
+  {icon:'🤖',title:'ARIA ASSESSMENT: NOT BAD, ACTUALLY.',body:`Multiple challenge sets completed since login. The bad news: threat actors do not stop when you do. The good news: neither do you. The planet's critical infrastructure appreciates your commitment. <strong>Carry on.</strong>`},
+  {icon:'🔥',title:'WORLD CRISIS ONGOING. YOUR COFFEE IS GETTING COLD.',body:`The planet's OT systems — water treatment plants, power grids, manufacturing lines — are quietly grateful. They cannot speak. But if they could, they would say: <strong>"Please do not stop now."</strong>`}
+];
+const CS_PREFIXES=['Ghost','Zero','Iron','Null','Cyber','Phantom','Dark','Stealth','Crimson','Vector','Sigma','Viper','Apex','Nova','Storm'];
+const CS_SUFFIXES=['Packet','Node','Byte','Sector','Wire','Shield','Cipher','Proxy','Gate','Loop','Stack','Trace','Core','Grid','Link'];
+const CS_REGIONS=['SG','IN','AU','MY','JP','KR','TW','ID','TH','CN','NZ','PH'];
+function genCallsign(){return CS_PREFIXES[Math.floor(Math.random()*CS_PREFIXES.length)]+CS_SUFFIXES[Math.floor(Math.random()*CS_SUFFIXES.length)]+'_'+CS_REGIONS[Math.floor(Math.random()*CS_REGIONS.length)];}
+function getTitle(c){let t=TITLES[0][1];for(const[p,l]of TITLES)if(c>=p)t=l;return t;}
+
+// ══ STATE ══
+let pName='',pEmail='',pTrack='',pPin='',pCpQualified=false;
+let playerRowId=null,creditsRowId=null;
+let credits=START_CR,spConnected=false,pendingGeoData=null;
+const state={
+  FA:{solved:[],reviewed:[],wrongAttempts:{},usedHints:[],retried:[],perChMCQ:{},selMCQ:{},attempts:0,ariaShown:0},
+  CP:{solved:[],reviewed:[],wrongAttempts:{},usedHints:[],retried:[],perChMCQ:{},selMCQ:{},attempts:0,ariaShown:0}
+};
+let calibStep=0,calibSelections=[];
+const shuffleCache={};
+
+function seededRng(seed){let s=0;for(let i=0;i<seed.length;i++)s=(s*31+seed.charCodeAt(i))>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+function getShuffled(ch){
+  if(shuffleCache[ch.id])return shuffleCache[ch.id];
+  const rng=seededRng(ch.id);
+  const ix=ch.opts.map((t,i)=>({t,correct:i===ch.correctIdx}));
+  for(let i=ix.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[ix[i],ix[j]]=[ix[j],ix[i]];}
+  shuffleCache[ch.id]={shuffled:ix.map(o=>o.t),ci:ix.findIndex(o=>o.correct)};
+  return shuffleCache[ch.id];
+}
+
+// ══ CALIBRATION ══
+const CALIBQS=[
+  {q:'In OT security, what does "passive scanning" mean?',opts:['Running scans with read-only credentials','Listening to network traffic without sending any packets to devices','Scanning devices only during scheduled maintenance windows','Using a firewall to block incoming scan traffic'],correct:1},
+  {q:'Which international standard specifically defines zone-and-conduit security architecture for industrial control systems?',opts:['NIST SP 800-53','ISO 27001','IEC 62443','NERC CIP-013'],correct:2},
+  {q:'What is the PRIMARY operational risk of applying a firmware patch to a live OT device such as a PLC?',opts:['The patch licence fee may be too high','The patching process can cause unexpected device behaviour or downtime in a live process','The OEM vendor may revoke the device warranty','Patches always increase the attack surface temporarily'],correct:1}
+];
+
+// ══ JSON LOADER ══
+async function loadChallenges(){
+  const loadMsg = document.getElementById('load-msg');
+  try {
+    loadMsg.textContent = 'Loading Field Agent challenges...';
+    const faRes = await fetch('challenges/S1E1_FA.json');
+    if(!faRes.ok) throw new Error('FA challenges not found');
+    FA_CHALLENGES = await faRes.json();
+
+    loadMsg.textContent = 'Loading Cyber Professional challenges...';
+    const cpFile = `challenges/S1E1_CP_${CONFIG.flavour}.json`;
+    const cpRes = await fetch(cpFile);
+    if(!cpRes.ok) throw new Error('CP challenges not found');
+    CP_CHALLENGES = await cpRes.json();
+
+    loadMsg.textContent = 'Ready.';
+    // Transition to onboarding
+    setTimeout(()=>{
+      document.getElementById('sc-load').classList.remove('active');
+      document.getElementById('sc-load').style.display='none';
+      const ob=document.getElementById('sc-ob');
+      ob.style.display='block';ob.classList.add('active');
+      initCallsign();
+    },400);
+  } catch(err) {
+    loadMsg.textContent = 'Error loading challenges: '+err.message+'. Ensure you are running from a web server, not file://';
+    loadMsg.style.color='var(--red)';
+    console.error('Challenge load error:',err);
+  }
+}
+
+// ══ HELPERS ══
+function $id(id){return document.getElementById(id);}
+function show(id){const el=$id(id);if(el)el.style.display='block';}
+function hide(id){const el=$id(id);if(el)el.style.display='none';}
+function setSPDot(i){const el=$id('sp-dot');if(el)el.textContent=i;}
+function flash(msg,type){
+  const f=$id('sf');
+  f.textContent=msg;f.className='sf '+type;f.classList.add('show');
+  setTimeout(()=>f.classList.remove('show'),1800);
+}
+function getCh(){return pTrack==='FA'?FA_CHALLENGES:CP_CHALLENGES;}
+function getSt(){return state[pTrack]||state.CP;}
+function updateTopBar(){
+  const rk=getTitle(credits);
+  const el=$id('g-cr');if(el)el.textContent=credits.toLocaleString();
+  const rkel=$id('g-rank');if(rkel)rkel.textContent=rk;
+  const badge=$id('g-track-badge');
+  if(badge){badge.textContent=pTrack;badge.className='tb-badge '+(pTrack==='CP'?'tb-cp':'tb-fa');}
+}
+function addCr(amt){credits=Math.max(0,credits+amt);updateTopBar();}
+
+// ══ CALLSIGN ══
+function initCallsign(){const el=$id('cs-name');if(el)el.textContent=genCallsign();}
+function useCallsign(){const cs=$id('cs-name')?.textContent||'';const inp=$id('ob-name');if(inp&&cs){inp.value=cs;inp.focus();}}
+
+// ══ ONBOARDING ══
+async function goOb2(){
+  const e=$id('ob-email').value.trim().toLowerCase();
+  const n=$id('ob-name').value.trim();
+  const p=$id('ob-pin').value.trim();
+  const c1=$id('ob-consent1').checked;
+  const c2=$id('ob-consent2').checked;
+  const statusEl=$id('ob-sp-status');
+  if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){
+    statusEl.textContent='Enter a valid email address.';statusEl.className='sp-status st-err';return;
+  }
+  if(!n){statusEl.textContent='Enter your callsign.';statusEl.className='sp-status st-err';return;}
+  if(!/^\d{4}$/.test(p)){statusEl.textContent='PIN must be exactly 4 digits.';statusEl.className='sp-status st-err';return;}
+  if(!c1||!c2){statusEl.textContent='Please tick both consent checkboxes to continue.';statusEl.className='sp-status st-err';return;}
+  pEmail=e;pName=n;pPin=p;
+  const btn=$id('btn-ob1');btn.textContent='Checking...';btn.disabled=true;
+  try{
+    // Returning player: match by email + flavour first
+    const byEmail=await sbGet('players',`?email=eq.${encodeURIComponent(e)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id,name,track,cp_qualified`);
+    if(byEmail.length>0){
+      // Email exists — verify callsign + PIN match
+      const pinCheck=await sbGet('players',`?email=eq.${encodeURIComponent(e)}&pin=eq.${encodeURIComponent(p)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id,name,track,cp_qualified`);
+      if(pinCheck.length===0){
+        statusEl.textContent='Incorrect callsign or PIN for this email. Try again.';
+        statusEl.className='sp-status st-err';
+        btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;return;
+      }
+      playerRowId=pinCheck[0].id;
+      pName=pinCheck[0].name;
+      pCpQualified=pinCheck[0].cp_qualified||false;
+      const cred=await sbGet('credits',`?player_id=eq.${playerRowId}&select=id,credits,solved`);
+      if(cred.length>0){creditsRowId=cred[0].id;credits=cred[0].credits;}
+      const sv=await sbGet('solves',`?player_id=eq.${playerRowId}&correct=eq.true&select=challenge_id`);
+      sv.forEach(s=>{
+        const id=s.challenge_id;
+        if(id.startsWith('cp'))state.CP.solved.push(id);
+        else if(id.startsWith('fa'))state.FA.solved.push(id);
+      });
+      spConnected=true;setSPDot('✅');
+      statusEl.textContent=`Welcome back, ${pName}! Your progress has been loaded.`;
+      statusEl.className='sp-status st-ok';
+      try{await sbPatch('players',`id=eq.${playerRowId}`,{last_seen_at:new Date().toISOString()});}catch(err){}
+      setTimeout(()=>{hide('ob1');show('ob2');},1200);
+    } else {
+      // Check callsign not already taken by a different email
+      const byName=await sbGet('players',`?name=eq.${encodeURIComponent(n)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id`);
+      if(byName.length>0){
+        statusEl.textContent='That callsign is already taken. Choose a different one.';
+        statusEl.className='sp-status st-err';
+        btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;return;
+      }
+      spConnected=true;setSPDot('✅');
+      hide('ob1');show('ob2');
+    }
+  }catch(err){
+    spConnected=false;setSPDot('⚠️');
+    statusEl.textContent='Could not reach the live score server. Your score will save locally only.';
+    statusEl.className='sp-status st-wait';
+    hide('ob1');show('ob2');
+  }
+  btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;
+}
+
+function selTrack(t){
+  pTrack=t;
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('sel'));
+  $id('trk-'+t.toLowerCase()).classList.add('sel');
+  $id('btn-ob2').disabled=false;
+}
+
+function goOb3(){
+  if(!pTrack)return;
+  hide('ob2');
+  if(pTrack==='FA'){
+    if(playerRowId){launch();}
+    else{showGeo(()=>show('ob3a'));}
+  } else {
+    if(pCpQualified){
+      if(playerRowId){launch();}
+      else{showGeo(()=>launch());}
+    } else {
+      if(playerRowId){calibStep=0;calibSelections=[];show('ob3b');showCalib();}
+      else{showGeo(()=>{calibStep=0;calibSelections=[];show('ob3b');showCalib();});}
+    }
+  }
+}
+
+function goFA(){pTrack='FA';hide('ob3b-res');showGeo(()=>show('ob3a'));}
+
+// ══ GEOLOCATION ══
+let geoCb=null;
+function showGeo(cb){
+  if(playerRowId){if(cb)cb();return;}
+  geoCb=cb;
+  ['ob3a','ob3b','ob3b-res'].forEach(id=>hide(id));
+  show('ob-geo');
+  $id('btn-geo').disabled=true;
+  $id('geo-status').textContent='⏳ Requesting location access...';
+  hide('geo-manual');
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos=>{
+        pendingGeoData={source:'auto'};
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
+          .then(r=>r.json())
+          .then(d=>{
+            pendingGeoData.country=d.address?.country||'';
+            $id('geo-status').textContent=`📍 Detected: ${pendingGeoData.country}`;
+            $id('btn-geo').disabled=false;
+          })
+          .catch(()=>{$id('geo-status').textContent='📍 Location detected.';$id('btn-geo').disabled=false;});
+      },
+      ()=>{
+        $id('geo-status').textContent='Location access declined.';
+        show('geo-manual');
+        $id('geo-country').onchange=()=>{$id('btn-geo').disabled=!$id('geo-country').value;};
+      }
+    );
+  } else {
+    $id('geo-status').textContent='Location not available on this browser.';
+    show('geo-manual');
+    $id('geo-country').onchange=()=>{$id('btn-geo').disabled=!$id('geo-country').value;};
+  }
+}
+function geoNext(){
+  if($id('geo-manual').style.display!=='none'){
+    const c=$id('geo-country').value;if(!c)return;
+    pendingGeoData={country:c,source:'manual'};
+  }
+  hide('ob-geo');if(geoCb)geoCb();
+}
+function geoSkip(){pendingGeoData=null;hide('ob-geo');if(geoCb)geoCb();}
+
+// ══ CALIBRATION ══
+function showCalib(){
+  const q=CALIBQS[calibStep];
+  $id('calib-q').innerHTML=`
+    <div class="calib-progress">Question ${calibStep+1} of ${CALIBQS.length}</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px;">${q.q}</div>
+    ${q.opts.map((o,i)=>`<div class="calib-opt" onclick="selCalib(this,${i})">${o}</div>`).join('')}`;
+  $id('btn-calib').disabled=true;
+  $id('btn-calib').textContent=calibStep===CALIBQS.length-1?'SEE RESULTS →':'NEXT →';
+}
+function selCalib(el,idx){
+  document.querySelectorAll('.calib-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');calibSelections[calibStep]=idx;$id('btn-calib').disabled=false;
+}
+function nextCalib(){
+  if(calibSelections[calibStep]===undefined)return;
+  if(calibStep<CALIBQS.length-1){calibStep++;showCalib();}
+  else showCalibResult();
+}
+function showCalibResult(){
+  let score=0;
+  const details=CALIBQS.map((q,i)=>{
+    const ok=calibSelections[i]===q.correct;if(ok)score++;
+    return `<div style="padding:4px 0;color:${ok?'var(--green)':'var(--red)'};">${ok?'✓':'✗'} Q${i+1}: ${ok?'Correct':'Incorrect — correct: '+q.opts[q.correct]}</div>`;
+  }).join('');
+  hide('ob3b');show('ob3b-res');
+  if(score===3){
+    $id('calib-result').innerHTML=`
+      <div style="text-align:center;padding:20px 0 10px;">
+        <div class="calib-pass-num">3/3</div>
+        <div class="calib-pass-title">✓ CALIBRATION CLEARED</div>
+        <div class="calib-pass-sub">
+          <strong style="color:var(--text)">Outstanding.</strong> You know your OT cybersecurity fundamentals.<br>
+          Welcome to the Cyber Professional — Advanced track.<br><br>
+          <span style="font-size:12px;color:var(--text3);">You will never see this calibration again — on any device, ever.</span>
+        </div>
+        <div class="cs-detail">${details}</div>
+      </div>`;
+    $id('btn-pass').style.display='block';$id('btn-retry').style.display='none';$id('btn-go-fa').style.display='none';
+    pCpQualified=true;
+  } else {
+    const aria=score===0
+      ?`<strong style="color:var(--text)">ARIA recommends the Field Agent — Fundamental track first.</strong> The Cyber Professional track assumes solid OT cybersecurity fundamentals.`
+      :`<strong style="color:var(--text)">${score}/3 — not quite there.</strong> All three correct required. Retry as many times as you like. No penalty.`;
+    $id('calib-result').innerHTML=`<div style="text-align:center;padding:16px 0 14px"><div class="calib-fail-num">${score}/3</div><div style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px;">${aria}</div><div class="cs-detail">${details}</div></div>`;
+    $id('btn-pass').style.display='none';$id('btn-retry').style.display='block';$id('btn-go-fa').style.display='block';
+  }
+}
+function retryCalib(){calibStep=0;calibSelections=[];hide('ob3b-res');show('ob3b');showCalib();}
+
+// ══ LAUNCH ══
+async function launch(){
+  $id('sc-ob').classList.remove('active');$id('sc-ob').style.display='none';
+  const gs=$id('sc-game');gs.style.display='block';gs.classList.add('active');
+  $id('g-name').textContent=pName.toUpperCase();
+  updateTopBar();
+  const brf={
+    FA:`Welcome, <strong>${pName}</strong>. Field Agent — Fundamental track. Each challenge starts with a concept brief. Read it. Then answer. You have <strong style="color:var(--gold)">${credits.toLocaleString()} credits</strong>. Begin with Challenge 1.`,
+    CP:`Welcome, <strong>${pName}</strong>. Cyber Professional — Advanced track. Twenty real-world OT security scenarios. You are the OT security lead. Your decisions matter. You have <strong style="color:var(--gold)">${credits.toLocaleString()} credits</strong>. Move.`
+  };
+  $id('aria-brief').innerHTML=`<span class="aria-tag">// ARIA — MISSION BRIEFING · SEASON 1 · SecureOT SUITE</span><span class="aria-txt">${brf[pTrack]||brf.FA}</span>`;
+  if(spConnected&&!playerRowId){
+    try{
+      const gf=pendingGeoData?{country:pendingGeoData.country||'',geo_source:pendingGeoData.source}:{};
+      const pr=await sbPost('players',{name:pName,pin:pPin,email:pEmail,email_verified:false,track:pTrack,type:'real',cp_qualified:pCpQualified,flavour:CONFIG.supabaseFlavour,last_seen_at:new Date().toISOString(),...gf});
+      playerRowId=pr[0].id;
+      const cr=await sbPost('credits',{player_id:playerRowId,name:pName,track:pTrack,credits:500,solved:0,season:'S1',flavour:CONFIG.supabaseFlavour});
+      creditsRowId=cr[0].id;
+    }catch(e){console.error('Register:',e);}
+  }
+  if(spConnected&&playerRowId){
+    try{
+      await sbPatch('players',`id=eq.${playerRowId}`,{track:pTrack,cp_qualified:pCpQualified,last_seen_at:new Date().toISOString()});
+      if(creditsRowId)await sbPatch('credits',`id=eq.${creditsRowId}`,{track:pTrack});
+    }catch(e){console.error('Track patch:',e);}
+  }
+  renderChallenges();
+  loadStreak();
+  showTab('challenges',document.querySelectorAll('.tab')[0]);
+}
+
+function changeTrack(){
+  $id('sc-game').classList.remove('active');$id('sc-game').style.display='none';
+  const ob=$id('sc-ob');ob.style.display='block';ob.classList.add('active');
+  ['ob1','ob3a','ob3b','ob3b-res','ob-geo'].forEach(id=>hide(id));
+  show('ob2');
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('sel'));
+  $id('btn-ob2').disabled=true;
+  pTrack='';
+}
+
+// ══ SUPABASE WRITE ══
+async function writeScore(chId,delta,correct){
+  if(!spConnected||!playerRowId)return;
+  try{
+    await sbPost('solves',{player_id:playerRowId,challenge_id:chId,credits_earned:delta,correct,season:'S1'});
+    if(creditsRowId){
+      const ts=state.FA.solved.length+state.CP.solved.length;
+      await sbPatch('credits',`id=eq.${creditsRowId}`,{credits,solved:ts,updated_at:new Date().toISOString()});
+    }
+    setSPDot('✅');
+  }catch(e){setSPDot('⚠️');}
+}
+
+// ══ RESET ══
+function showReset(){show('reset-confirm');}
+function hideReset(){hide('reset-confirm');}
+async function doReset(){
+  if(!playerRowId){
+    ['FA','CP'].forEach(t=>{state[t]={solved:[],reviewed:[],wrongAttempts:{},usedHints:[],retried:[],perChMCQ:{},selMCQ:{},attempts:0,ariaShown:0};});
+    credits=500;updateTopBar();hideReset();renderChallenges();flash('Reset complete ✓','info');return;
+  }
+  try{
+    await sbDelete('solves',`player_id=eq.${playerRowId}`);
+    await sbPatch('credits',`id=eq.${creditsRowId}`,{credits:500,solved:0,updated_at:new Date().toISOString()});
+    ['FA','CP'].forEach(t=>{state[t]={solved:[],reviewed:[],wrongAttempts:{},usedHints:[],retried:[],perChMCQ:{},selMCQ:{},attempts:0,ariaShown:0};});
+    credits=500;updateTopBar();hideReset();renderChallenges();flash('Progress reset ✓','info');
+  }catch(e){flash('Reset failed — try again','bad');}
+}
+
+// ══ ARIA POPUP ══
+function checkAriaPopup(){
+  const st=getSt();st.attempts++;
+  if(st.attempts>=5*(st.ariaShown+1)){
+    st.ariaShown++;
+    const msg=ARIA_MSGS[(st.ariaShown-1)%ARIA_MSGS.length];
+    const ex=$id('aria-modal');if(ex)ex.remove();
+    const div=document.createElement('div');
+    div.className='modal-overlay';div.id='aria-modal';
+    div.innerHTML=`<div class="modal-box"><div class="modal-icon">${msg.icon}</div><div class="modal-title">${msg.title}</div><div class="modal-body">${msg.body}</div><div class="modal-sig">— ARIA · Adversarial Response &amp; Intelligence Agent</div><button class="btn-modal" onclick="document.getElementById('aria-modal').remove()">RESUME MISSION →</button></div>`;
+    document.body.appendChild(div);
+  }
+}
+
+// ══ RENDER CHALLENGES ══
+function renderChallenges(){
+  const chs=getCh();const st=getSt();
+  if(chs.length===0){
+    $id('ch-list').innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">No challenges available for this track yet.<br>Check back soon.</div>`;
+    return;
+  }
+  $id('ch-list').innerHTML=chs.map(ch=>{
+    const isSolved=st.solved.includes(ch.id),isReviewed=st.reviewed.includes(ch.id),hintUsed=st.usedHints.includes(ch.id);
+    const {shuffled,ci}=getShuffled(ch);
+    let useMCQ;
+    if(st.perChMCQ[ch.id]===true)useMCQ=true;
+    else if(st.perChMCQ[ch.id]===false)useMCQ=false;
+    else useMCQ=true;
+    const earn=Math.round(ch.credits);
+    const lose=Math.round(ch.credits*0.20);
+    const wA=st.wrongAttempts[ch.id]||0,hasR=st.retried.includes(ch.id),showRec=wA>0&&!isSolved&&!isReviewed;
+    const diffClass=ch.difficulty==='Rookie'?'b-rookie':'b-'+ch.difficulty.toLowerCase();
+    const trackBadge=pTrack==='FA'?'<span class="badge b-fa">🌱 FA</span>':'<span class="badge b-cp">⚔️ CP</span>';
+    return `<div class="ch-card ${isSolved?'solved':isReviewed?'reviewed':''}" id="card-${ch.id}">
+      <div class="ch-hdr" onclick="toggleCard('${ch.id}')">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px">
+            <span class="ch-title">${ch.title}</span>
+            ${isSolved?'<span class="ch-mark s">✓ SOLVED</span>':isReviewed?'<span class="ch-mark r">👁 REVIEWED</span>':''}
+          </div>
+          <div class="ch-meta">${trackBadge}<span class="badge ${diffClass}">${ch.difficulty}</span>${ch.sector?`<span class="badge b-ind">🏭 ${ch.sector}</span>`:''}<span class="badge b-cat">${ch.category}</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="text-align:right"><div class="badge b-cr">+${earn} 🪙</div>${!isSolved&&!isReviewed?`<div style="font-size:10px;color:var(--red);margin-top:2px;text-align:center">wrong: −${lose}</div>`:''}</div>
+          <span class="ch-chev">▼</span>
+        </div>
+      </div>
+      <div class="ch-body" id="body-${ch.id}">
+        ${ch.company?`<div class="ind-tag"><span class="ic ic-co">🏢 ${ch.company}</span><span class="ic ic-hq">📍 ${ch.hq}</span><span class="ic ic-ct">👤 ${ch.contact}</span></div>`:''}
+        ${pTrack==='FA'&&ch.concept?`<div class="concept-box"><span class="concept-tag">// CONCEPT BRIEF — READ THIS FIRST</span><div class="concept-text">${ch.concept}</div></div>`:''}
+        <div class="cust-voice"><span class="cv-tag">// SCENARIO</span>${ch.scenario}</div>
+        <div class="ch-q"><span class="q-tag">// YOUR CHALLENGE</span>${ch.question}</div>
+        ${isSolved||isReviewed?`<div class="debrief"><span class="d-tag">// ARIA — ${isSolved?'POST-SOLVE DEBRIEF':'ANSWER REVEALED'}</span>${ch.debrief}<br><a class="d-link" href="https://www.rockwellautomation.com/en-us/capabilities/industrial-cybersecurity.html" target="_blank">→ SecureOT Suite Overview</a></div>`:`
+          <div class="cr-prev"><span class="crp crp-w">✓ Correct → +${earn} 🪙</span><span class="crp crp-l">✗ Wrong → −${lose} 🪙</span></div>
+          ${useMCQ?`<div class="mcq-wrap" id="mcq-${ch.id}">${shuffled.map((o,i)=>`<div class="mcq-opt" id="mo-${ch.id}-${i}" onclick="selMCQOpt('${ch.id}',${i})"><span class="mcq-l">${'ABCD'[i]}</span><span class="mcq-t">${o}</span></div>`).join('')}</div>
+          <div class="btn-row"><button class="btn-sub" onclick="checkMCQ('${ch.id}')">Submit →</button>${!hintUsed?`<button class="btn-hint" onclick="useHint('${ch.id}')">Hint (−${Math.round(ch.credits*0.05)} 🪙)</button>`:''}<button class="btn-sw" onclick="switchOpen('${ch.id}')">Switch to text</button></div>`
+          :`<textarea class="open-area" id="ans-${ch.id}" placeholder="Type your response..." rows="4"></textarea>
+          <div class="btn-row"><button class="btn-sub" onclick="checkOpen('${ch.id}')">Submit →</button>${!hintUsed?`<button class="btn-hint" onclick="useHint('${ch.id}')">Hint (−${Math.round(ch.credits*0.05)} 🪙)</button>`:''}<button class="btn-sw" onclick="switchMCQ('${ch.id}')">Switch to MCQ</button></div>`}
+          ${hintUsed&&!isSolved&&!isReviewed?`<div class="res-box r-hn"><span class="r-tag">// ARIA HINT</span>${ch.hint}</div>`:''}
+          <div id="res-${ch.id}"></div>
+          ${showRec?`<div class="recovery"><div class="rec-title">// ARIA — WHAT DO YOU WANT TO DO?</div><div class="rec-btns">${!hasR?`<button class="rec-btn rb-retry" onclick="doRetry('${ch.id}')">↺ Try again (free)</button>`:''}<button class="rec-btn rb-hint" onclick="doRetryHint('${ch.id}')">${!hintUsed?'💡 Try with hint':'💡 Retry (hint shown)'}</button><button class="rec-btn rb-give" onclick="doGiveUp('${ch.id}',${lose})">🏳 Give up (−${lose} 🪙)</button></div><div style="font-size:11px;color:var(--text3);margin-top:8px">${!hasR?'One free retry — no credit deduction.':'Free retry used. Wrong answers now deduct credits.'}</div></div>`:''}`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id){
+  const body=$id('body-'+id),card=$id('card-'+id);
+  const isOpen=body.classList.contains('show');
+  document.querySelectorAll('.ch-body').forEach(b=>b.classList.remove('show'));
+  document.querySelectorAll('.ch-card').forEach(c=>c.classList.remove('open'));
+  if(!isOpen){body.classList.add('show');card.classList.add('open');}
+}
+function selMCQOpt(chId,idx){
+  const st=getSt();
+  if(st.solved.includes(chId)||st.reviewed.includes(chId))return;
+  document.querySelectorAll(`#mcq-${chId} .mcq-opt`).forEach(e=>e.classList.remove('sel'));
+  $id(`mo-${chId}-${idx}`)?.classList.add('sel');
+  st.selMCQ[chId]=idx;
+}
+function checkMCQ(id){
+  const ch=getCh().find(c=>c.id===id),st=getSt();
+  const idx=st.selMCQ[id];
+  if(idx===undefined){$id('res-'+id).innerHTML=`<div class="res-box r-hn"><span class="r-tag">// ARIA</span>Select an option first.</div>`;return;}
+  const ci=getShuffled(ch).ci;
+  document.querySelectorAll(`#mcq-${id} .mcq-opt`).forEach(e=>e.classList.add('disabled'));
+  $id(`mo-${id}-${ci}`)?.classList.add('correct');
+  if(idx!==ci)$id(`mo-${id}-${idx}`)?.classList.add('wrong');
+  checkAriaPopup();
+  if(idx===ci)awardCorrect(id,ch);else handleWrong(id,ch);
+}
+function checkOpen(id){
+  const ch=getCh().find(c=>c.id===id);
+  const raw=($id('ans-'+id)?.value||'').trim().toLowerCase();
+  if(!raw)return;
+  checkAriaPopup();
+  if(ch.keywords.some(k=>raw.includes(k.toLowerCase())))awardCorrect(id,ch);
+  else handleWrong(id,ch);
+}
+function awardCorrect(id,ch){
+  const st=getSt();if(st.solved.includes(id))return;
+  const earn=st.usedHints.includes(id)?Math.round(ch.credits*0.95):ch.credits;
+  st.solved.push(id);addCr(earn);flash('+'+earn+' 🪙','good');bumpStreak();
+  writeScore(id,earn,true);setTimeout(()=>renderChallenges(),700);
+}
+function handleWrong(id,ch){
+  const st=getSt();
+  const lose=Math.round(ch.credits*0.20),hasR=st.retried.includes(id);
+  st.wrongAttempts[id]=(st.wrongAttempts[id]||0)+1;
+  if(!hasR){$id('res-'+id).innerHTML=`<div class="res-box r-ng"><span class="r-tag">// ARIA — NEGATIVE</span>That's not the right call. One free retry available before credits are deducted.</div>`;}
+  else{addCr(-lose);flash('-'+lose+' 🪙','bad');$id('res-'+id).innerHTML=`<div class="res-box r-ng"><span class="r-tag">// ARIA — NEGATIVE</span>Wrong again. −${lose} credits.</div>`;writeScore(id,-lose,false);}
+  renderChallenges();
+  setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);
+}
+function doRetry(id){const st=getSt();st.retried.push(id);st.selMCQ[id]=undefined;renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
+function doRetryHint(id){const st=getSt();if(!st.usedHints.includes(id)){const ch=getCh().find(c=>c.id===id);const cost=Math.round(ch.credits*0.05);st.usedHints.push(id);addCr(-cost);flash('-'+cost+' 🪙','info');}doRetry(id);}
+function doGiveUp(id,lose){const st=getSt();if(!st.reviewed.includes(id)){st.reviewed.push(id);addCr(-lose);flash('-'+lose+' 🪙','bad');writeScore(id,-lose,false);renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}}
+function useHint(id){const st=getSt();if(st.usedHints.includes(id))return;const ch=getCh().find(c=>c.id===id);const cost=Math.round(ch.credits*0.05);st.usedHints.push(id);addCr(-cost);flash('-'+cost+' 🪙','info');renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
+function switchMCQ(id){const st=getSt();st.perChMCQ[id]=true;st.selMCQ[id]=undefined;renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
+function switchOpen(id){const st=getSt();st.perChMCQ[id]=false;renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
+function changeEpisode(){renderChallenges();}
+
+// ══ LEADERBOARD ══
+async function renderLB(filter,el){
+  if(el){document.querySelectorAll('.lb-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+  const content=$id('lb-content');
+  content.innerHTML='<div class="lb-loading">Loading live scores...</div>';
+  let realPlayers=[];
+  if(spConnected){
+    try{
+      let q=`?select=name,credits,solved,track&flavour=eq.${CONFIG.supabaseFlavour}&order=credits.desc&limit=50`;
+      if(filter==='CP')q+='&track=eq.CP';
+      if(filter==='FA')q+='&track=eq.FA';
+      realPlayers=await sbGet('credits',q);
+    }catch(e){content.innerHTML='<div class="lb-loading" style="color:var(--red)">Could not load live scores.</div>';return;}
+  }
+  const seeds=SEED_PLAYERS.filter(p=>filter==='all'||(filter==='CP'&&p.track==='CP')||(filter==='FA'&&p.track==='FA'));
+  const all=[
+    ...realPlayers.map(p=>({name:p.name,credits:p.credits,solved:p.solved,track:p.track,type:'real',isYou:p.name===pName,country:''})),
+    ...seeds
+  ];
+  all.sort((a,b)=>b.credits-a.credits);
+  if(all.length===0){content.innerHTML='<div class="lb-loading">No scores yet — be the first on the board.</div>';return;}
+  let countryMap={};
+  if(spConnected){
+    try{
+      const pl=await sbGet('players',`?select=name,country&type=eq.real&flavour=eq.${CONFIG.supabaseFlavour}`);
+      pl.forEach(p=>{if(p.country)countryMap[p.name]=p.country;});
+    }catch(e){}
+  }
+  let html=`<table class="lb-tbl"><thead><tr><th>#</th><th>Player</th><th>Country</th><th>Credits</th><th>Net</th><th>Solved</th></tr></thead><tbody>`;
+  all.forEach((p,i)=>{
+    const medal=['🥇','🥈','🥉'][i]||(i+1);
+    const chip=`<span class="trk-chip ${p.track==='CP'?'tc-cp':'tc-fa'}">${p.track}</span>`;
+    const net=p.credits-500;
+    const netStr=net>=0?`<span class="chg-pos">+${net}</span>`:`<span class="chg-neg">${net}</span>`;
+    const seedMark=p.type==='seed'?` <span style="font-size:9px;color:var(--text3);opacity:.5">[seed]</span>`:'';
+    const country=p.type==='seed'?p.country:(countryMap[p.name]||'');
+    const countryDisplay=country==='Others'?'🌍':country||'—';
+    html+=`<tr class="${p.isYou?'lb-you':''}">
+      <td>${medal}</td>
+      <td>${p.name}${chip}${seedMark}</td>
+      <td style="font-size:12px;color:var(--text3)">${countryDisplay}</td>
+      <td class="lb-cr">${p.credits.toLocaleString()} 🪙</td>
+      <td>${netStr}</td>
+      <td style="color:var(--text3)">${p.solved||0}</td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  if(!spConnected)html+='<div style="font-size:11px;color:var(--amber);padding:10px;text-align:center;">⚠️ Offline mode — showing local data only.</div>';
+  content.innerHTML=html;
+}
+
+// ══ STREAK ══
+function loadStreak(){
+  const d=JSON.parse(localStorage.getItem('ot_streak')||'{"count":0,"last":""}');
+  const today=new Date().toDateString();
+  if(d.last!==today){const y=new Date(Date.now()-86400000).toDateString();if(d.last!==y)d.count=0;d.last=today;localStorage.setItem('ot_streak',JSON.stringify(d));}
+}
+function bumpStreak(){
+  const d=JSON.parse(localStorage.getItem('ot_streak')||'{"count":0,"last":""}');
+  const today=new Date().toDateString();
+  if(d.last!==today){
+    d.count=(d.last===new Date(Date.now()-86400000).toDateString())?d.count+1:1;
+    d.last=today;localStorage.setItem('ot_streak',JSON.stringify(d));
+    if(d.count===3){addCr(15);flash('🔥 3-day streak! +15 🪙','good');}
+    if(d.count===7){addCr(50);flash('🔥 7-day streak! +50 🪙','good');}
+  }
+}
+
+// ══ TABS ══
+function showTab(id,el){
+  ['challenges','leaderboard','about','intel','coming'].forEach(t=>{
+    const e=$id('tab-'+t);if(e)e.style.display=t===id?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  if(id==='leaderboard')renderLB('all',null);
+}
+
+// ══ EASTER EGG ══
+function revealCredit(){
+  const el=document.getElementById('lk-credit');
+  if(!el)return;
+  el.textContent='Imagined by Sandip · Powered by Claude';
+  el.style.opacity='1';
+  el.style.color='var(--green)';
+  el.style.fontSize='12px';
+  el.style.letterSpacing='1px';
+  el.style.cursor='default';
+  el.onclick=null;
+}
+
+// ══ PRIVACY MODAL ══
+function showPrivacy(){
+  const ex=$id('privacy-modal');if(ex)ex.remove();
+  const div=document.createElement('div');
+  div.className='modal-overlay';div.id='privacy-modal';
+  div.innerHTML=`<div class="modal-box" style="text-align:left;max-height:80vh;overflow-y:auto;">
+    <div class="modal-title" style="margin-bottom:14px;">Privacy Policy</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+      <strong style="color:var(--text)">What we collect</strong><br>
+      Your email address, chosen callsign, and game activity (challenges attempted, credits earned, scores). Your country for the leaderboard.<br><br>
+      <strong style="color:var(--text)">Why we collect it</strong><br>
+      Your email identifies your account and prevents automated abuse. It is never displayed publicly, never shared with third parties, and never used for marketing.<br><br>
+      <strong style="color:var(--text)">How long we keep it</strong><br>
+      Accounts inactive for more than 12 months are deleted automatically, including all associated game data. You will not be notified before deletion.<br><br>
+      <strong style="color:var(--text)">Your rights</strong><br>
+      You can request deletion of your account at any time using the Reset My Progress option in the game.<br><br>
+      <strong style="color:var(--text)">Data storage</strong><br>
+      Game data is stored securely in Supabase (supabase.com), a SOC 2 compliant cloud database. Data is encrypted at rest and in transit.
+    </div>
+    <div style="margin-top:18px;text-align:center;">
+      <button class="btn-modal" onclick="document.getElementById('privacy-modal').remove()">Close</button>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+// ══ INIT ══
+document.addEventListener('DOMContentLoaded',()=>{
+  loadChallenges();
+  $id('ob-email')?.addEventListener('keydown',e=>{if(e.key==='Enter')$id('ob-name')?.focus();});
+  $id('ob-name')?.addEventListener('keydown',e=>{if(e.key==='Enter')$id('ob-pin')?.focus();});
+  $id('ob-pin')?.addEventListener('keydown',e=>{if(e.key==='Enter')goOb2();});
+});
+</script>
+</body>
+</html>
