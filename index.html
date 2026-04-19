@@ -240,7 +240,24 @@ select.ob-input{cursor:pointer;}
 .load-bar{width:200px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
 .load-fill{height:100%;background:var(--green);border-radius:2px;animation:loadAnim 1.5s ease-in-out infinite;}
 @keyframes loadAnim{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
-@media(max-width:600px){.track-grid{grid-template-columns:1fr;}.ab-grid,.lk-feats{grid-template-columns:1fr;}.top-bar{flex-direction:column;align-items:flex-start;}.tb-controls{width:100%;}.tabs{overflow-x:auto;}.tab{font-size:10px;padding:6px 4px;}.pin-row{grid-template-columns:1fr;}}
+@media(max-width:600px){
+  .track-grid{grid-template-columns:1fr;}
+  .ab-grid,.lk-feats{grid-template-columns:1fr;}
+  .top-bar{flex-direction:column;align-items:flex-start;}
+  .tb-controls{width:100%;}
+  .tabs{overflow-x:auto;}
+  .tab{font-size:10px;padding:6px 4px;}
+  .pin-row{grid-template-columns:1fr;}
+  .aria-tag{letter-spacing:1px;font-size:9px;}
+  .aria-box{padding:10px 12px;}
+  .lb-tbl{font-size:11px;}
+  .lb-tbl th{padding:5px 4px;font-size:9px;letter-spacing:0;}
+  .lb-tbl td{padding:7px 4px;}
+  .lb-col-net,.lb-col-solved{display:none;}
+  .lb-cr{font-size:12px;}
+  .trk-chip{font-size:8px;padding:1px 4px;}
+  .pw-sub{font-size:9px;letter-spacing:2px;text-align:center;padding:0 20px;}
+}
 </style>
 </head>
 <body>
@@ -249,9 +266,9 @@ select.ob-input{cursor:pointer;}
 
 <!-- LOADING SCREEN -->
 <!-- PASSWORD GATE -->
-<div id="sc-pw" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;">
+<div id="sc-pw" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:20px;text-align:center;">
   <div style="font-family:var(--fd);font-size:36px;font-weight:700;color:var(--green);letter-spacing:3px;text-shadow:0 0 30px rgba(74,222,128,.3);margin-bottom:8px;">OT CYBERARENA</div>
-  <div style="font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:40px;">Meridian Industrial Group · Restricted Access</div>
+  <div class="pw-sub" style="font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase;margin-bottom:40px;text-align:center;padding:0 20px;">Meridian Industrial Group · Restricted Access</div>
   <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px 32px;width:100%;max-width:360px;">
     <div style="font-size:11px;font-weight:600;color:var(--green);letter-spacing:2px;margin-bottom:6px;">// ACCESS CODE</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;">This arena is restricted to authorised operatives only. Enter your access code to proceed.</div>
@@ -336,21 +353,26 @@ select.ob-input{cursor:pointer;}
 
   <div class="ob-card" id="ob-geo" style="display:none">
     <div class="ob-title">// ONE LAST THING</div>
-    <div class="ob-sub">Help us understand where our operatives are based. Your location is used only for the game — never shared externally.</div>
+    <div class="ob-sub">Select your country for the leaderboard. Your location is used only for the game — never shared externally.</div>
     <div class="geo-box">
-      <div class="geo-title">// DETECTING YOUR LOCATION</div>
-      <div id="geo-status" style="font-size:12px;color:var(--text3);">⏳ Requesting location access...</div>
-      <div id="geo-manual" style="display:none;margin-top:10px;">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Select your country:</div>
-        <select class="ob-input" id="geo-country">
-          <option value="">Select country...</option>
-          <option>Australia</option><option>China</option><option>India</option>
-          <option>Indonesia</option><option>Japan</option><option>Korea</option>
-          <option>Malaysia</option><option>New Zealand</option><option>Philippines</option>
-          <option>Singapore</option><option>Taiwan</option><option>Thailand</option>
-          <option>Vietnam</option><option>Others</option>
-        </select>
-      </div>
+      <div class="geo-title">// YOUR COUNTRY</div>
+      <select class="ob-input" id="geo-country" onchange="document.getElementById('btn-geo').disabled=!this.value;updateCallsignSuggestion();">
+        <option value="">Select your country...</option>
+        <option value="AU">Australia</option>
+        <option value="CN">China</option>
+        <option value="IN">India</option>
+        <option value="ID">Indonesia</option>
+        <option value="JP">Japan</option>
+        <option value="KR">Korea</option>
+        <option value="MY">Malaysia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="PH">Philippines</option>
+        <option value="SG">Singapore</option>
+        <option value="TW">Taiwan</option>
+        <option value="TH">Thailand</option>
+        <option value="VN">Vietnam</option>
+        <option value="Others">Others</option>
+      </select>
     </div>
     <button class="btn-p" onclick="geoNext()" id="btn-geo" disabled>ENTER THE ARENA →</button>
     <button class="btn-sec" onclick="geoSkip()">Skip for now →</button>
@@ -529,9 +551,7 @@ select.ob-input{cursor:pointer;}
       </div>
       <div class="lk-feats">
         <div class="lk-feat"><div class="lk-ft">⚡ Flash Challenges</div><div class="lk-fd">Breaking OT incidents. 24h window. Double credits.</div></div>
-        <div class="lk-feat"><div class="lk-ft">🤝 Team-Up Mechanics</div><div class="lk-fd">Duels. Relays. Mentor badge.</div></div>
         <div class="lk-feat"><div class="lk-ft">🌐 More Episodes</div><div class="lk-fd">Asset Inventory, MDR, Incident Response.</div></div>
-        <div class="lk-feat"><div class="lk-ft">🗣️ Language Modes</div><div class="lk-fd">Japanese, Chinese, Korean.</div></div>
         <div class="lk-feat"><div class="lk-ft">🏆 Track Graduation</div><div class="lk-fd">FA → CP after 500 credits + proctored test.</div></div>
         <div class="lk-feat"><div class="lk-ft">🎭 Avatar Unlocks</div><div class="lk-fd">Earn by rank. Industry outfits.</div></div>
       </div>
@@ -588,8 +608,18 @@ const ARIA_MSGS=[
 ];
 const CS_PREFIXES=['Ghost','Zero','Iron','Null','Cyber','Phantom','Dark','Stealth','Crimson','Vector','Sigma','Viper','Apex','Nova','Storm'];
 const CS_SUFFIXES=['Packet','Node','Byte','Sector','Wire','Shield','Cipher','Proxy','Gate','Loop','Stack','Trace','Core','Grid','Link'];
-const CS_REGIONS=['SG','IN','AU','MY','JP','KR','TW','ID','TH','CN','NZ','PH'];
-function genCallsign(){return CS_PREFIXES[Math.floor(Math.random()*CS_PREFIXES.length)]+CS_SUFFIXES[Math.floor(Math.random()*CS_SUFFIXES.length)]+'_'+CS_REGIONS[Math.floor(Math.random()*CS_REGIONS.length)];}
+function genCallsign(countryCode){
+  const code=countryCode||'XX';
+  const p=CS_PREFIXES[Math.floor(Math.random()*CS_PREFIXES.length)];
+  const s=CS_SUFFIXES[Math.floor(Math.random()*CS_SUFFIXES.length)];
+  return p+s+'_'+code;
+}
+function updateCallsignSuggestion(){
+  const sel=$id('geo-country');
+  const code=sel?.value||'';
+  const el=$id('cs-name');
+  if(el&&code)el.textContent=genCallsign(code);
+}
 function getTitle(c){let t=TITLES[0][1];for(const[p,l]of TITLES)if(c>=p)t=l;return t;}
 
 // ══ STATE ══
@@ -673,7 +703,7 @@ function updateTopBar(){
 function addCr(amt){credits=Math.max(0,credits+amt);updateTopBar();}
 
 // ══ CALLSIGN ══
-function initCallsign(){const el=$id('cs-name');if(el)el.textContent=genCallsign();}
+function initCallsign(){const el=$id('cs-name');if(el)el.textContent=genCallsign('XX');}
 function useCallsign(){const cs=$id('cs-name')?.textContent||'';const inp=$id('ob-name');if(inp&&cs){inp.value=cs;inp.focus();}}
 
 // ══ ONBOARDING ══
@@ -773,38 +803,14 @@ function showGeo(cb){
   ['ob3a','ob3b','ob3b-res'].forEach(id=>hide(id));
   show('ob-geo');
   $id('btn-geo').disabled=true;
-  $id('geo-status').textContent='⏳ Requesting location access...';
-  hide('geo-manual');
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(
-      pos=>{
-        pendingGeoData={source:'auto'};
-        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
-          .then(r=>r.json())
-          .then(d=>{
-            pendingGeoData.country=d.address?.country||'';
-            $id('geo-status').textContent=`📍 Detected: ${pendingGeoData.country}`;
-            $id('btn-geo').disabled=false;
-          })
-          .catch(()=>{$id('geo-status').textContent='📍 Location detected.';$id('btn-geo').disabled=false;});
-      },
-      ()=>{
-        $id('geo-status').textContent='Location access declined.';
-        show('geo-manual');
-        $id('geo-country').onchange=()=>{$id('btn-geo').disabled=!$id('geo-country').value;};
-      }
-    );
-  } else {
-    $id('geo-status').textContent='Location not available on this browser.';
-    show('geo-manual');
-    $id('geo-country').onchange=()=>{$id('btn-geo').disabled=!$id('geo-country').value;};
-  }
+  const sel=$id('geo-country');if(sel)sel.value='';
 }
 function geoNext(){
-  if($id('geo-manual').style.display!=='none'){
-    const c=$id('geo-country').value;if(!c)return;
-    pendingGeoData={country:c,source:'manual'};
-  }
+  const sel=$id('geo-country');
+  const code=sel?.value||'';
+  if(!code)return;
+  const name=sel.options[sel.selectedIndex].text;
+  pendingGeoData={country:name,countryCode:code,source:'manual'};
   hide('ob-geo');if(geoCb)geoCb();
 }
 function geoSkip(){pendingGeoData=null;hide('ob-geo');if(geoCb)geoCb();}
@@ -953,10 +959,10 @@ function renderChallenges(){
   $id('ch-list').innerHTML=chs.map(ch=>{
     const isSolved=st.solved.includes(ch.id),isReviewed=st.reviewed.includes(ch.id),hintUsed=st.usedHints.includes(ch.id);
     const {shuffled,ci}=getShuffled(ch);
-    let useMCQ;
-    if(st.perChMCQ[ch.id]===true)useMCQ=true;
-    else if(st.perChMCQ[ch.id]===false)useMCQ=false;
-    else useMCQ=true;
+    
+    
+    
+    
     const earn=Math.round(ch.credits);
     const lose=Math.round(ch.credits*0.20);
     const wA=st.wrongAttempts[ch.id]||0,hasR=st.retried.includes(ch.id),showRec=wA>0&&!isSolved&&!isReviewed;
@@ -983,10 +989,8 @@ function renderChallenges(){
         <div class="ch-q"><span class="q-tag">// YOUR CHALLENGE</span>${ch.question}</div>
         ${isSolved||isReviewed?`<div class="debrief"><span class="d-tag">// ARIA — ${isSolved?'POST-SOLVE DEBRIEF':'ANSWER REVEALED'}</span>${ch.debrief}<br><a class="d-link" href="https://www.rockwellautomation.com/en-us/capabilities/industrial-cybersecurity.html" target="_blank">→ SecureOT Suite Overview</a></div>`:`
           <div class="cr-prev"><span class="crp crp-w">✓ Correct → +${earn} 🪙</span><span class="crp crp-l">✗ Wrong → −${lose} 🪙</span></div>
-          ${useMCQ?`<div class="mcq-wrap" id="mcq-${ch.id}">${shuffled.map((o,i)=>`<div class="mcq-opt" id="mo-${ch.id}-${i}" onclick="selMCQOpt('${ch.id}',${i})"><span class="mcq-l">${'ABCD'[i]}</span><span class="mcq-t">${o}</span></div>`).join('')}</div>
-          <div class="btn-row"><button class="btn-sub" onclick="checkMCQ('${ch.id}')">Submit →</button>${!hintUsed?`<button class="btn-hint" onclick="useHint('${ch.id}')">Hint (−${Math.round(ch.credits*0.05)} 🪙)</button>`:''}<button class="btn-sw" onclick="switchOpen('${ch.id}')">Switch to text</button></div>`
-          :`<textarea class="open-area" id="ans-${ch.id}" placeholder="Type your response..." rows="4"></textarea>
-          <div class="btn-row"><button class="btn-sub" onclick="checkOpen('${ch.id}')">Submit →</button>${!hintUsed?`<button class="btn-hint" onclick="useHint('${ch.id}')">Hint (−${Math.round(ch.credits*0.05)} 🪙)</button>`:''}<button class="btn-sw" onclick="switchMCQ('${ch.id}')">Switch to MCQ</button></div>`}
+          <div class="mcq-wrap" id="mcq-${ch.id}">${shuffled.map((o,i)=>`<div class="mcq-opt" id="mo-${ch.id}-${i}" onclick="selMCQOpt('${ch.id}',${i})"><span class="mcq-l">${'ABCD'[i]}</span><span class="mcq-t">${o}</span></div>`).join('')}</div>
+          <div class="btn-row"><button class="btn-sub" onclick="checkMCQ('${ch.id}')">Submit →</button>${!hintUsed?`<button class="btn-hint" onclick="useHint('${ch.id}')">Hint (−${Math.round(ch.credits*0.05)} 🪙)</button>`:''}</div>
           ${hintUsed&&!isSolved&&!isReviewed?`<div class="res-box r-hn"><span class="r-tag">// ARIA HINT</span>${ch.hint}</div>`:''}
           <div id="res-${ch.id}"></div>
           ${showRec?`<div class="recovery"><div class="rec-title">// ARIA — WHAT DO YOU WANT TO DO?</div><div class="rec-btns">${!hasR?`<button class="rec-btn rb-retry" onclick="doRetry('${ch.id}')">↺ Try again (free)</button>`:''}<button class="rec-btn rb-hint" onclick="doRetryHint('${ch.id}')">${!hintUsed?'💡 Try with hint':'💡 Retry (hint shown)'}</button><button class="rec-btn rb-give" onclick="doGiveUp('${ch.id}',${lose})">🏳 Give up (−${lose} 🪙)</button></div><div style="font-size:11px;color:var(--text3);margin-top:8px">${!hasR?'One free retry — no credit deduction.':'Free retry used. Wrong answers now deduct credits.'}</div></div>`:''}`}
@@ -1047,8 +1051,6 @@ function doRetry(id){const st=getSt();st.retried.push(id);st.selMCQ[id]=undefine
 function doRetryHint(id){const st=getSt();if(!st.usedHints.includes(id)){const ch=getCh().find(c=>c.id===id);const cost=Math.round(ch.credits*0.05);st.usedHints.push(id);addCr(-cost);flash('-'+cost+' 🪙','info');}doRetry(id);}
 function doGiveUp(id,lose){const st=getSt();if(!st.reviewed.includes(id)){st.reviewed.push(id);addCr(-lose);flash('-'+lose+' 🪙','bad');writeScore(id,-lose,false);renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}}
 function useHint(id){const st=getSt();if(st.usedHints.includes(id))return;const ch=getCh().find(c=>c.id===id);const cost=Math.round(ch.credits*0.05);st.usedHints.push(id);addCr(-cost);flash('-'+cost+' 🪙','info');renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
-function switchMCQ(id){const st=getSt();st.perChMCQ[id]=true;st.selMCQ[id]=undefined;renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
-function switchOpen(id){const st=getSt();st.perChMCQ[id]=false;renderChallenges();setTimeout(()=>{$id('body-'+id)?.classList.add('show');$id('card-'+id)?.classList.add('open');},50);}
 function changeEpisode(){renderChallenges();}
 
 // ══ LEADERBOARD ══
@@ -1086,7 +1088,7 @@ async function renderLB(filter,el){
   const all=[...realPlayers,...seeds];
   all.sort((a,b)=>b.credits-a.credits);
   if(all.length===0){content.innerHTML='<div class="lb-loading">No scores yet — be the first on the board.</div>';return;}
-  let html=`<table class="lb-tbl"><thead><tr><th>#</th><th>Player</th><th>Country</th><th>Credits</th><th>Net</th><th>Solved</th></tr></thead><tbody>`;
+  let html=`<table class="lb-tbl"><thead><tr><th>#</th><th>Player</th><th>Country</th><th>Credits</th><th class="lb-col-net">Net</th><th class="lb-col-solved">Solved</th></tr></thead><tbody>`;
   all.forEach((p,i)=>{
     const medal=['🥇','🥈','🥉'][i]||(i+1);
     const chip=`<span class="trk-chip ${p.track==='CP'?'tc-cp':'tc-fa'}">${p.track}</span>`;
@@ -1099,8 +1101,8 @@ async function renderLB(filter,el){
       <td>${p.name}${chip}${seedMark}</td>
       <td style="font-size:12px;color:var(--text3)">${countryDisplay}</td>
       <td class="lb-cr">${p.credits.toLocaleString()} 🪙</td>
-      <td>${netStr}</td>
-      <td style="color:var(--text3)">${p.solved||0}</td>
+      <td class="lb-col-net">${netStr}</td>
+      <td class="lb-col-solved" style="color:var(--text3)">${p.solved||0}</td>
     </tr>`;
   });
   html+='</tbody></table>';
@@ -1139,7 +1141,7 @@ function showTab(id,el){
 function revealCredit(){
   const el=document.getElementById('lk-credit');
   if(!el)return;
-  el.textContent='Imagined by Sandip · Powered by Claude';
+  el.textContent='Designed and Created by Sandip Choudhari';
   el.style.opacity='1';
   el.style.color='var(--green)';
   el.style.fontSize='12px';
