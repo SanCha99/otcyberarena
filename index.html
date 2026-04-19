@@ -752,15 +752,15 @@ async function goOb2(){
     // Returning player: match by email + flavour first
     const byEmail=await sbGet('players',`?email=eq.${encodeURIComponent(e)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id,name,track,cp_qualified`);
     if(byEmail.length>0){
-      // Email exists — verify callsign + PIN match
+      // Email exists — verify PIN only (callsign is loaded from their account)
       const pinCheck=await sbGet('players',`?email=eq.${encodeURIComponent(e)}&pin=eq.${encodeURIComponent(p)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id,name,track,cp_qualified`);
       if(pinCheck.length===0){
-        statusEl.textContent='Incorrect callsign or PIN for this email. Try again.';
+        statusEl.textContent='Incorrect PIN for this email. Try again.';
         statusEl.className='sp-status st-err';
         btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;return;
       }
       playerRowId=pinCheck[0].id;
-      pName=pinCheck[0].name;
+      pName=pinCheck[0].name; // Always use their saved callsign
       pCpQualified=pinCheck[0].cp_qualified||false;
       const cred=await sbGet('credits',`?player_id=eq.${playerRowId}&select=id,credits,solved`);
       if(cred.length>0){creditsRowId=cred[0].id;credits=cred[0].credits;}
@@ -774,7 +774,7 @@ async function goOb2(){
       statusEl.textContent=`Welcome back, ${pName}! Your progress has been loaded.`;
       statusEl.className='sp-status st-ok';
       try{await sbPatch('players',`id=eq.${playerRowId}`,{last_seen_at:new Date().toISOString()});}catch(err){}
-      setTimeout(()=>{hide('ob1');show('ob2');},1200);
+      setTimeout(()=>{hide('ob1b');show('ob2');},1200);
     } else {
       // Check callsign not already taken by a different email
       const byName=await sbGet('players',`?name=eq.${encodeURIComponent(n)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id`);
@@ -784,13 +784,13 @@ async function goOb2(){
         btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;return;
       }
       spConnected=true;setSPDot('✅');
-      hide('ob1');show('ob2');
+      hide('ob1b');show('ob2');
     }
   }catch(err){
     spConnected=false;setSPDot('⚠️');
     statusEl.textContent='Could not reach the live score server. Your score will save locally only.';
     statusEl.className='sp-status st-wait';
-    hide('ob1');show('ob2');
+    hide('ob1b');show('ob2');
   }
   btn.textContent='CONFIRM IDENTITY →';btn.disabled=false;
 }
