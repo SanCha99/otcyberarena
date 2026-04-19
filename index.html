@@ -298,16 +298,55 @@ select.ob-input{cursor:pointer;}
   </div>
 
   <div class="ob-card" id="ob1">
-    <div class="ob-title">// IDENTITY CHECK</div>
-    <div class="ob-sub">Every operative starts with <strong style="color:var(--gold)">500 credits</strong>. Your email identifies your account — it is never shown publicly or used for marketing.</div>
-    <div style="margin-bottom:14px;">
+    <div class="ob-title">// STEP 1 OF 2 — YOUR DETAILS</div>
+    <div class="ob-sub">Every operative starts with <strong style="color:var(--gold)">500 credits</strong>. Your email identifies your account — never shown publicly or used for marketing.</div>
+    <div style="margin-bottom:12px;">
       <div class="id-label">EMAIL ADDRESS</div>
-      <input class="ob-input" id="ob-email" placeholder="your@email.com" type="email" maxlength="120" autocomplete="email">
+      <input class="ob-input" id="ob-email" placeholder="your@email.com" type="email" maxlength="120" autocomplete="email" onkeydown="if(event.key==='Enter')$id('geo-country-1').focus()">
     </div>
+    <div style="margin-bottom:12px;">
+      <div class="id-label">YOUR COUNTRY</div>
+      <select class="ob-input" id="geo-country-1" onchange="onCountryChange()">
+        <option value="">Select your country...</option>
+        <option value="AU">Australia</option>
+        <option value="CN">China</option>
+        <option value="IN">India</option>
+        <option value="ID">Indonesia</option>
+        <option value="JP">Japan</option>
+        <option value="KR">Korea</option>
+        <option value="MY">Malaysia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="PH">Philippines</option>
+        <option value="SG">Singapore</option>
+        <option value="TW">Taiwan</option>
+        <option value="TH">Thailand</option>
+        <option value="VN">Vietnam</option>
+        <option value="Others">Others</option>
+      </select>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="ob-consent1" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
+        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I have read and agree to the <span style="color:var(--green);text-decoration:underline;cursor:pointer;" onclick="showPrivacy()">Privacy Policy</span></span>
+      </label>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="ob-consent2" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
+        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I confirm I am 16 years of age or older</span>
+      </label>
+    </div>
+    <div class="sp-status" id="ob-sp-status"></div>
+    <button class="btn-p" onclick="goOb1b()" id="btn-ob1">NEXT — CHOOSE YOUR CALLSIGN →</button>
+  </div>
+
+  <div class="ob-card" id="ob1b" style="display:none">
+    <div class="ob-title">// STEP 2 OF 2 — CALLSIGN &amp; PIN</div>
+    <div class="ob-sub">Your callsign is your identity on the leaderboard. Choose wisely — it cannot be changed.</div>
     <div class="cs-suggest" id="cs-suggest">
       <div class="cs-suggest-text">
-        Suggested callsign: <strong id="cs-name">GhostNode_SG</strong>
-        <span class="cs-suggest-note">✏️ Use this or type your own below</span>
+        Suggested: <strong id="cs-name">GhostNode_XX</strong>
+        <span class="cs-suggest-note">Based on your country · click to use</span>
       </div>
       <button class="btn-cs" onclick="useCallsign()">Use this →</button>
     </div>
@@ -315,21 +354,10 @@ select.ob-input{cursor:pointer;}
       <div><div class="id-label">CALLSIGN</div><input class="ob-input" id="ob-name" placeholder="Your callsign..." maxlength="30" autocomplete="off"></div>
       <div><div class="id-label">4-DIGIT PIN</div><input class="ob-input" id="ob-pin" placeholder="e.g. 7392" maxlength="4" type="password" autocomplete="off"></div>
     </div>
-    <div style="margin-bottom:14px;">
-      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-        <input type="checkbox" id="ob-consent1" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
-        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I have read and agree to the <span style="color:var(--green);text-decoration:underline;cursor:pointer;" onclick="showPrivacy()">Privacy Policy</span></span>
-      </label>
-    </div>
-    <div style="margin-bottom:18px;">
-      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-        <input type="checkbox" id="ob-consent2" style="margin-top:3px;accent-color:var(--green);flex-shrink:0;">
-        <span style="font-size:12px;color:var(--text2);line-height:1.6;">I confirm I am 16 years of age or older</span>
-      </label>
-    </div>
-    <div class="sp-status" id="ob-sp-status"></div>
-    <div style="font-size:11px;color:var(--text3);margin-bottom:18px;">Same email + callsign + PIN on any device = your scores load automatically.</div>
-    <button class="btn-p" onclick="goOb2()" id="btn-ob1">CONFIRM IDENTITY →</button>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:16px;">Same email + callsign + PIN on any device = your progress loads automatically.</div>
+    <div class="sp-status" id="ob-sp-status2"></div>
+    <button class="btn-p" onclick="goOb2()" id="btn-ob1b">CONFIRM IDENTITY →</button>
+    <button class="btn-sec" onclick="hide('ob1b');show('ob1');" style="margin-top:6px;">← Back</button>
   </div>
 
   <div class="ob-card" id="ob2" style="display:none">
@@ -351,32 +379,7 @@ select.ob-input{cursor:pointer;}
     <button class="btn-p" onclick="goOb3()" id="btn-ob2" disabled>SELECT TRACK →</button>
   </div>
 
-  <div class="ob-card" id="ob-geo" style="display:none">
-    <div class="ob-title">// ONE LAST THING</div>
-    <div class="ob-sub">Select your country for the leaderboard. Your location is used only for the game — never shared externally.</div>
-    <div class="geo-box">
-      <div class="geo-title">// YOUR COUNTRY</div>
-      <select class="ob-input" id="geo-country" onchange="document.getElementById('btn-geo').disabled=!this.value;updateCallsignSuggestion();">
-        <option value="">Select your country...</option>
-        <option value="AU">Australia</option>
-        <option value="CN">China</option>
-        <option value="IN">India</option>
-        <option value="ID">Indonesia</option>
-        <option value="JP">Japan</option>
-        <option value="KR">Korea</option>
-        <option value="MY">Malaysia</option>
-        <option value="NZ">New Zealand</option>
-        <option value="PH">Philippines</option>
-        <option value="SG">Singapore</option>
-        <option value="TW">Taiwan</option>
-        <option value="TH">Thailand</option>
-        <option value="VN">Vietnam</option>
-        <option value="Others">Others</option>
-      </select>
-    </div>
-    <button class="btn-p" onclick="geoNext()" id="btn-geo" disabled>ENTER THE ARENA →</button>
-    <button class="btn-sec" onclick="geoSkip()">Skip for now →</button>
-  </div>
+
 
   <div class="ob-card" id="ob3a" style="display:none">
     <div class="ob-title">// WELCOME, FIELD AGENT</div>
@@ -549,6 +552,11 @@ select.ob-input{cursor:pointer;}
         Come back and finish the challenges in front of you first. What comes next is locked until it is ready — and it will be worth the wait.<br><br>
         <strong>That is all. — ARIA</strong>
       </div>
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:10px;font-weight:600;color:var(--green);letter-spacing:2px;margin-bottom:10px;">// SHARE THE ARENA</div>
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCADIAMgDASIAAhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAAAAYFBwMECAEC/8QASBAAAQMDAQIHDAkBBwUBAQAAAQIDBAAFEQYSIQcTMUFRVJEUFhciNVVhcXOUsdEVIzJSgZOistKhJDQ2QnSCwTNWYnLCkuH/xAAYAQEAAwEAAAAAAAAAAAAAAAAAAgMEAf/EACURAQACAQIGAgMBAAAAAAAAAAABAhEDEgQTITFBURRSMjNhcf/aAAwDAQACEQMRAD8AWNWaxuN8nOoZkOMwEqIbZQrZCh0qxyk/0rFB0PqS4RkyWbeoNrGUlxxKCR04JzUJAAVPjpUAQXUgg8+8V0qKCjvB1qjqLfvCPnR4OtUdRb94R86vGigo7wdao6i37wj50eDrVHUW/eEfOrxooKO8HWqOot+8I+dHg61R1Fv3hHzq8aKCjvB1qjqLfvCPnR4OtUdRb94R86vGigo7wdao6i37wj50eDrVHUW/eEfOrxooKO8HWqOot+8I+dHg61R1Fv3hHzq8aKCjvB1qjqLfvCPnR4OtUdRb94R86vGigo7wdao6i37wj50eDrVHUW/eEfOrxooKO8HWqOot+8I+dHg61R1Fv3hHzq8aKCjvB1qjqLfvCPnR4OtUdRb94R86vGigo7wdao6i37wj51rzdDakgRlSXrcotoGVFtxKyB04BzV80GgojSusbjYprSXJDj0AqAcZWraAHSnPIRRUHckhNzlJSAAHlgAc3jGig+bf5Qje1R8RXSormq3+UI3tUfEV0qKApUlaomtT3ozMRpzYcUhONok4PoprpGgf41P+oc+CqheZ6YUa9rRtiJxmW73yXfzX+hdHfJd/Nf6F1ra41lM01cI0eNFYeS61tkuFWQckc1LPhXunm6H2r+dNs+zl3+xv75Lv5r/QutuxagkXOeY7rDSEhBVlJOdxHzo0Xf39R2RydJZbaWl5TYS2TjAAOd/rqI0f5cX7JXxFcnMTHVC2+l6xuzlr6v17OsF+ct8eHGdQhCVBSyrO8Z5jX3o/Xzl7uT0e5IhxGkMlaV8YU5VkDHjH0mlnhFt8qXrZwtxn1tqQ0krQ2SOQZ34qakcGNnipC5N6dZSTgFzYSCfxqxqZ7/ry62+6yWbfbWZUNrGzIAWpKhsgk7Q3bjnsqQ0NrCXqaTLakxmGQwhKgWyd+SRz1uN2xi28H8uBb5BltIivhDicK2iQo4Gz6Tiqs07fblpB550W/PdKQn+0IUkbt+7k6aBuv/CRcLXfJkBqDFWiO6UJUoqyQOnfUxo3W304mWboYcPiSjY+s2drOc/aPoHbVVXL6RvVxfufcD39pWXPq2lFO/oNaD8aRGIEhhxoq5NtBTntoLHm8Jdzau0mHDt8V9Lby22ykqUVgEgHcd+4c1Nujb7cL7DkO3GCIi2nAlKQlQ2hjOfGpGttlgWS1RNSW+4CVcm2kOphbSTlSgAU4SdrcFHsrc8IepPMCfynaC0KXr7qCRbJ4jtMNLSUBWVE53k/KobS+sb1d74zCnWhMdhaVFTgQsYwkkcu6vrWHlxHsk/E1G84joo4i01pmG53yXfzX+hdHfJd/Nf6F1t60v7+nLI3OjMturU8lspcJxggnO71Ui+Fe6ebofav51zbPs5d/sb++S7+a/0Lr2Lqia7PZjPRGm9txKFZ2gRk+mtXQ+spmpbhJjyYrDKWmtsFsqyTkDnrHP8A8aj/AFDfwTXJzHlXqb6Ynd5PNBooNWNbmy6eVZft1/uNFF08qy/br/caKD5t/lCN7VHxFdKiuarf5Qje1R8RXSooCkaB/jU/6hz/AOqeaQXO7IeoX5bMR1wofWU5bVg5yOb11C/hm4jptn+onhZgy5V4hKjRX3kiOQS22VAHaPQKQ/oe6ebZn5CvlVx98l281/oXR3yXbzX+hdN8JfIow8Fsd+NpV1uSy4yvupZ2XEFJxsp5jWLR/lxfslfEVt98l281/oXWDSUd9u8KW6w6hJaVvUggco6a5M5mMK73i964M1wukOE09xkqOh5CCoNrdCSd2Ruzmqb1Fqy5atitQ1W9scSvjfqEqUeTG/l3b62OElAd1042TgLQ0kn1gUwSLM7we7NysweuL0jLCm3GzhKftZ8XfypHbVjW0NI6mvdsjwLMmzEsB0ILq2nAQFLyT0c9SHDH/dbV7R34Jpqtl5nS9HLu78MNy0tOrDGyreUlWBg79+B20pMNzOERwsXmO5bkwhttqbbPjlW4g7XqoMGi9V3dAtVoTawYZUlrj9hf2SeXPJTRrPTtsvjsRVyughFlKggFSRtZxn7XqqAtOqJVn1DG0k0wy5GYkCMHlEhZGeXlxnfWtwyf3q1f+jnxTQJ8J9yxatLltQJioj7iWhjPGAZTnxfRv3U5eEPUnmBP5btaUG1W3T9mi6niXRt+ey0h0RFLTgqUACMA7W7aPZTfo/WSL3DkO3NcOGttwJSnjdnaGM58Y0DTCdW/CYecTsLcbSpSd+4kAkUm6w8uI9kn4mvrT2r7vdNRpt8m1oaiqK8PBC94AJByd2/Ar61bHfcvCVtMOrSGk70oJHKeioX7M/E/g94Uo78nSrTcZlx5fdSDstoKjjZVzCqi+h7p5tmfkK+VXH3yXbzX+hdHfJdvNf6F03w78ihY4JoMuLeJqpMV9lJjgAuNlIJ2h0ipuf8A41H+ob/+a3O+S7ea/wBC6jm+7JmoWJb0R1srfQVYbVgYwOf1VG1onsq1tSt8RHs/UGig1a2ObLp5Vl+3X+40UXTyrL9uv9xooPm3+UI3tUfEV0qK5qt/lCN7VHxFdKigK013W2trUhy4RUrScKSp5IIPRy1uVz/qO3Tl6kua24UhSVS3SCGVEEbR9FBYusNeLsk5hm2JhzG3G9pSuMKsHOMeKaiU8Iuo1JCk2FBBGQQ27vqD0tpODc4767zPXbnELAQhzZRtjHL42KtqJcLVFhsR03SIoMtpQCX0ZOBjpoIvS+qTcrc69eRGt8hLpSlpa9glOAQcKOeUnsqM03rW43C69z3aCzBi7ClB5e0gZHIMq3UrcJjblx1K29b0KltCKhJWwOMSDtK3ZGd++tbVGqrveLMiFPtYjMpcSoObCxkgEY37ueg+OESU27rVb8Vxt5IQ0QUKCgSByZFP2jtU3a+XJ6NcbYIraGS4lYQsZOQMb/WaRtNaatM6yfScq7pjyW1KIZK0DOzvHKc763/CvdPN0PtX86CV1Rwhz7LqCXbWIUZxtgpAUsqycpB5j6ajmOE69ySoR7RHdIG8IDisdhpQvUiffrjIvC4S0pewpRbQooGyAOX8KauCWVGizriZMhpkKaQAXFhOd56aCFtMx64cI0SZJZ4l56clS28EbJzyb99NHC7FkyZNsMeO66EoczsIKsb09FT6NFQZGpE6iauLq1KfEhKUhJQd/Jnor511q6Vpl6GiLGZeEhKyrjCd2COj10C/A4N7c9ZY0+bcn4xcZQ44FpSkIJA3b/Seejwf6b/7kT+Y186hb5whz71aH7c/CittvgAqQVZGCDzn0Vh0hpu1XyHIeuN1ENbbgSlJUgbQxnPjUEqOEy4QQIbUKI43H+qSsqV4wTuB3H0V74V7p5uh9q/nWnqfSVltFmcmQb0JTyVJAaC0HIJweQ5pJoLc0nwgv3m7mLcWocRkNKXxm2U7xjd4xxz03yb3b24rrjU+ItxCCpKePSdogbhy0iReDixSlBEe/KdcKclKFNqPYKyDg7sUOYgO34odQpKthamwekbqDB4Q9SeYE/lO17B4Sbq/eIsGRbYzRdfQ0sHbCkhRA5CfTVkyJMaKkKkyGmUqOAXFhIJ/GlSToq33XUSdQt3FxRU8h0Jb2VIJRgYz/toHGg0UGg5sunlWX7df7jRRdPKsv26/3Gig+bf5Qje1R8RXSormq3+UI3tUfEV0qKAqC1JqOPabPLkxpEV6UxjDKnRknaAIwDnnNTtVTq/SNrQi53KLdS/OU6XBFSUElSl7xgb92T2UAx3HwglU29TWba5Fw0hCFpAWDvz45pBdjKM92NFSp/ZWpKdhO0VAE791M+ltJwbnHfXeZ67c4hYCEObKNsY5fGp3seiLZpy4s3gXVaktg4LpQlB2gRy/jQIun9X3LScFdvTb2zxjhe+vCkq3gDk3bvFrLqvVl3vdoTFn2tMZkOpWHAhYyQDgb93PT1qDSFt1ZPFxTc1eI2GvqCladxJ5enfSRqTUd9v9rTbn7MpttDiVhSGnMnAI5/XQbOj9BxNQWNM96a+0suKRsoSkjd66lpHBjZ4qQuTenWUk4Bc2Egn8akuDiVGt+lkx58hqM8HlktvLCFAHGDg763tVQ7JqWGzGkXmOylpzjAUPIJO4jnPpoFZNzm23OkbfG7rtaz3OJyUqUdlz7RBT4u4rPZvrYkcGdmiBJlXtxkK+zxmwnPqzWunUdy0tmyWaAm4wYp+qk7Klbe14x3p3biojd0UF9eulhnUezaERAVNKxscYVYBHj9GBydNBktOsF2e8xtNMpiuQGHgwJSl4JRn7WQcc9Mmo9OW3WLjDibn/AHUEf2dSV/axy9HJVWq06kan7hC3jbu6A33ZseLsZ+1tfZ/4plenMcHiwiySGLmJwy6XFA8Xscn2Dz7R5eig81PweQrLp+VcWp8hxbASQhSUgHKgP+ahtIaatV7hyHbjdRDW24EpSVIG0MZz41S6NaP6tWmw3JqLDizDsuPoUQUAeMPtHHKkD8akY/BlZpSSqNenXkg4Jb2FYP4UFYSW0tSXW0K2koWUhXSAeWmvSml7RebS5KuF3ER1LqkBvbQMgAHO855zWrYdKu3LUgtslEpiOS4OO4oj7IOOUY34pzPBRbwkn6Tlbv8AwTQL3Bq0u3anL89CozJjrSHH08WkkkYGTjfTNqXT9jul0evP020H0oCktIcbIUUjcOXO/FRn0pL1ls2i/sJtURH1okbJTlSRgJyvdvBPp3VlY0Fp1uQ2tGo0qUlQIHGNbzn10C5q/U91vkJhm42xMVDbm2lQQsZOMY8at7R+uZsBu22NuJHUyXg3xhKtrC17zy4/zVY2qtNMalhsxpEh1lLTm2CgA53Y56VomgLHb7tHWb6e6GHkLDSlNgkgggY5d9BYtBooNBzZdPKsv26/3Gii6eVZft1/uNFB82/yhG9qj4iulRXNVv8AKEb2qPiK6VFAVWt6tFs0/PmamiXRt+ey+p4RVLRgqUrBG453bR7KsqqJXbG7xwiyrc64ptD855JUkAkb1H/igZ4EIcJYXPuLhhrh4ZSlgbQUDvydqvg3OZfdnTF1jCDbkHi+7ClSThseLvV4u/ZHbROmOcGjwgW5KJiJieOUqQCCkjKcDZqd1++qVwd90rASp4MLIHICSDQb2l41l01bnYce8x3krdLu0t5AOSAMbj6KjNN61uNwuvc92gswY2wpQeXtIGRyDKt1U7TnqLUl81BaUW9+zKbbStKwpDThJwCOf10DbqHTFh1Bd1z3b8224tKU7CHWyNwxzmsHgot/nOV/+E1EaS0Exc7Ui4zpMmK6l05bLYAASeXfTjqnVS7ZDZcsqY9weW5srbQrbKU4O/CTnloN+xsW7T9uYsybi0tbJIAccSlZKlFWMZ9NYdV6Wj6mbjIkSXWRHKiNgA5zjp9VVHcJN3n6l+m3LU6l3jUO8WllezlOMenmq0NGalul9kym7jbhES0hKkkIWNok/wDlQLndlybe7yhBWbcV9yd2cWra2Cftfd5/VS3rnS0fTL0NEeS693QlZO2kDGCOj11eLrjbLanHVpQhIypSjgAeulDVdosep3Yy5F8ZYMcKACHWznOOk+igWLLoKyXK3w3TfCJMhpK1MpU2SFEZIxy7qe9K6ZY0zFfYjyHHg8sLJWAMbsc1VRpZMa3cIjDfdCDHjyXEB5SgAUgKAOeTfV3R5UaUkqjSGnkpOCW1hQB/CgwG7WxKiFXGICDggvp3f1o+mLX5yh/np+dIiuDyxzZzgavxW84tSuLQpsnlyd3LSVrOws6cvSYLD63kllLm0sAHJJGN3qoLY1PHsuo7YmC/eY7KUuhzaQ8gnIBGN59NVDqCBGsmoe5rfJExprYWleQdo7jjxay6NsTOor0YL7y2UhpTm0gAnII6fXX3frM1YNWot7Dy3UIU0oKWADvweagsXS2sp1ynOs3qGzb2UtFSHF7SNpWQMZVu5CaSb462/wAKqXGXEONqmx8KQQQfsc4qz9U6aY1LDZjyJDjKWnNsFABzuxz0rxNAWO33aOs3090MPIWGlKbBJBBAxy76CxaDRQaDmy6eVZft1/uNFF08qy/br/caKD5t/lCN7VHxFdKiuarf5Qje1R8RXSooCqetMKWnhWL6or4a7veO2Wzs48bfnFXDSnK1RNauD0ZmI05sOKQnG0ScHoFcmYjuhfUrTuyap0ZG1LLYkyJbzJab4sBCQQd+ef10iagv96nWhdhVaFCO0UtpdS0vaUEHcejfinfvku/mv9C6875Lt5r/AELqO+FfyKKa+i7j1CV+Sr5VbWkNV3i73VMGfahGZDRVxmwsbxjA37q2++S7ea/0LrbsV/kXOeY7rDSEhBVlJOdxHT667F4djXpM4Ss+XADbsWTOjsqWgpIW6kEAjlwTVdGIxohYuGnZKbvIfBZW1uVsJ5drxN/KAPxpj1FoGJf7su4PTX2lrSlOyhKSNwxz1AT7ang1Si6W50zHJJMdSHxgAfayNnn8WpLmqvhQvKHuJXaYyXcgbBCwrJ9Ga2PCHqTzAn8p2sLcKDe2Dq+RcG2rnvfTCStOCtvclOCdrfsD0791ZfCHqTzAn8t2gdWEuam0gET0GK5NZIcSlJyjfzA+qljwUW/znK//AAmorwoXkP8AEfRMbjc7Oxhe1noxmmrSmrX7oJX04zHtxb2OKCyW9vOc/a5cYHJ00FZxtNFWqVW6WX2IKX1tmUtvZASM4OTu34HbVoaVg2TTUV9iPeo7weWFkrebGN2OY1i19coD+jLg0xOjOOKSjCUPJUT46eYGqSoJ21XSTatVuToEdMp1LjuyjBIIORndv5DWTU0q76iuaZ0i1OtLDYb2W2l4wCTz+utrgx/xtE/9HP2GnzVurLxZbumJb7WJTRaSvbKFneSd27dzUFa2G43HStw+kRAUSUFr69Ckp34PLu37qwXq+v3q+/SjrDaHSUeIjOPFxj081Wbwrkq0gwo7iZSDj/aqlTSGlbRc7cxPl3gRpAdP1W2gch3cu/fQN2ltZTrlPdZvUNm3spaKkOL2kbSsgYyrdyE18TNM2K4apTeRfW+PU+24GkuNkEpxgcud+KndU6aY1LDZjyJDjKWnNsFABzuxz0rRNAWO33aOs3090MPIWGlKbBJBBAxy76CxaDRQaDmy6eVZft1/uNFF08qy/br/AHGig+bf5Qje1R8RXSormq3+UI3tUfEV0qKApGgf41P+oc+CqeaRoH+NT/qHP/qoX8M+v3r/AKya41lM01cI0eNFYeS61tkuFWQckc1LPhXunm6H2r+dZ+FmDLlXiEqNFfeSI5BLbZUAdo9ApD+h7p5tmfkK+VTaF36Lv7+o7I5OkstsrS8psJbJxgAHO/11EaP8uL9kr4isvBbHfjaVdbksuMr7qWdlxBScbKeY1i0f5cX7JXxFQt3hn1v2Ua+rteT7Df3LdGhR3UJQhQUsqySRnmNRpnv64WIGom02iOwC8h3BRtq+zs+Pu5CT+FRvCLFmK1q5IjxH3UpQ0QUtqIJA6RWpq/VF1vkBhi42wRW23dtKghYycEY8b11NoM1v0Lp6NcIz7OoUuONOpWlHGN+MQQQOWrJxVRab0ew9plnUqJDypLAW+hgIBSpTajgdO/ZHbW74Q9SeYE/lO0DC/omC3qQ6heuDrakviQUqCQgY5ieisuotOW3WLjC03P8AuoI+oUlf2scvRyVq3e+NXHg9lOS3Y7M16Krbj8YApKs8myTmq40rq2VpgShFjMPd0FO1xmd2znkx66CPu9ok2+fLaDEgsMPKQHVtEAgKwDnGN9TWkNNWq+Q5D1xuohrbcCUpKkDaGM58anfVN6jXPg3edVJjCTIYaWplDoJCipJIxnO6qjYiSpAKo8d10A4JQ2VY7KCQs91XpzUHdkRDb5YUtCds7lA5Gd1OLPCVfpCCtiysuJBwVIS4Rn8KQvou49Qlfkq+VMVg1hctK29duFvbO24XfrwtKt4A5N27dQe6g1jctVQE25VvbGy4HfqApStwI5OjfUAzb7iy8h0W+SShQVgsq5j6q37Dcrjpe4G5CAo7SC39chSU78Hl3dFNbPCTf32+MYsjTiOTaQhwjtFBk8IepP8At9P5Ttb9p0qnUcmNqqe69FmOvB1UdKMJSUKwBv37wkH8ai3+Eu+x0hUizMtJJwCtLic9tP2lbq7e9PRbi+2htx7aylGcDCiOf1UEvQaKDQc2XTyrL9uv9xoounlWX7df7jRQfNv8oRvao+IrpUVzVb/KEb2qPiK6VFAUgud2Q9Qvy2YjrhQ+spy2rBzkc3rp+oqNq5Vamnvx1xgpd8l281/oXR3yXbzX+hdNtFc2z7R5d/sUu+S7Y8l/oXWDSTD7d4Ut1h1CS0repBA5R006UU29czJyZ3RM2zhilOKaiuuoTtKQhSgOkgVTOqNQXzUsJmLJs62UtOcYC205knBHP66uuipryzwdtOM6LgtvNrbWC5lK0kEeOrmNGtL/AHGwtRFW2AJZeUoLBSo7OMY+z66ZqKDnm7N3S6XSTPdtr6FyFlZSlleB2ipzRuiBfkyzcFyoZYKNj6rG1nOeX1VdVFBVOouDiNarHJnRJcqQ80E7LfFg7WVAc2/nqJ0vfr5pqK/HjWdbyXlhZLjTm7djmq7KKDDCdW/CYecTsLcbSpSd+4kAkUs6m0NF1Fc0zn5r7KktBvZQkEYBJ5/XTZRQJXClHed0oy0w246oSkbkJKjjZVv3V98HwkQtDFS2VpdbU6sNrSQTjeN3LTlRQVnHcn8ITv0deIi7c1GSX0ONtqypW5OPG3chNPdgtLdjs7FtadW6hnawtYAJyonm9dSNFAUGig0HNl08qy/br/caKLp5Vl+3X+40UHs2JJtNzdjPpLciM5g5HODuPq56suDwrxO5UC4W+QHwMKLJSUk9IyQR6qcb3pu0X0A3GGlxxIwl1JKVj8R8DUD4MdO9Mz84fKg1PCvZ+oT+xH8qPCvZ+oT+xH8q2HODbTLSdp1yUgdKnwP+Kwd4Wj+vOe9o+VB54V7P1Cf2I/lR4V7P1Cf2I/lXveFo/rznvaPlR3haP68572j5UHnhXs/UJ/Yj+VHhXs/UJ/Yj+Ve94Wj+vOe9o+VHeFo/rznvaPlQeeFez9Qn9iP5UeFez9Qn9iP5V73haP68572j5Ud4Wj+vOe9o+VB54V7P1Cf2I/lR4V7P1Cf2I/lXveFo/rznvaPlR3haP68572j5UHnhXs/UJ/Yj+VHhXs/UJ/Yj+Ve94Wj+vOe9o+VHeFo/rznvaPlQeeFez9Qn9iP5UeFez9Qn9iP5V73haP68572j5Ud4Wj+vOe9o+VB54V7P1Cf2I/lR4V7P1Cf2I/lXveFo/rznvaPlR3haP68572j5UHnhXs/UJ/Yj+VHhXs/UJ/Yj+Ve94Wj+vOe9o+VHeFo/rznvaPlQeeFez9Qn9iP5UeFez9Qn9iP5V73haP68572j5Ud4Wj+vOe9o+VB54V7P1Cf2I/lWvN4V4fcy+4LdIL5Hi8cUhIPScEk+qpFHBpptxO0hctQPOHwR8K+vBjp3pmfnD5UFQxY0q7XNDDCS7JkuYAA5STvP/NFX3ZNM2ixZNuhpQ4oYU6olSyPWf+KKDbutzh2iA5NnvBplHOeUnmAHOard7VWp9WzFxNNR1xYw+04MBQHSpfIn1Df661NTyZOstdN2WK4UxWHC0nHIMfbX/Q49Q6asSSmLpPSr67fGTxcNoqSgnG2rpUeck8poFGPwYPSjx17vTrrp5Q2Cr9SuXsraXwU2kp+rnzUq6VbBHZgVtJ1TJgTGRe7pbUILaXnWmYT6lJSoZHjAkD8a3tQ6pjQihmLc4zD+yl1Zeiuup4tQ3HxOT8aBFvPBjdYSFO219ucgb9jZ2HPwHIe2kZ1txlxTbqFIWg4UlScEHoIq+LBeJ8m7yrZce5XVtMtvtvRkqSlSV8xCid9RHCVpdm42t27RWwmbFTtOFI/6rY5c+kDeD6MUFOUV5RQe0VNMabeMBmbPnQrexIGWe6Vq2nB0hKQTj015N05Ij21VyjSok+G2oJccjLJ4snk2kkAjsoIaipa16em3GIubtsRYSFbKpMpzi289A5yfUK2kaTflJX9FXK3XF1AKixHdIcIHLhKgM/hQL9Fe7C+M4vZVt5xs4356KmL5pi42KOy/MLKkOqKDxS9ri14B2VbtxwaCGoqW0/p6ZqB55qCthKmUbauNXsg78YG7lzUbIjvRZDkeQ2pt1tRStChgpI5RQY6K3rxapFnlpjSlNqWptLgLZJGFDI5q+rHZ5N8uAhRFsocKFL2nVFKQBy78Ggj6K2LjBkW24PwZadl5hZQoDk9Y9B5akWdM3B3Tbt+yymI2eRSiFqG0E5AxyZOOXmNBDUVOxNLvSLOxdHrlbokeQpSG+6HFJJKTg8iT0V8vafZaZW4NQWdwoSVbCHVlSsDkHictBFxJsuE4HIcl5hY/zNLKT/SnXT3CZcYbiGbynuyPyFwAB1I+Cvx7aQqKDpO23CJdITcyC8l5hwZSpPwPQfRRVN8HWoXLPfW4jqz3HNUG1pJ3JUdyVdu4+g+iig3eDEhOuJIkf9UsugZ+9tDP9M1a12ehR7XJeuSUqiIQS6FI2wU+rnqrNY2+XpPWLd/gI/s7zvGpPMFn7aD69/4H0VYEaZbdZ6beQw8oNSGy26kEbbRPMR0/0NAoavlWv6XlERpKk9xtqeLVwEdLjZ+ykII8b1f0rZ1BHt6lSpj0Wa3GRbmi4pqelAdGPEbKd5Pr9FT0bS8oSmF3GfCntMpCNl22N7akgYA28kipC82dU9kIiORYy1YDinIaHttI5E4OOQ7xQFqlWtyZxEVCUzExWlL8TxuLI8UFXPW7clNptspT2OLDKyvPRsnNRtlsTtvuEm4TZ5mSn0Ib2kshpKUJ5AEjNK3CXq1hmE7Y7e6FyHfFkLSchtPOn1nn6BQVNRRRQNK7wEQIdv1PYlvBhoCM7tqYdDZ5ObCh0bqFWe0XOzz59ifmsrgoDj0eVsqCkn7qk/juIrQjanuTMRuI/wBzTI7Qw2iXHQ7sDoBIyB+NfE/UdxmwzCyxHiKOVMRWUtIUfTsjf+NBNapStzRumnYuTCbYUhezyJez42fSd/8AWli3MTZM5tm3IdXJUfEDWdrk9HorZtV+uVpQ41Df+od/6jLiAttfrSrIrad1Zcyw4zFEWCl0bLhhxkMqUOgqAz/WgkdEWxH0lIu90U21Hth2iX1bKS9nCUk+vefwqWtMQXJu6Wu4321ylXRXGtcU8oqTI5QQCkbjyH0AUkru0tVmRadtKYiHS7spSAVL6SeetVl5xh5DzKyhxtQUlQ5QQcg0DRpdp2NB1Oy6kodagqSpJ5UqCvnX08E6vtSpKMfTsJv65I5ZbQ/zDpWOfpFRD2o7i9JuEhSmg5cGuKkFLQAUPVzHdy1oQZki3zGpcR0tPtK2kKHMaBh4Qjm/skdTY/bXnB8M390Hqb/7Khrxdpd6nGZPUlTxSE5SkJGBybhXxa7nKtUpUiGpKXFNqbJUkK3KGDQM8iA5q232mdF3zQ4iBM9YHiOH/bnJ9FSMmexMsOqI8I/2GAxGjRvSlLhyr/ccnspMtV7uFoRKTAfLQlN8W5uzkdI6DvO/01ji3OVEgTITKkhmaEh4FIJOycjB5t9A2qctrfBxZjc48l5BkvbIYeDZByeXIOaXZb+nlRnExINxQ+R4inJSFJB9ICBmvuHqe4RLY1bw3DejMqUpCX4yHMEnJ5R6a+laolqSUmDaRkY3W9oH4UEFRRRQfbW3xyOKzt7Q2cdPNRTZwc6dcvF9bluoPccJYcWojcpY3pSPx3n0euiguafBi3GG5EmspeYcGFIUOX/++mq3n6CvVjmmfpOatQHI2VhLgHRv8VQ9dFFB6jXuprV9Xe7EVlP+fYU0T+OCD+FfbnCwrY+qsagr/wApG79tFFAuXnX+oLo2pltaYTKtxTHSQoj0qO/sxSmUrJyUqJ9VFFAbCvunso2FfdPZRRQGwr7p7KNhX3T2UUUBsK+6eyjYV909lFFAbCvunso2FfdPZRRQGwr7p7KNhX3T2UUUBsK+6eyjYV909lFFAbCvunso2FfdPZRRQGwr7p7KNhX3T2UUUG3DtFynrCYcCS8T9xokdtOmn+DGdJcQ9e3BFZ5S0hQU4r0Z5E/1oooLTt8CLbITcSCyllhsYSlPx9J9NFFFB//Z" alt="QR code for otcyberarena.com" style="width:160px;height:160px;border-radius:12px;border:2px solid rgba(74,222,128,0.2);">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;letter-spacing:1px;">Scan to open · otcyberarena.com</div>
+      </div>
       <div class="lk-feats">
         <div class="lk-feat"><div class="lk-ft">⚡ Flash Challenges</div><div class="lk-fd">Breaking OT incidents. 24h window. Double credits.</div></div>
         <div class="lk-feat"><div class="lk-ft">🌐 More Episodes</div><div class="lk-fd">Asset Inventory, MDR, Incident Response.</div></div>
@@ -614,12 +622,7 @@ function genCallsign(countryCode){
   const s=CS_SUFFIXES[Math.floor(Math.random()*CS_SUFFIXES.length)];
   return p+s+'_'+code;
 }
-function updateCallsignSuggestion(){
-  const sel=$id('geo-country');
-  const code=sel?.value||'';
-  const el=$id('cs-name');
-  if(el&&code)el.textContent=genCallsign(code);
-}
+
 function getTitle(c){let t=TITLES[0][1];for(const[p,l]of TITLES)if(c>=p)t=l;return t;}
 
 // ══ STATE ══
@@ -703,25 +706,48 @@ function updateTopBar(){
 function addCr(amt){credits=Math.max(0,credits+amt);updateTopBar();}
 
 // ══ CALLSIGN ══
+function onCountryChange(){
+  const sel=$id('geo-country-1');
+  const code=sel?.value||'XX';
+  const el=$id('cs-name');
+  if(el)el.textContent=genCallsign(code);
+}
 function initCallsign(){const el=$id('cs-name');if(el)el.textContent=genCallsign('XX');}
 function useCallsign(){const cs=$id('cs-name')?.textContent||'';const inp=$id('ob-name');if(inp&&cs){inp.value=cs;inp.focus();}}
 
-// ══ ONBOARDING ══
-async function goOb2(){
+function goOb1b(){
   const e=$id('ob-email').value.trim().toLowerCase();
-  const n=$id('ob-name').value.trim();
-  const p=$id('ob-pin').value.trim();
+  const country=$id('geo-country-1')?.value||'';
   const c1=$id('ob-consent1').checked;
   const c2=$id('ob-consent2').checked;
   const statusEl=$id('ob-sp-status');
   if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){
     statusEl.textContent='Enter a valid email address.';statusEl.className='sp-status st-err';return;
   }
+  if(!country){statusEl.textContent='Please select your country.';statusEl.className='sp-status st-err';return;}
+  if(!c1||!c2){statusEl.textContent='Please tick both consent checkboxes to continue.';statusEl.className='sp-status st-err';return;}
+  statusEl.textContent='';
+  // Update callsign suggestion with selected country
+  const el=$id('cs-name');
+  if(el)el.textContent=genCallsign(country);
+  hide('ob1');show('ob1b');
+  setTimeout(()=>$id('ob-name')?.focus(),100);
+}
+
+// ══ ONBOARDING ══
+async function goOb2(){
+  const e=$id('ob-email').value.trim().toLowerCase();
+  const n=$id('ob-name').value.trim();
+  const p=$id('ob-pin').value.trim();
+  const country=$id('geo-country-1')?.value||'';
+  const statusEl=$id('ob-sp-status2');
   if(!n){statusEl.textContent='Enter your callsign.';statusEl.className='sp-status st-err';return;}
   if(!/^\d{4}$/.test(p)){statusEl.textContent='PIN must be exactly 4 digits.';statusEl.className='sp-status st-err';return;}
-  if(!c1||!c2){statusEl.textContent='Please tick both consent checkboxes to continue.';statusEl.className='sp-status st-err';return;}
   pEmail=e;pName=n;pPin=p;
-  const btn=$id('btn-ob1');btn.textContent='Checking...';btn.disabled=true;
+  // Store country from step 1
+  const countryName=$id('geo-country-1')?.options[$id('geo-country-1')?.selectedIndex]?.text||'';
+  pendingGeoData={country:countryName,countryCode:country,source:'manual'};
+  const btn=$id('btn-ob1b');btn.textContent='Checking...';btn.disabled=true;
   try{
     // Returning player: match by email + flavour first
     const byEmail=await sbGet('players',`?email=eq.${encodeURIComponent(e)}&flavour=eq.${CONFIG.supabaseFlavour}&select=id,name,track,cp_qualified`);
@@ -798,22 +824,10 @@ function goFA(){pTrack='FA';hide('ob3b-res');if(playerRowId){show('ob3a');}else{
 // ══ GEOLOCATION ══
 let geoCb=null;
 function showGeo(cb){
-  if(playerRowId){if(cb)cb();return;}
-  geoCb=cb;
-  ['ob3a','ob3b','ob3b-res'].forEach(id=>hide(id));
-  show('ob-geo');
-  $id('btn-geo').disabled=true;
-  const sel=$id('geo-country');if(sel)sel.value='';
+  // Country is now collected in step 1 — skip geo screen entirely
+  if(cb)cb();
 }
-function geoNext(){
-  const sel=$id('geo-country');
-  const code=sel?.value||'';
-  if(!code)return;
-  const name=sel.options[sel.selectedIndex].text;
-  pendingGeoData={country:name,countryCode:code,source:'manual'};
-  hide('ob-geo');if(geoCb)geoCb();
-}
-function geoSkip(){pendingGeoData=null;hide('ob-geo');if(geoCb)geoCb();}
+
 
 // ══ CALIBRATION ══
 function showCalib(){
@@ -899,7 +913,7 @@ async function launch(){
 function changeTrack(){
   $id('sc-game').classList.remove('active');$id('sc-game').style.display='none';
   const ob=$id('sc-ob');ob.style.display='block';ob.classList.add('active');
-  ['ob1','ob3a','ob3b','ob3b-res','ob-geo'].forEach(id=>hide(id));
+  ['ob1','ob1b','ob3a','ob3b','ob3b-res'].forEach(id=>hide(id));
   show('ob2');
   document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('sel'));
   $id('btn-ob2').disabled=true;
@@ -1210,7 +1224,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   } else {
     gatePassed();
   }
-  $id('ob-email')?.addEventListener('keydown',e=>{if(e.key==='Enter')$id('ob-name')?.focus();});
+  $id('ob-email')?.addEventListener('keydown',e=>{if(e.key==='Enter')$id('geo-country-1')?.focus();});
   $id('ob-name')?.addEventListener('keydown',e=>{if(e.key==='Enter')$id('ob-pin')?.focus();});
   $id('ob-pin')?.addEventListener('keydown',e=>{if(e.key==='Enter')goOb2();});
 });
