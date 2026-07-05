@@ -368,6 +368,17 @@ body {
 
 .theme-panel.open { display: block; }
 
+/* Mobile topbar fix (v1.3.0): topbar contents were wider than small screens,
+   forcing horizontal page scroll. Hide live badge, tighten buttons, clip root. */
+html { overflow-x: clip; }
+@media (max-width: 680px) {
+  .topbar-center { display: none; }
+  .topbar { gap: 8px; }
+  .logo { font-size: 14px; gap: 6px; }
+  .btn-nav, .btn-nav-ghost { padding: 0 10px; font-size: 11px; min-height: 40px; }
+  .theme-btn { min-width: 40px; min-height: 40px; }
+}
+
 .theme-panel-title {
   font-family: var(--mono);
   font-size: 10px;
@@ -1544,7 +1555,7 @@ footer {
       <span class="ot">OT </span><span class="cyber">CYBER</span><span class="arena">ARENA</span>
     </h1>
 
-    <div class="hero-version" id="heroVersion">EC v1.0.4 · 2026-06-06 · Ghost Protocol</div>
+    <div class="hero-version" id="heroVersion">EC v1.3.0 · 2026-07-05 · Ghost Protocol</div>
 
     <p class="hero-tagline">The global community for OT security</p>
 
@@ -2022,7 +2033,7 @@ footer {
     <span class="footer-link" onclick="openModal('register')">Join Arena</span>
     <a class="footer-link" href="mailto:support@otcyberarena.com">Contact</a>
     <span class="footer-link" id="easterEgg" onclick="toggleEasterEgg()">Powered by AI</span>
-    <span class="version-stamp" id="versionStamp">EC v1.0.0</span>
+    <span class="version-stamp" id="versionStamp">EC v1.3.0</span>
   </div>
 </footer>
 
@@ -2035,7 +2046,7 @@ footer {
 'use strict';
 
 // ── VERSION ──────────────────────────────────────
-const EC_VERSION = '1.0.0';
+const EC_VERSION = '1.3.0';
 document.getElementById('versionStamp').textContent = 'EC v' + EC_VERSION;
 
 // ── THEME SYSTEM ─────────────────────────────────
