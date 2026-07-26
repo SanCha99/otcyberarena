@@ -1657,69 +1657,16 @@ footer {
         <button class="filter-btn active" data-filter="all" onclick="filterLB(this,'all')">ALL OPERATIVES</button>
       </div>
       <div class="lb-rows" id="lbRows" role="list">
-        <!-- Populated by leaderboard engine in Chunk 2 -->
-        <div class="lb-row">
-          <div class="lb-pos p1">#1</div>
-          <div class="lb-flag">🇦🇺</div>
-          <div class="lb-info">
-            <div class="lb-callsign">GridWatch_AUS</div>
-            <div class="lb-track-rank">CP · Ghost in the Machine</div>
-          </div>
-          <div class="lb-credits">1,920</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos p2">#2</div>
-          <div class="lb-flag">🇸🇬</div>
-          <div class="lb-info">
-            <div class="lb-callsign">NullVector_SGS</div>
-            <div class="lb-track-rank">CP · Ghost in the Machine</div>
-          </div>
-          <div class="lb-credits">1,640</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos p3">#3</div>
-          <div class="lb-flag">🇺🇸</div>
-          <div class="lb-info">
-            <div class="lb-callsign">ThreatHunt_USS</div>
-            <div class="lb-track-rank">CP · Ghost in the Machine</div>
-          </div>
-          <div class="lb-credits">1,340</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos">#4</div>
-          <div class="lb-flag">🇯🇵</div>
-          <div class="lb-info">
-            <div class="lb-callsign">CyberSamurai_JPS</div>
-            <div class="lb-track-rank">CP · Threat Hunter</div>
-          </div>
-          <div class="lb-credits">1,180</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos">#5</div>
-          <div class="lb-flag">🇩🇪</div>
-          <div class="lb-info">
-            <div class="lb-callsign">SOCGuard_DES</div>
-            <div class="lb-track-rank">CP · SOC Analyst</div>
-          </div>
-          <div class="lb-credits">890</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos">#6</div>
-          <div class="lb-flag">🇮🇳</div>
-          <div class="lb-info">
-            <div class="lb-callsign">FieldOps_INS</div>
-            <div class="lb-track-rank">FA · Field Tech</div>
-          </div>
-          <div class="lb-credits">720</div>
-        </div>
-        <div class="lb-row">
-          <div class="lb-pos">#7</div>
-          <div class="lb-flag">🇬🇧</div>
-          <div class="lb-info">
-            <div class="lb-callsign">IronGrid_UKS</div>
-            <div class="lb-track-rank">FA · Field Tech</div>
-          </div>
-          <div class="lb-credits">540</div>
+        <!-- 2026-07-26 fix: this used to be 7 hardcoded fake-operative rows
+             (GridWatch_AUS etc.), the exact same names as the JS SEED_PLAYERS
+             fallback. renderLeaderboard() always overwrites this via
+             innerHTML once JS runs, but search engines, link-preview
+             scrapers, and no-JS/slow-JS visitors all see the raw HTML
+             below BEFORE that happens -- so the static fallback needs to
+             be as honest as the JS one now is. No fake names here either. -->
+        <div class="lb-empty" style="padding:28px 16px;text-align:center;font-family:var(--mono);
+             font-size:12px;color:var(--muted);line-height:1.7">
+          ARIA // Loading the leaderboard...
         </div>
       </div>
       <div class="lb-footer">
