@@ -1567,7 +1567,7 @@ footer {
       <span class="ot">OT </span><span class="cyber">CYBER</span><span class="arena">ARENA</span>
     </h1>
 
-    <div class="hero-version" id="heroVersion">EC v1.3.2 · 2026-07-05 · Ghost Protocol</div>
+    <div class="hero-version" id="heroVersion">EC v1.3.3 · 2026-07-26 · Ghost Protocol</div>
 
     <p class="hero-tagline">The global community for OT security</p>
 
@@ -2045,7 +2045,7 @@ footer {
     <span class="footer-link" onclick="openModal('register')">Join Arena</span>
     <a class="footer-link" href="mailto:support@otcyberarena.com">Contact</a>
     <span class="footer-link" id="easterEgg" onclick="toggleEasterEgg()">Powered by AI</span>
-    <span class="version-stamp" id="versionStamp">EC v1.3.2</span>
+    <span class="version-stamp" id="versionStamp">EC v1.3.3</span>
   </div>
 </footer>
 
@@ -2058,7 +2058,7 @@ footer {
 'use strict';
 
 // ── VERSION ──────────────────────────────────────
-const EC_VERSION = '1.3.2';
+const EC_VERSION = '1.3.3';
 document.getElementById('versionStamp').textContent = 'EC v' + EC_VERSION;
 
 // ── THEME SYSTEM ─────────────────────────────────
@@ -3038,7 +3038,16 @@ const FLAG_MAP = {
   CA:'🇨🇦',FR:'🇫🇷',NL:'🇳🇱',MY:'🇲🇾',NZ:'🇳🇿',KR:'🇰🇷',TH:'🇹🇭',CN:'🇨🇳'
 };
 
-let lbData = [...SEED_PLAYERS];  // fallback until Supabase loads
+// 2026-07-26 fix: SEED_PLAYERS must never appear to a real visitor -- it
+// backed every leaderboard view on the live domain because this code
+// treated "query failed" and "query succeeded with zero real players" as
+// the same case. There are 0 real registered players in Supabase right
+// now, so the live query legitimately returns an empty array (not an
+// error) -- that was silently being replaced with 7 fake operatives
+// (GridWatch_AUS etc.) every single page load. SEED_PLAYERS now backs
+// ONLY the IS_LOCAL/file:// dev preview; the live path renders a real
+// empty state instead (see renderLeaderboard()).
+let lbData = [];
 let lbFilter = 'all';
 
 async function loadLeaderboard() {
@@ -3048,7 +3057,8 @@ async function loadLeaderboard() {
       .select('callsign,country,track,credits,current_streak')
       .order('credits', { ascending: false })
       .limit(20);
-    if (error || !data?.length) { lbData = [...SEED_PLAYERS]; }
+    if (error) { console.warn('leaderboard query error:', error.message); lbData = []; }
+    else if (!data?.length) { lbData = []; }
     else {
       lbData = data.map(p => ({
         callsign: p.callsign,
@@ -3060,7 +3070,8 @@ async function loadLeaderboard() {
       }));
     }
   } catch (e) {
-    lbData = [...SEED_PLAYERS];
+    console.warn('leaderboard load exception:', e);
+    lbData = [];
   }
   renderLeaderboard();
 }
@@ -3080,6 +3091,17 @@ function renderLeaderboard() {
 
   const container = document.getElementById('lbRows');
   if (!container) return;
+
+  if (!rows.length) {
+    container.innerHTML = `
+      <div class="lb-empty" style="padding:28px 16px;text-align:center;font-family:var(--mono);
+           font-size:12px;color:var(--muted);line-height:1.7">
+        ARIA // No operatives ranked yet.<br>
+        <span style="color:var(--accent)">Play today's challenge to claim #1.</span>
+      </div>`;
+    return;
+  }
+
   container.innerHTML = rows.map((p,i) => {
     const rank = getRank(p.credits);
     const pos  = i+1;
