@@ -1,0 +1,163 @@
+[
+  {
+    "week_start": "2026-07-05",
+    "mcq_ids": [
+      "EC-00001",
+      "EC-00002"
+    ],
+    "cywordle": {
+      "word": "CERT",
+      "clue": "Computer Emergency Response Team \u2014 the coordination group you notify when an ICS incident hits."
+    }
+  },
+  {
+    "week_start": "2026-07-10",
+    "mcq_ids": [
+      "EC-00003"
+    ],
+    "cywordle": {
+      "word": "PATCH",
+      "clue": "The fix a vendor ships for a known vulnerability \u2014 applying it in OT usually needs a planned maintenance window."
+    }
+  },
+  {
+    "week_start": "2026-07-11",
+    "mcq_ids": [
+      "EC-00004"
+    ],
+    "cywordle": {
+      "word": "LADDER",
+      "clue": "A widely used PLC programming language whose diagrams resemble the rails and rungs of this physical structure."
+    }
+  },
+  {
+    "week_start": "2026-07-13",
+    "mcq_ids": [
+      "EC-00005"
+    ],
+    "cywordle": {
+      "word": "ROOT",
+      "clue": "The highest-privilege account on a Unix-based system, and often an attacker's ultimate goal after breaching a network."
+    }
+  },
+  {
+    "week_start": "2026-07-14",
+    "mcq_ids": [
+      "EC-00006"
+    ],
+    "cywordle": {
+      "word": "WIPER",
+      "clue": "Malware built to permanently destroy or erase data and systems rather than steal it \u2014 used in some of the most destructive attacks on OT networks."
+    }
+  },
+  {
+    "week_start": "2026-07-16",
+    "mcq_ids": [
+      "EC-00007"
+    ],
+    "cywordle": {
+      "word": "LEGACY",
+      "clue": "An outdated system or piece of equipment still running well past its expected lifespan, common in OT environments and often hard to patch or secure."
+    }
+  },
+  {
+    "week_start": "2026-07-18",
+    "mcq_ids": [
+      "EC-00008"
+    ],
+    "cywordle": {
+      "word": "HASH",
+      "clue": "A fixed-size digital fingerprint of a file or message, used to confirm it has not been altered or tampered with."
+    }
+  },
+  {
+    "week_start": "2026-07-21",
+    "mcq_ids": [
+      "EC-00009"
+    ],
+    "cywordle": {
+      "word": "PROXY",
+      "clue": "A server that sits between an OT network zone and other systems, relaying and inspecting traffic on its behalf rather than allowing direct connections."
+    }
+  },
+  {
+    "week_start": "2026-07-22",
+    "mcq_ids": [
+      "EC-00010"
+    ],
+    "cywordle": {
+      "word": "MODBUS",
+      "clue": "A widely used industrial communication protocol connecting PLCs, sensors, and control devices."
+    }
+  },
+  {
+    "week_start": "2026-07-23",
+    "mcq_ids": [
+      "EC-00011"
+    ],
+    "cywordle": {
+      "word": "RELAY",
+      "clue": "An electrically operated switch that uses a small control signal to open or close a circuit controlling much larger OT equipment."
+    }
+  },
+  {
+    "week_start": "2026-07-24",
+    "mcq_ids": [
+      "EC-00012"
+    ],
+    "cywordle": {
+      "word": "BREACH",
+      "clue": "An incident where an attacker gains unauthorized access to a network or system."
+    }
+  },
+  {
+    "week_start": "2026-07-25",
+    "mcq_ids": [
+      "EC-00013"
+    ],
+    "cywordle": {
+      "word": "SENSOR",
+      "clue": "A device that measures physical conditions like temperature or pressure and reports them to controllers."
+    }
+  },
+  {
+    "week_start": "2026-07-27",
+    "mcq_ids": [
+      "EC-00014"
+    ],
+    "cywordle": {
+      "word": "PURDUE",
+      "clue": "A hierarchical reference model that segments industrial networks into levels, separating OT control systems from the corporate IT network."
+    }
+  },
+  {
+    "week_start": "2026-07-28",
+    "mcq_ids": [
+      "EC-00015"
+    ],
+    "cywordle": {
+      "word": "CONDUIT",
+      "clue": "In IEC 62443, the secure communication pathway connecting one zone of an industrial network to another."
+    }
+  },
+  {
+    "week_start": "2026-07-29",
+    "mcq_ids": [
+      "EC-00016"
+    ],
+    "cywordle": {
+      "word": "GATEWAY",
+      "clue": "A device that translates between protocols, often bridging OT and IT networks or connecting legacy equipment to modern systems."
+    }
+  },
+  {
+    "week_start": "2026-07-30",
+    "mcq_ids": [
+      "EC-00017"
+    ],
+    "cywordle": {
+      "word": "AIRGAP",
+      "clue": "A network deliberately isolated with no physical or wireless connection to other networks, used to protect critical OT systems."
+    }
+  }
+]

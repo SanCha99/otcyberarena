@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="ghost">
+<html lang="en" data-theme="steel">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>OT CyberArena — External Community</title>
-<meta name="description" content="The global community for OT cybersecurity. Free. Vendor-neutral. AI-native.">
+<title>OT CyberArena</title>
+<meta name="description" content="The global community for OT cybersecurity.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 
 <!-- ═══════════════════════════════════════════════
-     THEME SYSTEM — 5 skins via CSS custom properties
-     Ghost Protocol is launch skin.
+     THEME SYSTEM — 5 skins built; only 2 selectable at
+     first release (2026-07-18): Steel Green (default) and Frost.
+     Ghost/Storm/Ember CSS kept in place for a later re-enable.
      ═══════════════════════════════════════════════ -->
 <style>
 /* GHOST PROTOCOL (launch) */
@@ -349,6 +350,24 @@ body {
 
 .btn-nav-ghost:hover { background: var(--accent-dim); }
 
+/* v2.0.1: nav decluttering — plain text links replace the two boxed
+   Login/Join buttons; the one strong CTA lives in the hero instead. */
+.nav-link {
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-link:hover { color: var(--accent); }
+
 /* ═══════════════════════════════════════════════
    THEME PANEL (dropdown)
    ═══════════════════════════════════════════════ */
@@ -384,6 +403,32 @@ html { overflow-x: clip; }
   .logo { font-size: 14px; gap: 6px; }
   .btn-nav, .btn-nav-ghost { padding: 0 10px; font-size: 11px; min-height: 40px; }
   .theme-btn { min-width: 40px; min-height: 40px; }
+}
+
+/* v2.0.4 (2026-07-18): on mobile the topbar (logo, Sign In/Sign Up, theme
+   icon) is hidden entirely -- it was duplicating the big hero heading on
+   small screens. That means anything the topbar offers has to have a
+   mobile-only equivalent somewhere else, or phone visitors simply can't
+   do it. Shared by every element that needs exactly that: shown only on
+   phones, hidden on desktop where the topbar already covers it.
+     - skin/theme toggle (v2.0.4, relocated into the footer v2.0.9)
+     - "Sign In" link (added 2026-07-22: removing the old join-cta-card's
+       Sign In button left phone visitors with NO way to log back into an
+       existing account -- sign-up only. Desktop is unaffected, it still
+       has the topbar's Sign In.)
+   !important on the base rule is required, not optional: this class gets
+   combined with .btn-primary (for the skin button) whose own display
+   value is declared LATER in the stylesheet -- without !important here,
+   plain source order would make .btn-primary win on every screen size and
+   defeat the "mobile only" part entirely (shipped broken this way for a
+   few minutes on 2026-07-22 before this was added). */
+.mobile-only-footer-item {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  .topbar { display: none !important; }
+  .mobile-only-footer-item { display: inline-flex !important; }
+  .theme-panel { top: auto; bottom: 100px; }
 }
 
 .theme-panel-title {
@@ -608,9 +653,7 @@ html { overflow-x: clip; }
 
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ─── RIGHT: Featured Game Card ─── */
-/* .hero-game removed — game card now lives in .main-row col 1 */
-
+/* ─── GAME CARD (v2.0.0: two instances, MCQ + Cywordle, both always visible) ─── */
 .game-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -698,25 +741,87 @@ html { overflow-x: clip; }
   gap: clamp(12px, 1.8vw, 20px);
 }
 
-/* Row: Game card | Leaderboard | Intel (3 equal columns) */
-.main-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: clamp(12px, 1.8vw, 20px);
-  align-items: start;
-}
-
-@media (max-width: 960px) {
-  .main-row { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 640px) {
-  .main-row { grid-template-columns: 1fr; }
+/* v2.0.0: single stacked column, page order matches Sandip's section list
+   (title -> MCQ -> Cywordle -> intel -> leaderboard -> join -> archive).
+   Each section gets a consistent centered reading width instead of the old
+   cramped 3-column grid (root cause of the "messy" layout complaint).
+   v2.0.1: selectors use descendant (not direct-child) combinator so this
+   still applies when a section is nested inside a .row-pair wrapper. */
+.main .game-section,
+.main .intel-section,
+.main .leaderboard-section,
+.main .archive-cta-section {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 /* v1.3.1: grid/flex children default to min-width:auto — wide nowrap content
    stretched cards past the viewport and clipped their right edge. Clamp them. */
-.main-row > * { min-width: 0; max-width: 100%; }
+.main > * { min-width: 0; max-width: 100%; }
 .game-card, .game-card * { max-width: 100%; }
+
+/* ─── v2.0.1: DESKTOP 2-COLUMN PAIRING ───
+   Mobile (default): .row-pair is a plain block, children stack exactly as
+   before via the .main .game-section etc rule above — no behaviour change.
+   Desktop/laptop (>=900px): paired sections (MCQ+Cywordle, Intel+Leaderboard)
+   sit side by side. Sandip's flag: MCQ card height changes as someone
+   answers (feedback/debrief reveal), which would misalign a stretched grid
+   row. Fix: give paired panels a FIXED height with an internal scrollbar for
+   just the growing content — desktop only, never on mobile. */
+@media (min-width: 900px) {
+  .row-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .row-pair .game-section,
+  .row-pair .intel-section,
+  .row-pair .leaderboard-section {
+    max-width: none;
+    margin: 0;
+    height: 620px;
+    display: flex;
+    flex-direction: column;
+  }
+  .row-pair .game-card,
+  .row-pair .leaderboard-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .row-pair .game-card-body,
+  .row-pair .intel-grid,
+  .row-pair .lb-rows {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  .row-pair .game-card-body::-webkit-scrollbar,
+  .row-pair .intel-grid::-webkit-scrollbar,
+  .row-pair .lb-rows::-webkit-scrollbar { width: 6px; }
+  .row-pair .game-card-body::-webkit-scrollbar-thumb,
+  .row-pair .intel-grid::-webkit-scrollbar-thumb,
+  .row-pair .lb-rows::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  /* Archive links section isn't paired — widen it to match so it doesn't
+     look squeezed next to the wider rows above it. */
+  .main .archive-cta-section { max-width: 1200px; }
+}
+
+/* ─── ARCHIVE ACCESS BUTTONS ─── */
+.archive-cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.archive-btn {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  text-decoration: none;
+  justify-content: center;
+}
 
 /* ─── SECTION LABEL ─── */
 .section-label {
@@ -739,107 +844,8 @@ html { overflow-x: clip; }
 }
 
 /* ─── EPISODE BANK ─── */
-.episodes-section { width: 100%; }
-
-.episode-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.episode-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.1s;
-  position: relative;
-  overflow: hidden;
-}
-
-.episode-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s;
-}
-
-.episode-card:hover { border-color: rgba(0,255,65,0.3); transform: translateY(-2px); }
-.episode-card:hover::before { transform: scaleX(1); }
-
-.episode-card.locked { opacity: 0.6; cursor: default; }
-.episode-card.locked:hover { transform: none; border-color: var(--border); }
-.episode-card.locked::before { display: none; }
-
-.episode-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.episode-lock {
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.episode-title {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--text);
-  line-height: 1.3;
-  margin-bottom: 8px;
-}
-
-.episode-meta {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--muted);
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.episode-track-fa { color: #44aaff; }
-.episode-track-cp { color: var(--accent); }
 
 
-/* ─── GAME MODE TABS ─── */
-.game-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-.game-tab {
-  flex: 1;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 10px 4px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: var(--muted);
-  cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
-}
-.game-tab:hover { color: var(--text); }
-.game-tab.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
 
 /* ─── INTEL FEED ─── */
 .intel-section { width: 100%; }
@@ -899,6 +905,82 @@ html { overflow-x: clip; }
 
 /* ─── LEADERBOARD ─── */
 .leaderboard-section { width: 100%; }
+
+/* v2.0.6: extra breathing room + a visual break before the join ask and
+   the archive links. Previously these bottom sections (leaderboard, join
+   CTA, archive links, footer) all just used the same flat .main flex gap
+   as every other section, so scrolling through them read as one long
+   uniform block with no sense of moving into a new part of the page.
+   Sandip: "the bottom part design can be improved" -> spacing/hierarchy. */
+/* v2.0.9 (2026-07-22): .join-cta-section removed (card deleted). Its
+   breathing-room/border treatment now applies to .archive-cta-section,
+   since that's the first section after the leaderboard. */
+.archive-cta-section {
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── CYBERFLIGHT PROMO CARD (v2.1.0) ─── */
+.game-promo-section {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+@media (min-width: 900px) {
+  .main .game-promo-section { max-width: 1200px; }
+}
+.game-promo-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-decoration: none;
+  transition: border-color .15s, transform .1s;
+}
+.game-promo-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.game-promo-art {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent-dim), var(--surface2));
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+.game-promo-body { flex: 1; min-width: 0; }
+.game-promo-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.game-promo-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.game-promo-cta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+@media (max-width: 480px) {
+  .game-promo-card { flex-direction: column; text-align: center; }
+  .game-promo-art { width: 56px; height: 56px; font-size: 26px; }
+}
 
 .leaderboard-card {
   background: var(--surface);
@@ -1087,6 +1169,33 @@ html { overflow-x: clip; }
 
 .modal-body { padding: 20px; }
 
+/* v2.0.1: Share-tone picker (modalShare) */
+.share-tone-list { display: flex; flex-direction: column; gap: 10px; }
+.share-tone-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: border-color 0.15s;
+  min-height: 48px;
+  width: 100%;
+}
+.share-tone-btn:hover { border-color: var(--accent); }
+.share-tone-name {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text);
+}
+.share-tone-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
 /* Form elements */
 .form-group { margin-bottom: 18px; }
 
@@ -1143,18 +1252,18 @@ html { overflow-x: clip; }
 /* OTP input */
 .otp-row {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   justify-content: center;
 }
 
 .otp-digit {
-  width: 48px;
-  height: 56px;
+  width: 32px;
+  height: 46px;
   background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text);
   font-family: var(--mono);
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
   border-radius: var(--radius);
   outline: none;
@@ -1163,6 +1272,13 @@ html { overflow-x: clip; }
 }
 
 .otp-digit:focus { border-color: var(--accent); }
+
+/* v2.1.1: 8 boxes at the base size (291px) still overflow the modal's
+   ~248px content width on <=400px phones -- shrink further there. */
+@media (max-width: 400px) {
+  .otp-row { gap: 4px; }
+  .otp-digit { width: 26px; height: 42px; font-size: 16px; }
+}
 
 /* Progress steps */
 .reg-steps {
@@ -1432,9 +1548,10 @@ footer {
   padding-left:  max(clamp(12px,3vw,28px), env(safe-area-inset-left));
   padding-right: max(clamp(12px,3vw,28px), env(safe-area-inset-right));
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
   gap: 10px;
   margin-top: 40px;
 }
@@ -1451,6 +1568,7 @@ footer {
 .footer-right {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
 }
@@ -1460,17 +1578,13 @@ footer {
   font-size: 10px;
   color: var(--muted);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color 0.15s, text-shadow 0.3s;
   cursor: pointer;
 }
 
 .footer-link:hover { color: var(--accent); }
-
-.version-stamp {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--border);
-}
+.footer-link.accent { color: var(--accent); font-weight: 700; }
+.footer-link.glow { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); font-weight: 700; }
 
 /* ═══════════════════════════════════════════════
    UTILITIES
@@ -1511,11 +1625,11 @@ footer {
       <span id="chipCallsign">—</span>
       <span class="rank-chip" id="chipRank">—</span>
     </div>
-    <!-- Shown when logged out -->
-    <button class="btn-nav-ghost" id="btnLogin"  onclick="openModal('login')"   aria-label="Log in">LOG IN</button>
-    <button class="btn-nav"       id="btnJoin"   onclick="openModal('register')" aria-label="Join the arena">JOIN ARENA</button>
+    <!-- Shown when logged out — v2.0.1: plain text links, decluttered nav -->
+    <button class="nav-link" id="btnLogin"  onclick="openModal('login')"   aria-label="Sign in">Sign In</button>
+    <button class="nav-link" id="btnJoin"   onclick="openModal('register')" aria-label="Sign up">Sign Up</button>
     <!-- Theme picker -->
-    <button class="theme-btn" id="themeToggle" onclick="toggleThemePanel()" aria-label="Change theme" title="Change theme">🎨</button>
+    <button class="theme-btn theme-toggle-btn" id="themeToggle" onclick="toggleThemePanel()" aria-label="Change theme" title="Change theme">🎨</button>
   </div>
 </header>
 
@@ -1534,26 +1648,16 @@ footer {
 <!-- Theme panel -->
 <div class="theme-panel" id="themePanel" role="dialog" aria-label="Theme selector">
   <div class="theme-panel-title">Select Skin</div>
-  <div class="theme-option active" data-theme="ghost"  onclick="setTheme('ghost')">
-    <div class="theme-swatch" style="background:#00ff41"></div>Ghost Protocol
-  </div>
-  <div class="theme-option" data-theme="steel"  onclick="setTheme('steel')">
+  <div class="theme-option active" data-theme="steel"  onclick="setTheme('steel')">
     <div class="theme-swatch" style="background:#22c55e"></div>Steel Green
-    <span style="margin-left:auto;font-size:9px;opacity:.5">SOON</span>
-  </div>
-  <div class="theme-option" data-theme="storm"  onclick="setTheme('storm')">
-    <div class="theme-swatch" style="background:#00d4ff"></div>Cyber Storm
-    <span style="margin-left:auto;font-size:9px;opacity:.5">SOON</span>
-  </div>
-  <div class="theme-option" data-theme="ember"  onclick="setTheme('ember')">
-    <div class="theme-swatch" style="background:#ff8c00"></div>Ember
-    <span style="margin-left:auto;font-size:9px;opacity:.5">SOON</span>
   </div>
   <div class="theme-option" data-theme="frost"  onclick="setTheme('frost')">
     <div class="theme-swatch" style="background:#0066cc"></div>Frost
-    <span style="margin-left:auto;font-size:9px;opacity:.5">SOON</span>
   </div>
 </div>
+<!-- Ghost/Storm/Ember removed from the picker (2026-07-18): first release
+     ships with 2 skins only. CSS blocks kept above for a later re-enable —
+     see PROJECT.md decision log. -->
 
 <!-- ─── HERO — DIRECTION B SPLIT OPS ─── -->
 <main id="mainContent">
@@ -1567,7 +1671,7 @@ footer {
       <span class="ot">OT </span><span class="cyber">CYBER</span><span class="arena">ARENA</span>
     </h1>
 
-    <div class="hero-version" id="heroVersion">EC v1.3.3 · 2026-07-26 · Ghost Protocol</div>
+    <div class="hero-version" id="heroVersion">EC v2.1.5 · 2026-07-28 · Steel Green</div>
 
     <p class="hero-tagline">The global community for OT security</p>
 
@@ -1575,7 +1679,7 @@ footer {
       <span class="aria-prefix">ARIA //</span>
       Real-world ICS threats. Simulated. Gamified. Scored.<br>
       No vendor agenda. No fluff. Just the scenarios that define the discipline.<br><br>
-      One challenge. No login required. See if you belong here.
+      Drop in and play. Join later to save your progress and rank up.
     </div>
 
     <!-- LAUNCH PHASE: feature highlights replace live stats (restore stats-row when user base grows)
@@ -1587,185 +1691,165 @@ footer {
     </div>
     -->
 
-    <div class="feature-pills">
-      <span class="feature-pill">Free — Always</span>
-      <span class="feature-pill">New Challenge Daily</span>
-      <span class="feature-pill">OT / ICS Focused</span>
-      <span class="feature-pill">No Vendor Agenda</span>
-    </div>
+    <!-- v2.0.1: feature pills removed — redundant with "The Global Community
+         for OT Security" tagline above (Sandip: decluttering pass) -->
 
-    <div class="hero-cta">
-      <button class="btn-primary" id="heroCTABtn" onclick="openModal('register')">Join Free — 30 Seconds</button>
-    </div>
+    <!-- v2.0.9 (2026-07-22): top hero "Join Free" button removed (Sandip:
+         redundant with the many other join prompts on the page; the footer
+         Join Arena button, distinct color, is the one dedicated "just join"
+         CTA now). heroCTABtn references below are null-checked and safe to
+         leave as-is even with no button in the DOM. -->
   </div>
 
 
 </section>
 
-<!-- ─── MAIN CONTENT ─── -->
+<!-- ─── MAIN CONTENT — stacked sections, page order: MCQ, Cywordle,
+     Intel, Leaderboard, Join CTA, Archive access ─── -->
 <div class="main">
 
-  <!-- ROW 1: GAME | LEADERBOARD | INTEL -->
-  <div class="main-row">
+  <!-- v2.0.1: paired on desktop (>=900px), stacked on mobile — see .row-pair CSS -->
+  <div class="row-pair">
 
-    <!-- GAME CARD (col 1) -->
-    <div class="game-panel">
-  <!-- RIGHT: Featured Game Card (populated by game engine in Chunk 2) -->
-  <div class="hero-game">
-    <div class="game-card" id="featuredGameCard">
-      <div class="game-tabs" role="tablist" aria-label="Game mode">
-        <button class="game-tab active" id="tabMCQ" role="tab" aria-selected="true"
-                onclick="switchGameMode('mcq')">Daily MCQ</button>
-        <button class="game-tab" id="tabWordle" role="tab" aria-selected="false"
-                onclick="switchGameMode('cywordle')">OT Cywordle</button>
-      </div>
+  <!-- SECTION 2: THIS WEEK'S MCQ -->
+  <section class="game-section" id="mcqSection" aria-label="This Week's MCQ Challenge">
+    <div class="section-label">This Week's MCQ</div>
+    <div class="game-card" id="featuredGameCardMCQ">
       <div class="game-card-header">
-        <span class="game-type-badge" id="gameTypeBadge">LOADING...</span>
-        <span class="game-day-label" id="gameDayLabel">—</span>
+        <span class="game-type-badge" id="mcqBadgeLabel">THIS WEEK'S MCQ</span>
+        <span class="game-day-label" id="mcqDayLabel">Live all week</span>
         <span class="game-no-login">✓ NO LOGIN</span>
       </div>
-      <div class="game-card-body" id="gameCardBody">
-        <!-- MCQ or Cywordle engine rendered here by Chunk 2 JS -->
-        <div class="game-placeholder" id="gamePlaceholder">
+      <div class="game-card-body" id="gameCardBodyMCQ">
+        <!-- MCQ engine rendered here -->
+        <div class="game-placeholder" id="gamePlaceholderMCQ">
           <div class="game-placeholder-icon">⚙</div>
           <div class="game-placeholder-text">
-            ARIA // Loading today's challenge...<br>
-            <span style="opacity:.5">Fetching daily queue</span>
+            ARIA // Loading this week's MCQ...<br>
+            <span style="opacity:.5">Fetching weekly queue</span>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Register nudge (shown after game attempt) -->
-    <div class="reg-nudge" id="regNudge" aria-live="polite">
-      <div class="reg-nudge-title" id="nudgeTitle">You belong here.</div>
-      <div class="reg-nudge-sub">Join <span id="nudgeCount">—</span> operatives on the global leaderboard. Free. Vendor-neutral. Always.</div>
-      <div class="reg-nudge-btns">
-        <button class="btn-primary" onclick="openModal('register')">Create Operative Profile</button>
-        <button class="btn-secondary" onclick="closeNudge()">Maybe Later</button>
+  <!-- SECTION 3: THIS WEEK'S CYWORDLE -->
+  <section class="game-section" id="cywordleSection" aria-label="This Week's OT Cywordle">
+    <div class="section-label">This Week's OT Cywordle</div>
+    <div class="game-card" id="featuredGameCardWordle">
+      <div class="game-card-header">
+        <span class="game-type-badge" id="cywordleBadgeLabel">THIS WEEK'S CYWORDLE</span>
+        <span class="game-day-label" id="cywordleDayLabel">Live all week</span>
+        <span class="game-no-login">✓ NO LOGIN</span>
       </div>
+      <div class="game-card-body" id="gameCardBodyWordle">
+        <!-- Cywordle engine rendered here -->
+        <div class="game-placeholder" id="gamePlaceholderWordle">
+          <div class="game-placeholder-icon">⚙</div>
+          <div class="game-placeholder-text">
+            ARIA // Loading this week's Cywordle...<br>
+            <span style="opacity:.5">Fetching weekly queue</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /row-pair: MCQ + Cywordle -->
+
+  <!-- Register nudge (shown after either game attempt) -->
+  <div class="reg-nudge" id="regNudge" aria-live="polite" style="max-width:640px;margin:0 auto;">
+    <div class="reg-nudge-title" id="nudgeTitle">You belong here.</div>
+    <div class="reg-nudge-sub">Join <span id="nudgeCount">—</span> operatives on the global leaderboard.</div>
+    <div class="reg-nudge-btns">
+      <button class="btn-primary" onclick="openModal('register')">Create Operative Profile</button>
+      <button class="btn-secondary" onclick="closeNudge()">Maybe Later</button>
     </div>
   </div>
 
-    </div>
+  <!-- v2.0.1: paired on desktop (>=900px), stacked on mobile — see .row-pair CSS -->
+  <div class="row-pair">
 
-    <!-- LEADERBOARD (col 2) -->
-    <section class="leaderboard-section" aria-label="Global Leaderboard">
-      <div class="section-label">Global Leaderboard</div>
+  <!-- SECTION 4: THREAT INTEL FEED -->
+  <section class="intel-section" aria-label="Threat Intelligence Feed">
+    <div class="section-label">This Week's Threat Intel</div>
+    <div class="intel-grid" id="intelFeed">
+      <div class="intel-item">
+        <div class="intel-source-tag">CISA ICS-CERT</div>
+        <div class="intel-headline">Loading latest threat intelligence...</div>
+        <div class="intel-date">—</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-source-tag">CISA ICS-CERT</div>
+        <div class="intel-headline">Loading latest threat intelligence...</div>
+        <div class="intel-date">—</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-source-tag">CISA ICS-CERT</div>
+        <div class="intel-headline">Loading latest threat intelligence...</div>
+        <div class="intel-date">—</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;text-align:right">
+      <a class="btn-secondary archive-btn" href="archive-intel.html"
+         style="font-size:11px;padding:8px 14px;min-height:38px;min-width:0;flex:none">Past Intel →</a>
+    </div>
+  </section>
+
+  <!-- SECTION 5: LEADERBOARD -->
+  <section class="leaderboard-section" aria-label="Global Leaderboard">
+    <div class="section-label">Global Leaderboard</div>
     <div class="leaderboard-card">
       <div class="leaderboard-filter" role="group" aria-label="Filter leaderboard">
         <button class="filter-btn active" data-filter="all" onclick="filterLB(this,'all')">ALL OPERATIVES</button>
       </div>
       <div class="lb-rows" id="lbRows" role="list">
-        <!-- 2026-07-26 fix: this used to be 7 hardcoded fake-operative rows
-             (GridWatch_AUS etc.), the exact same names as the JS SEED_PLAYERS
-             fallback. renderLeaderboard() always overwrites this via
-             innerHTML once JS runs, but search engines, link-preview
-             scrapers, and no-JS/slow-JS visitors all see the raw HTML
-             below BEFORE that happens -- so the static fallback needs to
-             be as honest as the JS one now is. No fake names here either. -->
-        <div class="lb-empty" style="padding:28px 16px;text-align:center;font-family:var(--mono);
-             font-size:12px;color:var(--muted);line-height:1.7">
-          ARIA // Loading the leaderboard...
-        </div>
+        <!-- Populated by leaderboard engine -->
       </div>
       <div class="lb-footer">
-        <button class="btn-secondary" style="font-size:11px;padding:8px 16px;width:100%;"
-                onclick="openModal('register')">See Your Rank — Join Free</button>
+        <button class="btn-primary" style="font-size:11px;padding:8px 16px;width:100%;"
+                onclick="openModal('register')">See Your Rank</button>
       </div>
-    </div>
-    </section>
-
-    <!-- THREAT INTEL FEED -->
-    <section class="intel-section" aria-label="Threat Intelligence Feed">
-      <div class="section-label">This Week's Threat Intel</div>
-      <div class="intel-grid" id="intelFeed">
-        <div class="intel-item">
-          <div class="intel-source-tag">CISA ICS-CERT</div>
-          <div class="intel-headline">Loading latest threat intelligence...</div>
-          <div class="intel-date">—</div>
-        </div>
-        <div class="intel-item">
-          <div class="intel-source-tag">CISA ICS-CERT</div>
-          <div class="intel-headline">Loading latest threat intelligence...</div>
-          <div class="intel-date">—</div>
-        </div>
-        <div class="intel-item">
-          <div class="intel-source-tag">CISA ICS-CERT</div>
-          <div class="intel-headline">Loading latest threat intelligence...</div>
-          <div class="intel-date">—</div>
-        </div>
-      </div>
-    </section>
-
-  </div><!-- /main-row -->
-
-  <!-- ROW 2: EPISODE BANK (full width, 3 columns) -->
-  <section class="episodes-section" id="episodesSection" aria-label="Episode Bank">
-    <div class="section-label">Episode Bank — Season 1</div>
-<div class="episode-grid" id="episodeGrid">
-
-      <div class="episode-card" onclick="openEpisode('s1e1')" tabindex="0" role="button" aria-label="Episode 1: Ransomware on OT">
-        <div class="episode-tag">
-          <span>S1 · E1</span>
-        </div>
-        <div class="episode-title">Ransomware on OT Networks</div>
-        <div class="episode-meta">
-          <span class="episode-track-fa">FA · 20 challenges</span>
-          <span class="episode-track-cp">CP · 20 challenges</span>
-        </div>
-      </div>
-
-      <div class="episode-card locked" tabindex="0" role="button" aria-label="Episode 2: OT Network Segmentation — login required">
-        <div class="episode-tag">
-          <span>S1 · E2</span>
-          <span class="episode-lock">🔒</span>
-        </div>
-        <div class="episode-title">OT Network Segmentation</div>
-        <div class="episode-meta">
-          <span class="episode-track-fa">FA · 20 challenges</span>
-          <span class="episode-track-cp">CP · 20 challenges</span>
-        </div>
-      </div>
-
-      <div class="episode-card locked" tabindex="0" role="button" aria-label="Episode 3: Supply Chain and Remote Access — login required">
-        <div class="episode-tag">
-          <span>S1 · E3</span>
-          <span class="episode-lock">🔒</span>
-        </div>
-        <div class="episode-title">Supply Chain &amp; Remote Access</div>
-        <div class="episode-meta">
-          <span class="episode-track-fa">FA · 20 challenges</span>
-          <span class="episode-track-cp">CP · 20 challenges</span>
-        </div>
-      </div>
-
-      <div class="episode-card locked" tabindex="0" role="button" aria-label="Episode 4: ICS Incident Response — login required">
-        <div class="episode-tag">
-          <span>S1 · E4</span>
-          <span class="episode-lock">🔒</span>
-        </div>
-        <div class="episode-title">ICS Incident Response</div>
-        <div class="episode-meta">
-          <span class="episode-track-fa">FA · 20 challenges</span>
-          <span class="episode-track-cp">CP · 20 challenges</span>
-        </div>
-      </div>
-
-      <div class="episode-card locked" tabindex="0" role="button" aria-label="Episode 5: IEC 62443 Fundamentals — login required">
-        <div class="episode-tag">
-          <span>S1 · E5</span>
-          <span class="episode-lock">🔒</span>
-        </div>
-        <div class="episode-title">IEC 62443 Fundamentals</div>
-        <div class="episode-meta">
-          <span class="episode-track-fa">FA · 20 challenges</span>
-          <span class="episode-track-cp">CP · 20 challenges</span>
-        </div>
-      </div>
-
     </div>
   </section>
+
+  </div><!-- /row-pair: Intel + Leaderboard -->
+
+  <!-- v2.0.9 (2026-07-22): "Join The Arena" card removed (Sandip: too many
+       redundant sign-up/sign-in prompts already on the page). The mobile
+       skin-toggle button that lived in this card is now in the footer,
+       next to Join Arena — see footer-right below. Desktop is unaffected;
+       desktop players still use the topbar's #themeToggle. -->
+
+  <!-- CYBERFLIGHT PROMO CARD (v2.1.0): standalone arcade game embedded via
+       cyberflight-play.html (iframe). That page listens for the game's
+       postMessage score event and credits it to the signed-in player,
+       capped at 3 credited runs/day; credited amount = the run's raw
+       final score (Sandip's call: rank tiers already scale the score,
+       no separate lookup table). Not signed in? The page still lets them
+       play and prompts sign-in to bank the score afterward. -->
+  <section class="game-promo-section" aria-label="CyberFlight game">
+    <div class="section-label">More Learning Tools</div>
+    <a class="game-promo-card" href="cyberflight-play.html">
+      <div class="game-promo-art" aria-hidden="true">🚀</div>
+      <div class="game-promo-body">
+        <div class="game-promo-title">CYBERFLIGHT</div>
+        <div class="game-promo-desc">Dodge live OT/ICS threats, collect real defenses, and climb the sectors in this arcade flyer — tracked on its own scoreboard, separate from your knowledge credits.</div>
+        <div class="game-promo-cta">▶ Play CyberFlight</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- SECTIONS 7 & 8: PAST MCQs / PAST CYWORDLES -->
+  <section class="archive-cta-section" id="archiveCtaSection" aria-label="Past challenges" style="display:none">
+    <div class="section-label">Past Challenges</div>
+    <div class="archive-cta-row">
+      <a class="btn-secondary archive-btn" href="archive-mcq.html">Past MCQs →</a>
+      <a class="btn-secondary archive-btn" href="archive-cywordle.html">Past Cywordles →</a>
+    </div>
+  </section>
+
+
 
 </div><!-- /main -->
 </main>
@@ -1803,7 +1887,7 @@ footer {
       <div id="regStepEmail">
         <div class="aria-modal-msg">
           <span class="aria-prefix">ARIA //</span> Enter your email to begin.
-          We'll send a 6-digit verification code — no password required.
+          We'll send an 8-digit verification code — no password required.
         </div>
         <div class="form-group">
           <label class="form-label" for="inputEmail">Email Address</label>
@@ -1817,7 +1901,7 @@ footer {
       <!-- STEP 1: OTP -->
       <div id="regStepOTP" class="hidden">
         <div class="aria-modal-msg">
-          <span class="aria-prefix">ARIA //</span> Enter the 6-digit code sent to <strong id="otpEmailDisplay"></strong>.
+          <span class="aria-prefix">ARIA //</span> Enter the 8-digit code sent to <strong id="otpEmailDisplay"></strong>.
           Code expires in 10 minutes.
         </div>
         <div class="otp-row" role="group" aria-label="One-time password input">
@@ -1921,7 +2005,7 @@ footer {
         <div style="margin:16px 0;">
           <div class="consent-item" onclick="toggleConsent('consentPrivacy')">
             <div class="consent-check" id="consentPrivacy" role="checkbox" aria-checked="false" tabindex="0">✓</div>
-            <div class="consent-text">I agree to the <a href="#" onclick="return false">Privacy Policy</a>. Data used only for platform operation.</div>
+            <div class="consent-text">I agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. Data used only for platform operation.</div>
           </div>
           <div class="consent-item" onclick="toggleConsent('consentAge')">
             <div class="consent-check" id="consentAge" role="checkbox" aria-checked="false" tabindex="0">✓</div>
@@ -1982,17 +2066,60 @@ footer {
   </div>
 </div>
 
+<!-- SHARE MODAL (v2.0.1) — 3-way tone picker instead of one fixed template -->
+<div class="modal-overlay" id="modalShare" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="shareModalTitle">Share Your Result</div>
+        <div class="modal-subtitle">ARIA // Pick a tone — we'll build the post for you.</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('share')" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="share-tone-list">
+        <button class="share-tone-btn" onclick="shareWithTone('competitive')">
+          <span class="share-tone-name">Competitive</span>
+          <span class="share-tone-desc">Dares others to beat your score</span>
+        </button>
+        <button class="share-tone-btn" onclick="shareWithTone('streak')">
+          <span class="share-tone-name">Streak-flex</span>
+          <span class="share-tone-desc">Short, stat-first brag</span>
+        </button>
+        <button class="share-tone-btn" onclick="shareWithTone('learning')">
+          <span class="share-tone-name">Learning-forward</span>
+          <span class="share-tone-desc">Reads as professional development</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ─── FOOTER ─── -->
 <footer role="contentinfo">
   <div class="footer-left">
-    <strong>OT CyberArena</strong> · External Community · Free · Vendor-Neutral<br>
-    Sources: CISA · NIST SP 800-82 · IEC 62443 · Dragos · SANS ICS
+    <strong>OT CyberArena</strong><br>
+    Sources: CISA · NIST SP 800-82 · IEC 62443 · MITRE ATT&CK · MITRE ATLAS · SANS ICS
   </div>
   <div class="footer-right">
-    <span class="footer-link" onclick="openModal('register')">Join Arena</span>
-    <a class="footer-link" href="mailto:support@otcyberarena.com">Contact</a>
-    <span class="footer-link" id="easterEgg" onclick="toggleEasterEgg()">Powered by AI</span>
-    <span class="version-stamp" id="versionStamp">EC v1.3.3</span>
+    <a class="footer-link accent mobile-only-footer-item theme-toggle-btn" onclick="toggleThemePanel()"
+       aria-label="Change theme" title="Change theme">Skin</a>
+    <a class="footer-link accent" onclick="openModal('register')">Sign Up</a>
+    <!-- v2.0.9 follow-up (2026-07-22): mobile has no persistent nav, so the
+         topbar's Sign In link (desktop-only) isn't reachable there. Without
+         this, mobile visitors could sign up but never sign back in. Reuses
+         .mobile-only-footer-item's exact visibility rule (mobile-only) so it
+         follows the same, already-fixed show/hide logic -- desktop keeps
+         using its topbar Sign In only, no duplicate there. -->
+    <a class="footer-link accent mobile-only-footer-item" onclick="openModal('login')">Sign In</a>
+    <!-- v2.1.5: wires up the clearPlayer() helper that already existed but
+         was never called from anywhere -- there was no way to sign out at
+         all before this. Hidden by default, shown only when signed in, so
+         testers can switch between accounts without clearing browser data. -->
+    <a class="footer-link accent hidden" id="footerSignOut" onclick="signOutPlayer()">Sign Out</a>
+    <a class="footer-link accent" href="mailto:support@otcyberarena.com">Contact</a>
+    <span class="footer-link" id="easterEgg" onclick="toggleEasterEgg()">Imagined by Human | Powered by AI</span>
+    <span class="footer-link" id="versionStamp">EC v2.1.5</span>
   </div>
 </footer>
 
@@ -2005,14 +2132,32 @@ footer {
 'use strict';
 
 // ── VERSION ──────────────────────────────────────
-const EC_VERSION = '1.3.3';
+const EC_VERSION = '2.1.5';
 document.getElementById('versionStamp').textContent = 'EC v' + EC_VERSION;
 
+// ── PAST MCQ/CYWORDLE ARCHIVE GATING (2026-07-18) ──────────────────────
+// Sandip: don't show "Past MCQs"/"Past Cywordles" at launch — wait until
+// there's ~8 weeks of real accumulated history. LAUNCH_DATE is a placeholder;
+// update it to the actual public-announcement date once golive_check passes
+// (see PROJECT.md §7). Until then this section stays hidden by design.
+const LAUNCH_DATE = new Date('2026-08-04T00:00:00Z');
+const ARCHIVE_REVEAL_WEEKS = 8;
+function archiveLinksShouldShow() {
+  const weeksSince = (Date.now() - LAUNCH_DATE.getTime()) / (7 * 24 * 3600 * 1000);
+  return weeksSince >= ARCHIVE_REVEAL_WEEKS;
+}
+function applyArchiveGate() {
+  const el = document.getElementById('archiveCtaSection');
+  if (el && archiveLinksShouldShow()) el.style.display = '';
+}
+
 // ── THEME SYSTEM ─────────────────────────────────
-const THEMES = ['ghost','steel','storm','ember','frost'];
+// Only steel + frost are selectable at first release (2026-07-18).
+// ghost/storm/ember CSS still exists above for a later re-enable.
+const THEMES = ['steel','frost'];
 
 function setTheme(name) {
-  if (!THEMES.includes(name)) name = 'ghost';
+  if (!THEMES.includes(name)) name = 'steel';
   document.documentElement.setAttribute('data-theme', name);
   localStorage.setItem('ec_theme', name);
   // Update panel active state
@@ -2033,13 +2178,15 @@ function closeThemePanel() {
 // Close theme panel on outside click
 document.addEventListener('click', e => {
   const panel  = document.getElementById('themePanel');
-  const toggle = document.getElementById('themeToggle');
-  if (!panel.contains(e.target) && e.target !== toggle) closeThemePanel();
+  // v2.0.9: check any theme-toggle-btn (desktop + footer/mobile), not just
+  // the desktop #themeToggle by id — fixes the footer skin button opening
+  // and then immediately closing the panel in the same click.
+  if (!panel.contains(e.target) && !e.target.closest('.theme-toggle-btn')) closeThemePanel();
 });
 
 // Load saved theme
 (function() {
-  const saved = localStorage.getItem('ec_theme') || 'ghost';
+  const saved = localStorage.getItem('ec_theme') || 'steel';
   setTheme(saved);
 })();
 
@@ -2101,11 +2248,7 @@ function showRegStep(idx) {
   regCurrentStep = idx;
 }
 
-function openEpisode(id) {
-  if (!currentPlayer) { openModal('register'); return; }
-  // Episode player wired in future session
-  alert('ARIA // Episode ' + id + ' — coming in next build.');
-}
+
 
 function updatePINDots() {
   const val = document.getElementById('inputPIN').value;
@@ -2185,10 +2328,7 @@ function scoreFlash(value, positive) {
   setTimeout(() => { el.className = 'score-flash'; }, 1400);
 }
 
-// ── SCROLL HELPER ─────────────────────────────────
-function scrollToEpisodes() {
-  document.getElementById('episodesSection').scrollIntoView({ behavior:'smooth', block:'start' });
-}
+
 
 // ── LIVE COUNT (launch phase — real count wired from Supabase when ready) ───
 function initLiveCount() {
@@ -2202,12 +2342,15 @@ function initLiveCount() {
 }
 
 // ── EASTER EGG ────────────────────────────────────
-let easterEggActive = false;
+// v2.1.5: was a permanent text-swap toggle ("Powered by AI" <->
+// "Imagined by Sandip - Built by ARIA"); replaced with a fixed label that
+// briefly glows accent-green on tap instead, self-reverting after 10s.
+let easterEggTimer = null;
 function toggleEasterEgg() {
-  easterEggActive = !easterEggActive;
-  document.getElementById('easterEgg').textContent = easterEggActive
-    ? 'Imagined by Sandip · Built by ARIA'
-    : 'Powered by AI';
+  const el = document.getElementById('easterEgg');
+  el.classList.add('glow');
+  clearTimeout(easterEggTimer);
+  easterEggTimer = setTimeout(() => el.classList.remove('glow'), 10000);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2225,7 +2368,10 @@ const RANKS = [
 
 const STREAK_BONUS = { 3: 15, 7: 50 };
 const CREDITS_MCQ  = { first:40, second:32, hint:20, wrong:-8 };
-const CREDITS_WORDLE = { solve:40, fail:-8 };
+// v2.1.2: attempt-based schedule (Sandip: reward speed/mastery like real
+// knowledge games, not a flat 40 regardless of how many guesses it took).
+// Index 0 = solved on guess 1 ... index 5 = solved on guess 6.
+const CREDITS_WORDLE = { byAttempt:[100,50,30,20,15,10], fail:-8 };
 
 function getRank(credits) {
   return RANKS.find(r => credits >= r.min && credits <= r.max) || RANKS[0];
@@ -2254,6 +2400,17 @@ function clearPlayer() {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+// v2.1.5: first real way to sign out -- clearPlayer() existed already but
+// nothing ever called it. Full reload is deliberate: simplest way to reset
+// every piece of signed-in UI (leaderboard highlight, hero CTA, player bar,
+// etc.) back to a clean guest state in one step, and this is a testing/
+// account-switching action, not a hot path that needs to avoid a reload.
+function signOutPlayer() {
+  clearPlayer();
+  currentPlayer = null;
+  location.reload();
+}
+
 let currentPlayer = loadPlayer();
 
 function updatePlayerUI() {
@@ -2262,6 +2419,7 @@ function updatePlayerUI() {
   document.getElementById('btnJoin').classList.toggle('hidden', loggedIn);
   document.getElementById('playerChip').classList.toggle('visible', loggedIn);
   document.getElementById('playerBar').classList.toggle('visible', loggedIn);
+  document.getElementById('footerSignOut').classList.toggle('hidden', !loggedIn);
   if (loggedIn) {
     const p = currentPlayer;
     const rank = getRank(p.credits || 0);
@@ -2273,10 +2431,10 @@ function updatePlayerUI() {
     document.getElementById('barRank').textContent      = rank.name;
     document.getElementById('rankProgressBar').style.width = getRankProgress(p.credits||0) + '%';
     const cta = document.getElementById('heroCTABtn');
-    if (cta) { cta.textContent = "\u25b6 Play Today's Challenge"; cta.onclick = () => document.getElementById("featuredGameCard")?.scrollIntoView({behavior:"smooth"}); }
+    if (cta) { cta.textContent = "▶ Play This Week's Challenge"; cta.onclick = () => document.getElementById("mcqSection")?.scrollIntoView({behavior:"smooth"}); }
   } else {
     const cta = document.getElementById('heroCTABtn');
-    if (cta) { cta.textContent = "Join Free — 30 Seconds"; cta.onclick = () => openModal("register"); }
+    if (cta) { cta.textContent = "Join Free"; cta.onclick = () => openModal("register"); }
   }
 }
 
@@ -2288,45 +2446,36 @@ const SUPABASE_URL  = 'https://obqqbfvrnkwkgucqdqad.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9icXFiZnZybmt3a2d1Y3FkcWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjU2NDUsImV4cCI6MjA5NjMwMTY0NX0.I5KjNSrEgF4fZ3jlYqgGj-TVIeQo5XKCQAcK8RHPnzs';
 const sb = IS_LOCAL ? null : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// ── DAILY QUEUE ───────────────────────────────────
-let todayQueue = null;
+// ── WEEKLY QUEUE (v2.0.0: 1 MCQ + 1 Cywordle live all week) ──
+let weeklyQueue = null;
 
-async function loadDailyQueue() {
+async function loadWeeklyQueue() {
   if (!IS_LOCAL) {
     try {
-      const res  = await fetch('daily_queue.json?v=' + Date.now());
+      const res  = await fetch('weekly_queue.json?v=' + Date.now());
       const data = await res.json();
       const today = new Date().toISOString().slice(0,10);
-      todayQueue = data.find(d => d.date === today) || data[0];
-    } catch { todayQueue = STUB_DAILY_QUEUE; }
+      const sorted = [...data].sort((a,b) => a.week_start.localeCompare(b.week_start));
+      weeklyQueue = [...sorted].reverse().find(w => w.week_start <= today) || sorted[sorted.length-1];
+    } catch { weeklyQueue = STUB_WEEKLY_QUEUE; }
   } else {
-    todayQueue = STUB_DAILY_QUEUE;
+    weeklyQueue = STUB_WEEKLY_QUEUE;
   }
-  renderGame();
+  renderBothGames();
 }
 
-// ── STUB DAILY QUEUE (fallback if no file) ────────
-const STUB_DAILY_QUEUE = {
-  date: new Date().toISOString().slice(0,10),
-  game_type: 'mcq_daily',
-  challenge_id: 'ec_s1e1_fa1',
-  day_label: getDayLabel()
+// ── STUB WEEKLY QUEUE (fallback if no file) ───────
+const STUB_WEEKLY_QUEUE = {
+  week_start: new Date().toISOString().slice(0,10),
+  mcq_ids: ['ec_s1e1_fa1'],
+  cywordle: { word: 'SCADA', clue: 'Supervisory Control and Data Acquisition — the software layer that monitors and controls industrial processes.' }
 };
-
-function getDayLabel() {
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const types = {
-    0:'Cywordle Sunday', 1:'MCQ Monday', 2:'True/False Tuesday',
-    3:'MCQ Wednesday', 4:'Drag-Match Thursday', 5:'MCQ Friday', 6:'Word Search Saturday'
-  };
-  return types[new Date().getDay()] || 'Daily Challenge';
-}
 
 // ── STUB MCQ CHALLENGE ────────────────────────────
 // Real challenges loaded from challenges/ JSON in Chunk 3 session
 const STUB_MCQ = {
   id: "ec_s1e1_fa1",
-  game_type: "mcq_daily",
+  game_type: "mcq_weekly",
   season: 1, episode: 1,
   credits: 40,
   lang: "en",
@@ -2385,13 +2534,46 @@ let mcqState = {
   attempt: 0,       // 0=first, 1=second
   hintUsed: false,
   answered: false,
-  correct: false
+  correct: false,
+  selectedIdx: null,
+  outcome: null      // 'correct' | 'wrong' | 'giveup'
 };
 
-function renderMCQ(challenge) {
-  mcqState = { challenge, attempt:0, hintUsed:false, answered:false, correct:false };
+// ── PERSISTENCE (v2.0.0): survive reload / tab switch ──
+function mcqProgressKey(id) { return `ec_mcq_progress_${id}`; }
+function saveMCQProgress() {
+  const ch = mcqState.challenge;
+  if (!ch) return;
+  localStorage.setItem(mcqProgressKey(ch.id), JSON.stringify({
+    attempt: mcqState.attempt, hintUsed: mcqState.hintUsed,
+    answered: mcqState.answered, outcome: mcqState.outcome,
+    selectedIdx: mcqState.selectedIdx
+  }));
+}
+function loadMCQProgress(id) {
+  try { return JSON.parse(localStorage.getItem(mcqProgressKey(id))); } catch { return null; }
+}
 
-  const body = document.getElementById('gameCardBody');
+// Content schema has drifted between episodes (s1e1: credits/concept_brief/source
+// vs s1e2: points/scenario/sources[]). Normalize here so the render/scoring code
+// has one shape to read, instead of two content files disagreeing silently.
+function normalizeMCQChallenge(challenge) {
+  return {
+    ...challenge,
+    credits:       challenge.credits ?? challenge.points ?? 20,
+    concept_brief: challenge.concept_brief ?? challenge.scenario ?? '',
+    aria_hint:     challenge.aria_hint ?? '',
+    source: challenge.source ?? (Array.isArray(challenge.sources)
+              ? challenge.sources.map(s => s.url ? `${s.text} — ${s.url}` : s.text).join(' | ')
+              : '')
+  };
+}
+
+function renderMCQ(rawChallenge) {
+  const challenge = normalizeMCQChallenge(rawChallenge);
+  mcqState = { challenge, attempt:0, hintUsed:false, answered:false, correct:false, selectedIdx:null, outcome:null };
+
+  const body = document.getElementById('gameCardBodyMCQ');
   body.innerHTML = `
     <div id="mcqWrap">
       <div class="mcq-meta" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
@@ -2400,16 +2582,24 @@ function renderMCQ(challenge) {
         <span id="mcqAttemptLabel" style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto"></span>
       </div>
 
-      <div class="mcq-concept" id="mcqConcept" style="display:none;
+      <div class="mcq-concept" id="mcqConcept" style="
            background:var(--accent-dim);border-left:2px solid var(--accent);
            padding:10px 14px;margin-bottom:14px;
-           font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;border-radius:var(--radius)">
-        <span style="color:var(--accent)">ARIA // BRIEF —</span>
+           font-size:15px;color:var(--text);line-height:1.55;border-radius:var(--radius)">
+        <span style="color:var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:.04em">ARIA // SCENARIO —</span>
         ${challenge.concept_brief || ''}
       </div>
 
       <div class="mcq-question" style="font-size:15px;line-height:1.55;margin-bottom:18px;color:var(--text)">
         ${challenge.question}
+      </div>
+
+      <div class="mcq-hint-box" id="mcqHintBox" style="display:none;
+           background:rgba(179,136,255,0.08);border-left:2px solid #b388ff;
+           padding:10px 14px;margin-bottom:14px;
+           font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;border-radius:var(--radius)">
+        <span style="color:#b388ff">ARIA // HINT —</span>
+        ${challenge.aria_hint || ''}
       </div>
 
       <div class="mcq-options" id="mcqOptions" style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px">
@@ -2454,14 +2644,18 @@ function renderMCQ(challenge) {
 
       <div id="mcqPostActions" style="display:none;margin-top:12px;display:none;">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="openModal('register')" style="flex:1;min-width:160px">
-            Join Free — Save Score
+          <button class="btn-primary" onclick="openModal('register')"
+                  style="flex:1;min-width:140px;padding:8px 14px;font-size:11px;min-height:38px">
+            Save My Score
           </button>
-          <button onclick="shareMCQ()"
-            style="background:#0a66c2;color:#fff;border:none;padding:12px 16px;
-                   font-family:var(--display);font-weight:700;font-size:12px;
+          <!-- v2.0.9 (2026-07-22): LinkedIn share button hidden for now
+               (Sandip: bring back in a future release) -- kept in DOM/JS,
+               just display:none, so re-enabling later is a one-line flip. -->
+          <button onclick="openSharePicker('mcq')"
+            style="background:#0a66c2;color:#fff;border:none;padding:8px 14px;
+                   font-family:var(--display);font-weight:700;font-size:11px;
                    text-transform:uppercase;cursor:pointer;border-radius:var(--radius);
-                   display:flex;align-items:center;gap:6px;min-height:48px">
+                   display:none;align-items:center;gap:6px;min-height:38px">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             Share
           </button>
@@ -2473,11 +2667,47 @@ function renderMCQ(challenge) {
   if (!challenge.track || challenge.track === 'FA') {
     // Show brief by default for FA; hidden for CP
   }
+
+  // Resume in-progress/finished state (persistence, v2.0.0) — visual replay
+  // only, never re-award credits or re-insert a solve record.
+  const saved = loadMCQProgress(challenge.id);
+  if (saved && saved.answered) {
+    mcqState.attempt     = saved.attempt;
+    mcqState.hintUsed    = saved.hintUsed;
+    mcqState.answered    = true;
+    mcqState.outcome     = saved.outcome;
+    mcqState.selectedIdx = saved.selectedIdx;
+    mcqState.correct     = saved.outcome === 'correct';
+    replayMCQAnswered(saved, challenge);
+  }
+}
+
+function replayMCQAnswered(saved, ch) {
+  const opts = document.querySelectorAll('.mcq-opt');
+  opts.forEach((o,i) => {
+    o.classList.add('mcq-locked');
+    o.style.cursor = 'default';
+    o.style.pointerEvents = 'none';
+    if (i === ch.correctIdx) {
+      o.style.borderColor = 'var(--green)';
+      o.style.background  = 'rgba(0,255,65,0.06)';
+    } else if (saved.outcome === 'wrong' && i === saved.selectedIdx) {
+      o.style.borderColor = 'var(--red)';
+      o.style.background  = 'rgba(255,68,68,0.06)';
+    }
+  });
+  const msg = saved.outcome === 'correct' ? 'ARIA // Correct — threat neutralised. (resumed)'
+            : saved.outcome === 'giveup'  ? "ARIA // Conceded. Here's the debrief — (resumed)"
+            : 'ARIA // Breach uncontained. (resumed)';
+  showMCQFeedback(saved.outcome === 'correct', 0, msg, ch.debrief, ch.source);
+  document.getElementById('mcqActions').style.display     = 'none';
+  document.getElementById('mcqPostActions').style.display = 'flex';
 }
 
 function selectMCQ(btn, idx) {
   if (mcqState.answered) return;
   const ch = mcqState.challenge;
+  mcqState.selectedIdx = idx;
   const opts = document.querySelectorAll('.mcq-opt');
   opts.forEach(o => {
     o.classList.add('mcq-locked');
@@ -2490,6 +2720,7 @@ function selectMCQ(btn, idx) {
   if (isCorrect) {
     mcqState.answered = true;
     mcqState.correct  = true;
+    mcqState.outcome  = 'correct';
     btn.style.borderColor = 'var(--green)';
     btn.style.background  = 'rgba(0,255,65,0.06)';
     btn.querySelector('span').style.color = 'var(--green)';
@@ -2526,6 +2757,7 @@ function selectMCQ(btn, idx) {
       // Final wrong
       mcqState.answered = true;
       mcqState.correct  = false;
+      mcqState.outcome  = 'wrong';
       // Reveal correct
       opts[ch.correctIdx].style.borderColor = 'var(--green)';
       opts[ch.correctIdx].style.background  = 'rgba(0,255,65,0.06)';
@@ -2542,8 +2774,9 @@ function selectMCQ(btn, idx) {
   if (mcqState.answered) {
     document.getElementById('mcqActions').style.display    = 'none';
     document.getElementById('mcqPostActions').style.display = 'flex';
-    recordSolve('mcq_daily', ch.id, mcqState.correct ? 'correct' : 'wrong',
+    recordSolve('mcq_weekly', ch.id, mcqState.correct ? 'correct' : 'wrong',
                 mcqState.correct ? (mcqState.hintUsed ? CREDITS_MCQ.hint : CREDITS_MCQ.first) : CREDITS_MCQ.wrong);
+    saveMCQProgress();
   }
 }
 
@@ -2572,9 +2805,10 @@ function useMCQHint() {
   mcqState.hintUsed = true;
   document.getElementById('mcqHint').style.opacity = '0.4';
   document.getElementById('mcqHint').disabled = true;
-  // Reveal concept brief
-  const brief = document.getElementById('mcqConcept');
-  if (brief) { brief.style.display = 'block'; brief.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  // Reveal the ARIA hint (scenario is visible by default now — this is the
+  // separate one-sentence clue field, gated behind the credit penalty)
+  const hintBox = document.getElementById('mcqHintBox');
+  if (hintBox) { hintBox.style.display = 'block'; hintBox.scrollIntoView({behavior:'smooth',block:'nearest'}); }
   // Second attempt message
   document.getElementById('mcqAttemptLabel').textContent = 'HINT USED — MAX +20 CR';
 }
@@ -2583,6 +2817,8 @@ function giveUpMCQ() {
   if (mcqState.answered) return;
   mcqState.answered = true;
   mcqState.correct  = false;
+  mcqState.outcome  = 'giveup';
+  mcqState.selectedIdx = null;
   const ch = mcqState.challenge;
   // Lock all options, reveal correct
   document.querySelectorAll('.mcq-opt').forEach((o,i) => {
@@ -2601,20 +2837,14 @@ function giveUpMCQ() {
   applyCredits(CREDITS_MCQ.wrong);
   document.getElementById('mcqActions').style.display     = 'none';
   document.getElementById('mcqPostActions').style.display = 'flex';
-  recordSolve('mcq_daily', ch.id, 'giveup', CREDITS_MCQ.wrong);
+  recordSolve('mcq_weekly', ch.id, 'giveup', CREDITS_MCQ.wrong);
+  saveMCQProgress();
   setTimeout(() => showNudge(false), 1600);
 }
 
-function shareMCQ() {
-  const correct = mcqState.correct;
-  const text = encodeURIComponent(
-    `I just tested my OT cybersecurity knowledge on OT CyberArena — the free, vendor-neutral ICS security challenge platform.\n\n` +
-    (correct ? '✅ Correct on the first attempt!' : '📚 Learned something new today.') +
-    `\n\nhttps://otcyberarena.com\n\n#OTSecurity #ICSCybersecurity #OTCyberArena`
-  );
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://otcyberarena.com&summary=${text}`, '_blank');
-  logEvent('share_click', { game_type: 'mcq_daily' });
-}
+// v2.0.1: replaced by the 3-way tone picker (openSharePicker/shareWithTone),
+// defined once both mcqState and wordleState exist — see below the Cywordle
+// engine. Sandip: let the player choose the tone instead of one fixed post.
 
 // ── CYWORDLE ENGINE ───────────────────────────────
 let wordleState = {
@@ -2627,12 +2857,22 @@ let wordleState = {
   failed: false
 };
 
+function cywordleProgressKey(word) { return `ec_cywordle_progress_${word}`; }
+function saveCywordleProgress() {
+  localStorage.setItem(cywordleProgressKey(wordleState.word), JSON.stringify({
+    guesses: wordleState.guesses, solved: wordleState.solved, failed: wordleState.failed
+  }));
+}
+function loadCywordleProgress(word) {
+  try { return JSON.parse(localStorage.getItem(cywordleProgressKey(word))); } catch { return null; }
+}
+
 function renderCywordle(wordData) {
   const word = wordData.word.toUpperCase();
   wordleState = { word, clue:wordData.clue, guesses:[], currentGuess:'', maxGuesses:6, solved:false, failed:false };
   const wordLen = word.length;
 
-  const body = document.getElementById('gameCardBody');
+  const body = document.getElementById('gameCardBodyWordle');
   body.innerHTML = `
     <div id="wordleWrap">
       <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.5">
@@ -2644,7 +2884,7 @@ function renderCywordle(wordData) {
 
       <div id="wordleGrid" style="display:flex;flex-direction:column;gap:4px;margin-bottom:14px">
         ${Array.from({length:6}, (_,r) => `
-          <div class="wordle-row" id="wrow${r}" style="display:flex;gap:4px">
+          <div class="wordle-row" id="wrow${r}" style="display:flex;gap:4px;justify-content:center">
             ${Array.from({length:wordLen}, (_,c) => `
               <div class="wordle-cell" id="wc${r}_${c}"
                 style="width:clamp(32px,calc(100%/${wordLen} - 4px),48px);height:clamp(32px,7vw,48px);
@@ -2671,12 +2911,12 @@ function renderCywordle(wordData) {
           onfocus="this.style.borderColor='var(--accent)'"
           onblur="this.style.borderColor='var(--border)'"
           onkeydown="if(event.key==='Enter')submitWordleGuess()"/>
-        <button onclick="submitWordleGuess()"
+        <button onclick="submitWordleGuess()" aria-label="Submit guess" title="Submit guess"
           style="background:var(--accent);color:var(--bg);border:none;
-                 padding:0 18px;font-family:var(--display);font-weight:700;font-size:13px;
-                 letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
-                 border-radius:var(--radius);min-height:48px;transition:opacity .15s"
-          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">GUESS</button>
+                 padding:0 16px;font-family:var(--display);font-weight:700;font-size:20px;
+                 line-height:1;cursor:pointer;flex-shrink:0;
+                 border-radius:var(--radius);min-height:48px;min-width:48px;transition:opacity .15s"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">⏎</button>
       </div>
 
       <div id="wordleKeyboard" style="display:flex;flex-direction:column;gap:4px;user-select:none">
@@ -2699,14 +2939,18 @@ function renderCywordle(wordData) {
 
       <div id="wordlePost" style="display:none;margin-top:14px">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="openModal('register')" style="flex:1;min-width:160px">
-            Join Free — Save Score
+          <button class="btn-primary" onclick="openModal('register')"
+                  style="flex:1;min-width:140px;padding:8px 14px;font-size:11px;min-height:38px">
+            Save My Score
           </button>
-          <button onclick="shareWordle()"
-            style="background:#0a66c2;color:#fff;border:none;padding:12px 16px;
-                   font-family:var(--display);font-weight:700;font-size:12px;
+          <!-- v2.0.9 (2026-07-22): LinkedIn share button hidden for now
+               (Sandip: bring back in a future release) -- kept in DOM/JS,
+               just display:none, so re-enabling later is a one-line flip. -->
+          <button onclick="openSharePicker('cywordle')"
+            style="background:#0a66c2;color:#fff;border:none;padding:8px 14px;
+                   font-family:var(--display);font-weight:700;font-size:11px;
                    text-transform:uppercase;cursor:pointer;border-radius:var(--radius);
-                   display:flex;align-items:center;gap:6px;min-height:48px">
+                   display:none;align-items:center;gap:6px;min-height:38px">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             Share
           </button>
@@ -2715,6 +2959,32 @@ function renderCywordle(wordData) {
     </div>`;
 
   document.getElementById('wordleGuessInput').focus({preventScroll:true});
+
+  // Resume in-progress/finished state (persistence, v2.0.0) — visual replay
+  // only, never re-award credits or re-insert a solve record.
+  const saved = loadCywordleProgress(word);
+  if (saved && saved.guesses && saved.guesses.length) replayCywordleProgress(saved);
+}
+
+function replayCywordleProgress(saved) {
+  saved.guesses.forEach((g,i) => {
+    renderWordleRow(i, g.guess, g.result);
+    updateWordleKeyboard(g.guess, g.result);
+  });
+  wordleState.guesses = saved.guesses.slice();
+  if (saved.solved || saved.failed) {
+    wordleState.solved = saved.solved;
+    wordleState.failed = saved.failed;
+    document.getElementById('wordleInput').style.display = 'none';
+    document.getElementById('wordlePost').style.display   = 'block';
+    setWordleMessage(saved.solved
+      ? `ARIA // Correct — ${wordleState.word}. Threat neutralised. ${wordleState.clue} (resumed)`
+      : `ARIA // The word was: ${wordleState.word}. ${wordleState.clue} (resumed)`,
+      saved.solved ? 'var(--green)' : 'var(--red)');
+  } else {
+    const remaining = wordleState.maxGuesses - wordleState.guesses.length;
+    setWordleMessage(`ARIA // ${remaining} attempt${remaining!==1?'s':''} remaining. (resumed)`, 'var(--muted)');
+  }
 }
 
 function wordleKeyPress(letter) {
@@ -2778,8 +3048,8 @@ function submitWordleGuess() {
 
   if (solved) {
     wordleState.solved = true;
-    const earned = CREDITS_WORDLE.solve;
-    setWordleMessage(`ARIA // Correct — ${target}. Threat neutralised. +${earned} CR`, 'var(--green)');
+    const earned = CREDITS_WORDLE.byAttempt[Math.min(rowIdx, CREDITS_WORDLE.byAttempt.length-1)];
+    setWordleMessage(`ARIA // Correct — ${target}. Threat neutralised. +${earned} CR — ${wordleState.clue}`, 'var(--green)');
     scoreFlash(earned, true);
     applyCredits(earned);
     document.getElementById('wordleInput').style.display = 'none';
@@ -2798,6 +3068,8 @@ function submitWordleGuess() {
     const remaining = wordleState.maxGuesses - wordleState.guesses.length;
     setWordleMessage(`ARIA // ${remaining} attempt${remaining!==1?'s':''} remaining.`, 'var(--muted)');
   }
+
+  saveCywordleProgress();
 }
 
 function scoreWordleGuess(guess, target) {
@@ -2872,70 +3144,148 @@ function setWordleMessage(msg, color) {
   el.style.color  = color || 'var(--muted)';
 }
 
-function shareWordle() {
-  const emojiMap = { correct:'🟩', present:'🟨', absent:'⬛' };
-  const rows = wordleState.guesses.map(g =>
-    g.result.map(r => emojiMap[r]||'⬛').join('')
-  ).join('\n');
-  const status = wordleState.solved
-    ? `Solved in ${wordleState.guesses.length}/${wordleState.maxGuesses}`
-    : 'Did not solve today';
-  const text = encodeURIComponent(
-    `OT Cywordle — ${status}\n${rows}\n\nhttps://otcyberarena.com #OTSecurity #OTCyberArena`
-  );
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://otcyberarena.com&summary=${text}`, '_blank');
-  logEvent('share_click', { game_type: 'cywordle' });
+// ── LINKEDIN SHARE — 3-way tone picker (v2.0.1) ──────────────────────────
+// Sandip: instead of one fixed post, let the player pick how they want to
+// sound — Competitive (dares others to beat the score), Streak-flex (short,
+// stat-first), or Learning-forward (reads as professional development, not
+// a game score). Covers both MCQ and Cywordle shares.
+let shareContext = null; // { gameType: 'mcq' | 'cywordle' }
+
+function openSharePicker(gameType) {
+  shareContext = { gameType };
+  openModal('share');
 }
 
-// ── RENDER GAME (dispatcher) ──────────────────────
-function renderGame() {
-  const q = todayQueue || STUB_DAILY_QUEUE;
-  const badge = document.getElementById('gameTypeBadge');
-  const dayLbl = document.getElementById('gameDayLabel');
-  if (badge)  badge.textContent  = q.game_type === 'cywordle' ? 'OT CYWORDLE' : 'DAILY MCQ';
-  if (dayLbl) dayLbl.textContent = q.day_label || getDayLabel();
+function buildShareText(gameType, tone) {
+  if (gameType === 'mcq') {
+    const correct = mcqState.correct;
+    if (tone === 'competitive') {
+      return correct
+        ? `Nailed this week's OT security question on my first try. Think you can? otcyberarena.com`
+        : `This week's OT security question got me. Think you can crack it? otcyberarena.com`;
+    }
+    if (tone === 'streak') {
+      return `This week's OT CyberArena MCQ: ${correct ? '✅ solved' : '❌ missed'}. otcyberarena.com #OTSecurity`;
+    }
+    return `Sharpened my OT/ICS security knowledge today with OT CyberArena's weekly challenge. Free, no login needed: otcyberarena.com`;
+  }
 
-  // Remove placeholder
-  const ph = document.getElementById('gamePlaceholder');
-  if (ph) ph.remove();
+  // cywordle
+  const emojiMap = { correct:'🟩', present:'🟨', absent:'⬛' };
+  const rows = wordleState.guesses.map(g => g.result.map(r => emojiMap[r]||'⬛').join('')).join('\n');
+  const solved = wordleState.solved;
+  if (tone === 'competitive') {
+    return solved
+      ? `Solved today's OT Cywordle in ${wordleState.guesses.length}/${wordleState.maxGuesses}. Think you know your OT security terms? Beat my score → otcyberarena.com`
+      : `Today's OT Cywordle got me. Think you can crack it? otcyberarena.com`;
+  }
+  if (tone === 'streak') {
+    return (solved
+      ? `OT Cywordle: cracked it in ${wordleState.guesses.length} guesses.\n${rows}\nYour turn`
+      : `OT Cywordle: didn't crack it today.\n${rows}\nYour turn`) + ` → otcyberarena.com #OTSecurity`;
+  }
+  return `Learned a new OT security term today via OT CyberArena's Cywordle. Free weekly challenge, 2 minutes: otcyberarena.com`;
+}
 
-  const tabM = document.getElementById('tabMCQ');
-  const tabW = document.getElementById('tabWordle');
-  if (q.game_type === 'cywordle') {
-    if (tabM) { tabM.classList.remove('active'); tabM.setAttribute('aria-selected','false'); }
-    if (tabW) { tabW.classList.add('active');    tabW.setAttribute('aria-selected','true'); }
-    // Pick today's word from bank by day-of-year index
-    const doy = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-    const wordData = OT_WORDS_BANK[doy % OT_WORDS_BANK.length];
-    currentWordData = wordData;
-    renderCywordle(wordData);
+function shareWithTone(tone) {
+  if (!shareContext) return;
+  const gameType = shareContext.gameType;
+  const text = encodeURIComponent(buildShareText(gameType, tone));
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://otcyberarena.com&summary=${text}`, '_blank');
+  logEvent('share_click', { game_type: gameType === 'mcq' ? 'mcq_weekly' : 'cywordle', tone });
+  closeModal('share');
+  shareContext = null;
+}
+
+// ── RENDER BOTH GAMES (v2.0.0: MCQ + Cywordle both live all week, no tabs) ──
+function renderBothGames() {
+  const wk = weeklyQueue || STUB_WEEKLY_QUEUE;
+
+  const phM = document.getElementById('gamePlaceholderMCQ');
+  if (phM) phM.remove();
+  const phW = document.getElementById('gamePlaceholderWordle');
+  if (phW) phW.remove();
+
+  currentMCQId = (wk.mcq_ids && wk.mcq_ids[0]) || 'ec_s1e1_fa1';
+  loadChallengeAndRender(currentMCQId);
+
+  const wordData = wk.cywordle || STUB_WORDLE;
+  currentWordData = wordData;
+  renderCywordle(wordData);
+
+  applyBankOverride();
+}
+
+// ── ARCHIVE/BANK DEEP LINK (v2.0.0) ───────────────
+// archive-mcq.html / archive-cywordle.html link back here as
+// index.html?bank=<id>&type=mcq|cywordle for logged-in players.
+// Same renderMCQ/renderCywordle + localStorage progress keys as the
+// weekly cards, so "no repeat scoring" is enforced automatically —
+// once a challenge id / word is answered anywhere, it replays solved.
+function applyBankOverride() {
+  const params  = new URLSearchParams(location.search);
+  const bankId  = params.get('bank');
+  const bankType = params.get('type');
+  if (!bankId) return;
+
+  if (!currentPlayer) {
+    openModal('register');
+    return;
+  }
+
+  if (bankType === 'cywordle') {
+    const wd = OT_WORDS_BANK.find(w => w.word.toUpperCase() === bankId.toUpperCase()) || STUB_WORDLE;
+    currentWordData = wd;
+    renderCywordle(wd);
+    const badge = document.getElementById('cywordleBadgeLabel');
+    if (badge) badge.textContent = 'BANK REPLAY';
+    const lbl = document.getElementById('cywordleDayLabel');
+    if (lbl) lbl.textContent = 'From the archive';
+    document.getElementById('cywordleSection')?.scrollIntoView({behavior:'smooth'});
   } else {
-    if (tabM) { tabM.classList.add('active');    tabM.setAttribute('aria-selected','true'); }
-    if (tabW) { tabW.classList.remove('active'); tabW.setAttribute('aria-selected','false'); }
-    // Default: MCQ — load challenge JSON or fall back to stub
-    currentMCQId = q.challenge_id || 'ec_s1e1_fa1';
-    loadChallengeAndRender(currentMCQId);
+    currentMCQId = bankId;
+    loadChallengeAndRender(bankId);
+    const badge = document.getElementById('mcqBadgeLabel');
+    if (badge) badge.textContent = 'BANK REPLAY';
+    const lbl = document.getElementById('mcqDayLabel');
+    if (lbl) lbl.textContent = 'From the archive';
+    document.getElementById('mcqSection')?.scrollIntoView({behavior:'smooth'});
   }
 }
+
+// v2.0.5 (2026-07-18): CHALLENGE_BANK_FILES replaces id-pattern parsing.
+// Bug found while publishing the first date-based batch: parseChallId's
+// regex only matched the old `ec_s{S}e{E}_{track}{N}` scheme. It silently
+// failed for both `s1e2_fa01` (no `ec_` prefix — already live!) and the new
+// date-based ids like `ec_7Jul2026_q1`, falling back to a hardcoded default
+// that fetched the WRONG file and rendered data[0] instead of the intended
+// question. Fix: list every bank file once here; loadChallengeAndRender
+// fetches them all and finds the id directly — no filename parsing, no
+// dependency on any particular id scheme (old or new).
+// APPEND new filenames here every time a new batch is published — nothing
+// else in the engine needs to change when the id scheme evolves again.
+const CHALLENGE_BANK_FILES = [
+  'challenges/ec_s1e1_fa.json',
+  'challenges/ec_s1e2_fa.json',
+  'challenges/ec_7Jul2026_fa.json',
+  'challenges/ec_11Jul2026_fa.json',
+  'challenges/ec_18Jul2026_fa.json',
+  'challenges/ec_19Jul2026_fa.json'
+];
 
 async function loadChallengeAndRender(id) {
   if (IS_LOCAL) { renderMCQ(STUB_MCQ); return; }
   try {
-    const [season, ep, track] = parseChallId(id);
-    const res = await fetch(`challenges/ec_s${season}e${ep}_${track}.json`);
-    if (!res.ok) throw new Error('not found');
-    const data = await res.json();
-    const ch = data.find(c => c.id === id) || data[0];
+    const results = await Promise.all(
+      CHALLENGE_BANK_FILES.map(f => fetch(f).then(r => r.ok ? r.json() : []).catch(() => []))
+    );
+    const all = results.flat();
+    const ch = all.find(c => c.id === id || c.old_id === id); // old_id: EC-##### id retrofit (2026-07-26) — keeps any pre-existing bookmarked/shared link working
+    if (!ch) throw new Error('id not found in any bank file: ' + id);
     renderMCQ(ch);
   } catch {
     renderMCQ(STUB_MCQ);
   }
-}
-
-function parseChallId(id) {
-  // ec_s1e1_fa1 → [1,1,'fa']
-  const m = id.match(/ec_s(\d+)e(\d+)_(fa|cp)/i);
-  return m ? [m[1], m[2], m[3].toLowerCase()] : ['1','1','fa'];
 }
 
 // ── INTEL FEED ────────────────────────────────────
@@ -2959,7 +3309,9 @@ const STUB_INTEL = [
 function renderIntelFeed(items) {
   const feed = document.getElementById('intelFeed');
   if (!feed || !items?.length) return;
-  feed.innerHTML = items.map(item => `
+  // v2.0.4 (2026-07-18): front page shows only the latest 3 (decision 2026-07-10) —
+  // items are appended newest-first in intel_feed.json, so a plain slice works.
+  feed.innerHTML = items.slice(0, 3).map(item => `
     <div class="intel-item" onclick="window.open('${item.url||'#'}','_blank')"
          style="cursor:${item.url?'pointer':'default'}">
       <div class="intel-source-tag">${item.source}</div>
@@ -2985,17 +3337,25 @@ const FLAG_MAP = {
   CA:'🇨🇦',FR:'🇫🇷',NL:'🇳🇱',MY:'🇲🇾',NZ:'🇳🇿',KR:'🇰🇷',TH:'🇹🇭',CN:'🇨🇳'
 };
 
-// 2026-07-26 fix: SEED_PLAYERS must never appear to a real visitor -- it
-// backed every leaderboard view on the live domain because this code
-// treated "query failed" and "query succeeded with zero real players" as
-// the same case. There are 0 real registered players in Supabase right
-// now, so the live query legitimately returns an empty array (not an
-// error) -- that was silently being replaced with 7 fake operatives
-// (GridWatch_AUS etc.) every single page load. SEED_PLAYERS now backs
-// ONLY the IS_LOCAL/file:// dev preview; the live path renders a real
-// empty state instead (see renderLeaderboard()).
+// v2.0.0: SEED_PLAYERS only ever backs the IS_LOCAL/file:// dev preview.
+// Production must never show fake operatives — real data or an empty state.
 let lbData = [];
 let lbFilter = 'all';
+
+// ── TEMP (2026-07-06): STAGING VISUAL PREVIEW ONLY ──────────────────────
+// Sandip asked to see 5 dummy rows so he can review the leaderboard's look
+// before real players exist. This must NOT ship to the live domain — flip
+// SHOW_STAGING_LEADERBOARD_PREVIEW to false (or delete this block down to
+// the ───── line) before promoting to otcyberarena.com.
+const SHOW_STAGING_LEADERBOARD_PREVIEW = false;
+const STAGING_PREVIEW_PLAYERS = [
+  { callsign:'GridWatch_AUS',  track:'CP', credits:1920, country:'AU', rank:'Ghost in the Machine' },
+  { callsign:'NullVector_SGS', track:'CP', credits:1640, country:'SG', rank:'Ghost in the Machine' },
+  { callsign:'ThreatHunt_USS', track:'CP', credits:1340, country:'US', rank:'Threat Hunter' },
+  { callsign:'SOCGuard_DES',   track:'CP', credits:890,  country:'DE', rank:'SOC Analyst' },
+  { callsign:'FieldOps_INS',   track:'FA', credits:720,  country:'IN', rank:'Field Tech' }
+];
+// ─────────────────────────────────────────────────────────────────────────
 
 async function loadLeaderboard() {
   if (IS_LOCAL) { lbData = [...SEED_PLAYERS]; renderLeaderboard(); return; }
@@ -3004,8 +3364,9 @@ async function loadLeaderboard() {
       .select('callsign,country,track,credits,current_streak')
       .order('credits', { ascending: false })
       .limit(20);
-    if (error) { console.warn('leaderboard query error:', error.message); lbData = []; }
-    else if (!data?.length) { lbData = []; }
+    if (error || !data?.length) {
+      lbData = SHOW_STAGING_LEADERBOARD_PREVIEW ? [...STAGING_PREVIEW_PLAYERS] : [];
+    }
     else {
       lbData = data.map(p => ({
         callsign: p.callsign,
@@ -3017,7 +3378,6 @@ async function loadLeaderboard() {
       }));
     }
   } catch (e) {
-    console.warn('leaderboard load exception:', e);
     lbData = [];
   }
   renderLeaderboard();
@@ -3044,7 +3404,7 @@ function renderLeaderboard() {
       <div class="lb-empty" style="padding:28px 16px;text-align:center;font-family:var(--mono);
            font-size:12px;color:var(--muted);line-height:1.7">
         ARIA // No operatives ranked yet.<br>
-        <span style="color:var(--accent)">Play today's challenge to claim #1.</span>
+        <span style="color:var(--accent)">Play this week's challenge to claim #1.</span>
       </div>`;
     return;
   }
@@ -3096,6 +3456,43 @@ async function recordSolve(gameType, challengeId, outcome, creditsEarned) {
   }
 }
 
+// ── CYBERFLIGHT: claim a score stashed by cyberflight-play.html before ──
+// the player signed in. cyberflight-play.html stashes { score, ts } in
+// localStorage under CF_PENDING_KEY when a run finishes with no logged-in
+// player; call claimPendingCyberflightScore() any time currentPlayer just
+// became set (after registration, after login, and on page load in case
+// a session already existed) to bank it. Same 3/day cap as the play page.
+const CF_PENDING_KEY = 'ec_pending_cyberflight_score';
+const CF_DAILY_CAP = 3;
+
+async function cyberflightRunsToday(playerId) {
+  if (IS_LOCAL || !sb) return 0;
+  const start = new Date(); start.setHours(0,0,0,0);
+  const { count, error } = await sb.from('solves')
+    .select('id', { count: 'exact', head: true })
+    .eq('player_id', playerId)
+    .eq('game_type', 'cyberflight')
+    .gte('created_at', start.toISOString());
+  if (error) { console.warn('cyberflightRunsToday error:', error.message); return 0; }
+  return count || 0;
+}
+
+async function claimPendingCyberflightScore() {
+  if (!currentPlayer) return;
+  let pending;
+  try { pending = JSON.parse(localStorage.getItem(CF_PENDING_KEY)); } catch { pending = null; }
+  if (!pending || typeof pending.score !== 'number') return;
+  localStorage.removeItem(CF_PENDING_KEY); // claim once regardless of cap outcome below
+  const runsToday = await cyberflightRunsToday(currentPlayer.id);
+  if (runsToday >= CF_DAILY_CAP) return;
+  // v2.1.2: CyberFlight (and other score-based bonus games) no longer feed
+  // the main knowledge leaderboard's credits -- Sandip: serious MCQ/Cywordle
+  // players would feel cheated by arcade-skill scores (hundreds to 13,000+)
+  // dwarfing knowledge-game credits (8-100). Still logged to solves for
+  // stats/admin dashboard and the game's own client-side personal best.
+  await recordSolve('cyberflight', 'cyberflight_' + Date.now(), null, pending.score);
+}
+
 async function logEvent(eventType, metadata) {
   if (!IS_LOCAL) {
     await sb.from('events').insert({
@@ -3129,7 +3526,7 @@ async function sendOTP() {
 async function verifyOTP() {
   const code = ['otp0','otp1','otp2','otp3','otp4','otp5','otp6','otp7'].map(id=>document.getElementById(id)?.value||'').join('');
   if (code.length !== 8 || !/^\d{8}$/.test(code)) {
-    showError('otpError', 'ARIA // Enter all 6 digits.');
+    showError('otpError', 'ARIA // Enter all 8 digits.');
     return;
   }
   regData.otp = code;
@@ -3268,6 +3665,7 @@ async function finaliseRegistration() {
   savePlayer(newPlayer);
   currentPlayer = newPlayer;
   updatePlayerUI();
+  claimPendingCyberflightScore();
   closeModal('register');
   logEvent('registration_complete', { track: newPlayer.track, country: newPlayer.country });
 }
@@ -3352,6 +3750,7 @@ async function loginWithPIN() {
   savePlayer(p);
   currentPlayer = p;
   updatePlayerUI();
+  claimPendingCyberflightScore();
   closeModal('login');
   logEvent('login', { callsign: p.callsign });
 }
@@ -3471,7 +3870,7 @@ function initHexBg() {
 
   // Mark hexes that sit under UI panels — threat dots only appear in margins
   function markCoveredHexes() {
-    const uiTargets = ['.navbar', '.hero-brand', '.game-panel', '.hero-rank-bar',
+    const uiTargets = ['.navbar', '.hero-brand', '.game-card', '.hero-rank-bar',
                        '.leaderboard-card', '.intel-item', '.episode-card',
                        '.score-module', '.hero-cta'];
     const rects = uiTargets
@@ -3493,35 +3892,25 @@ function initHexBg() {
 }
 
 
-// ── GAME MODE SWITCHER ────────────────────────────────
-let currentMCQId   = null;  // remembered for tab switching
-let currentWordData = null; // remembered for Cywordle tab
-
-function switchGameMode(mode) {
-  const tabMCQ    = document.getElementById('tabMCQ');
-  const tabWordle = document.getElementById('tabWordle');
-  if (tabMCQ)    { tabMCQ.classList.toggle('active', mode === 'mcq');      tabMCQ.setAttribute('aria-selected', mode==='mcq'); }
-  if (tabWordle) { tabWordle.classList.toggle('active', mode === 'cywordle'); tabWordle.setAttribute('aria-selected', mode==='cywordle'); }
-
-  if (mode === 'mcq') {
-    const id = currentMCQId || 'ec_s1e1_fa1';
-    if (IS_LOCAL) { renderMCQ(STUB_MCQ); }
-    else          { loadChallengeAndRender(id); }
-  } else {
-    const doy = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-    const wd  = currentWordData || OT_WORDS_BANK[doy % OT_WORDS_BANK.length];
-    renderCywordle(wd);
-  }
-}
+// ── WEEKLY GAME STATE (v2.0.0: both cards always visible, no switcher) ──
+let currentMCQId   = null;  // this week's MCQ id
+let currentWordData = null; // this week's Cywordle word data
 
 // ── INIT ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initHexBg();
   updatePlayerUI();
-  loadDailyQueue();
+  claimPendingCyberflightScore();
+  loadWeeklyQueue();
   loadIntelFeed();
   loadLeaderboard();
   initLiveCount();
+  applyArchiveGate();
+
+  // Archive pages link back as index.html#register / #login for anon visitors
+  if (location.hash === '#register' || location.hash === '#login') {
+    openModal(location.hash === '#register' ? 'register' : 'login');
+  }
 
   // OTP digit auto-advance
   document.querySelectorAll('.otp-digit').forEach((input, idx, all) => {
