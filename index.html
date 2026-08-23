@@ -1798,17 +1798,11 @@ footer {
         <div class="game-promo-cta">▶ Play CyberFlight</div>
       </div>
     </a>
-    <!-- OT SOC WARRIOR PROMO CARD (added 2026-08-23): renamed from RED SHIFT,
-         same iframe + postMessage integration pattern as CyberFlight above,
-         via ot-soc-warrior-play.html -> games/ot-soc-warrior.html. -->
-    <a class="game-promo-card" href="ot-soc-warrior-play.html">
-      <div class="game-promo-art" aria-hidden="true">🛡️</div>
-      <div class="game-promo-body">
-        <div class="game-promo-title">OT SOC WARRIOR</div>
-        <div class="game-promo-desc">Contain 10 real-time OT incidents against the clock as the on-shift incident commander — order matters, traps are plausible, every debrief maps to a real MITRE ATT&CK for ICS technique.</div>
-        <div class="game-promo-cta">▶ Start Your Shift</div>
-      </div>
-    </a>
+    <!-- OT SOC WARRIOR PROMO CARD pulled 2026-08-23 -- broken/overlapping
+         layout on mobile (game has zero @media rules, always desktop-first).
+         Files still exist (games/ot-soc-warrior.html, ot-soc-warrior-play.html)
+         but are unlinked from the homepage until a mobile fix ships through
+         staging first and is confirmed by Sandip on his phone. -->
   </section>
 
   <!-- Register nudge (shown after either game attempt) -->
