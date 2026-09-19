@@ -1695,7 +1695,7 @@ footer {
       <span class="ot">OT </span><span class="cyber">CYBER</span><span class="arena">ARENA</span>
     </h1>
 
-    <div class="hero-version" id="heroVersion">EC v2.1.23 · 2026-08-23 · Steel Green</div>
+    <div class="hero-version" id="heroVersion">EC v2.1.24 · 2026-09-19 · Steel Green</div>
 
     <p class="hero-tagline">The global community for OT security</p>
 
@@ -1855,6 +1855,10 @@ footer {
         <!-- Populated by leaderboard engine -->
       </div>
       <div class="lb-footer">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;
+                    margin-bottom:8px;line-height:1.5;">
+          Only your callsign shows here — never your name or email.
+        </div>
         <button class="btn-primary" style="font-size:11px;padding:8px 16px;width:100%;"
                 id="seeYourRankBtn" onclick="openModal('register')">See Your Rank</button>
       </div>
@@ -2155,7 +2159,7 @@ footer {
     <a class="footer-link accent hidden" id="footerSignOut" onclick="signOutPlayer()">Sign Out</a>
     <a class="footer-link accent" href="mailto:support@otcyberarena.com">Contact</a>
     <span class="footer-link" id="easterEgg" onclick="toggleEasterEgg()">Imagined by Human | Powered by AI</span>
-    <span class="footer-link" id="versionStamp">EC v2.1.23</span>
+    <span class="footer-link" id="versionStamp">EC v2.1.24</span>
   </div>
 </footer>
 
@@ -2168,7 +2172,7 @@ footer {
 'use strict';
 
 // ── VERSION ──────────────────────────────────────
-const EC_VERSION = '2.1.23';
+const EC_VERSION = '2.1.24';
 document.getElementById('versionStamp').textContent = 'EC v' + EC_VERSION;
 
 // ── PAST MCQ/CYWORDLE ARCHIVE GATING (2026-07-18) ──────────────────────
